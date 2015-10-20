@@ -1,0 +1,21 @@
+{
+  "name": "hexaworld",
+  "version": "0.0.0",
+  "scripts": {
+    "start": "beefy game.js:bundle.js --live"
+  },
+  "dependencies": {
+    "aabb-2d": "0.0.0",
+    "crtrdg-entity": "^0.2.2",
+    "crtrdg-gameloop": "^0.2.2",
+    "crtrdg-keyboard": "0.0.2",
+    "crtrdg-mouse": "~0.0.1",
+    "crtrdg-player": "0.0.1",
+    "inherits": "~2.0.0",
+    "lodash": "^3.10.1"
+  },
+  "devDependencies": {
+    "beefy": "~0.4.0",
+    "browserify": "~2.25.0"
+  }
+}
