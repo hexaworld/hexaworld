@@ -7,7 +7,7 @@ module.exports = Center
 function Center(options){
   options = options || {}
   this.size = options.size || 0.2
-  this.color = options.color || '#939597'
+  this.color = options.color || "#DFE0E2"
 }
 
 Center.prototype.border = function(transform) {

@@ -8,7 +8,7 @@ function Path(options){
   this.position = 0
   this.type = 'path'
   this.width = options.width || 0.2
-  this.color = options.color || '#939597'
+  this.color = options.color || "#DFE0E2"
 }
 
 Path.prototype.border = function(transform) {

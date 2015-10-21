@@ -77,6 +77,26 @@ Player.prototype.render = function(context, camera) {
 
   var self = this
 
-  context.fillStyle = self.color;
-  context.fillRect(self.position.x, self.position.y, self.size.x, self.size.y);
+  context.lineWidth = 3
+
+  // ears
+  context.beginPath()
+  context.fillStyle = '#EB8686'
+  context.ellipse(self.position.x - 5, self.position.y - 10, 13, 6, 45 * Math.PI/180, 0, 2*Math.PI)
+  context.closePath()
+  context.fill()
+
+  context.beginPath()
+  context.fillStyle = '#EB8686'
+  context.ellipse(self.position.x + 5, self.position.y - 10, 13, 6, -45 * Math.PI/180, 0, 2*Math.PI)
+  context.closePath()
+  context.fill()
+
+  // body
+  context.beginPath() 
+  context.fillStyle = '#EC6A6A'
+  context.arc(self.position.x, self.position.y, 15, 0, 2*Math.PI)
+  context.closePath()
+  context.fill()
+
 }
