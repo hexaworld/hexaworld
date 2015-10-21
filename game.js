@@ -26,7 +26,7 @@ var player = new Player({
 
 var camera = new Camera({
   position: {x: game.width/2, y:game.height/2, z: 1},
-  orientation: 180,
+  orientation: 0,
   speed: 2,
   velocity: 0,
   friction: 0.9,

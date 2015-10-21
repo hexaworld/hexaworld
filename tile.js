@@ -1,5 +1,6 @@
 _ = require('lodash')
 Path = require('./path.js')
+Center = require('./center.js')
 
 module.exports = Tile
 
@@ -8,43 +9,58 @@ function Tile(options){
     r: options.position.r, 
     q: options.position.q
   }
-  this.objects = options.objects || [new Path({position: 0}), new Path({position: 1})]
+  this.paths = options.paths || [new Path({position: 0}), new Path({position: 1})]
+  this.center = new Center()
   this.size = options.size || 50
   this.color = options.color || '#DFE0E2s'
 }
 
-Tile.prototype.pixels = function(camera) {
-  var s = this.size * 0.1 * camera.position.z
-  var x = s * 3/2 * this.position.r + camera.position.x
-  var y = s * Math.sqrt(3) * (this.position.q + this.position.r/2) + camera.position.y
-  return {x: x, y: y, s: s}
+Tile.prototype.origin = function(camera) {
+
+  var size = this.size * 0.1 * camera.position.z
+  var x = size * 3/2 * this.position.r + camera.position.x
+  var y = size * Math.sqrt(3) * (this.position.q + this.position.r/2) + camera.position.y
+  var rot = camera.orientation * Math.PI / 180
+  x = x * Math.cos(rot) - x * Math.sin(rot)
+  y = y * Math.sin(rot) + y * Math.cos(rot)
+  return {x: x, y: y, size: size, rot: rot}
+
 }
 
-Tile.prototype.draw = function(context, camera) {
-  var self = this
+Tile.prototype.border = function(origin) {
 
-  var start = self.pixels(camera)
-  var n = 6
-
-  context.beginPath()
-  
-  _.range(n + 1).forEach(function(i) {
-    var dx = start.s * Math.cos(i * 2 * Math.PI / n)
-    var dy = start.s * Math.sin(i * 2 * Math.PI / n)
-    context.lineTo(start.x + dx, start.y + dy)
+  return _.range(7).map(function(i) {
+    var dx = origin.size * Math.cos(i * 2 * Math.PI / 6 + origin.rot)
+    var dy = origin.size * Math.sin(i * 2 * Math.PI / 6 + origin.rot)
+    return {x: origin.x + dx, y: origin.y + dy}
   })
 
+}
+
+// draw hexagon given an origin(x,y) and size (arbitrary space)
+Tile.prototype.draw = function(context, origin) {
+
+  var border = this.border(origin)
+  context.beginPath()
+  _.forEach(border, function(point) {
+    context.lineTo(point.x, point.y)
+  })
   context.closePath()
   context.fillStyle = "#DFE0E2"
   context.fill()
+
 }
 
 Tile.prototype.render = function(context, camera) {
-  var self = this
 
-  self.draw(context, camera)
+  var origin = this.origin(camera)
 
-  this.objects.forEach(function (object) {
-    object.render(context, camera, self.pixels(camera))
+  this.draw(context, origin)
+
+  this.center.render(context, origin)
+
+  this.paths.forEach(function (path) {
+    path.render(context, origin)
   })
+
 }

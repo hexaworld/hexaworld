@@ -51,4 +51,14 @@ Camera.prototype.keyboardInput = function(keyboard){
   if ('L' in keyboard.keysDown){
     this.velocity.z = -this.speed
   }
+
+  if ('Q' in keyboard.keysDown){
+    this.orientation -= 0.1
+    if (this.orientation < 0) this.orientation = 360
+  }
+
+  if ('E' in keyboard.keysDown){
+    this.orientation += 0.1
+    if (this.orientation > 360) this.orientation = 0
+  }
 }
