@@ -3,11 +3,15 @@ var tile = require('./tile.js')
 module.exports = World
 
 function World() {
-  var opts1 = {position: { r: 0, q: 0}}
-  var opts2 = {position: { r: 0, q: 1}}
-  var opts3 = {position: { r: 1, q: 0}}
-  var opts4 = {position: { r: 1, q: 1}}
-  this.tiles = [new tile(opts1), new tile(opts2), new tile(opts3), new tile(opts4)]
+  this.tiles = [
+    new tile({position: { r: -1, q: 0}}), 
+    new tile({position: { r: 0, q: 0}}), 
+    new tile({position: { r: 0, q: 1}}),
+    new tile({position: { r: -1, q: 1}}),
+    new tile({position: { r: 1, q: -1}}),
+    new tile({position: { r: 1, q: 0}}),
+    new tile({position: { r: 0, q: -1}})
+  ]
 }
 
 World.prototype.render = function(context, camera) {
