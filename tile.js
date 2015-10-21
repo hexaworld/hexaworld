@@ -13,7 +13,7 @@ function Tile(options){
   this.paths = options.paths || [new Path({position: 0}), new Path({position: 1})]
   this.center = new Center()
   this.size = options.size || 50
-  this.color = options.color || '#DFE0E2s'
+  this.color = options.color || '#939597'
 }
 
 Tile.prototype.transform = function(camera) {
@@ -46,7 +46,7 @@ Tile.prototype.draw = function(context, transform) {
     context.lineTo(point[0], point[1])
   })
   context.closePath()
-  context.fillStyle = "#DFE0E2"
+  context.fillStyle = this.color
   context.fill()
 
 }
