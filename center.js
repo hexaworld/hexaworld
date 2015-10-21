@@ -9,17 +9,17 @@ function Center(options){
   this.color = options.color || '#939597'
 }
 
-Center.prototype.border = function(origin) {
+Center.prototype.border = function(transform) {
   var self = this
   return _.range(7).map(function(i) {
-    var dx = self.size * origin.size * Math.cos(i * 2 * Math.PI / 6)
-    var dy = self.size * origin.size * Math.sin(i * 2 * Math.PI / 6)
-    return {x: origin.x + dx, y: origin.y + dy}
+    var dx = self.size * transform.scale * Math.cos(i * 2 * Math.PI / 6)
+    var dy = self.size * transform.scale * Math.sin(i * 2 * Math.PI / 6)
+    return {x: transform.position.x + dx, y: transform.position.y + dy}
   })
 }
 
-Center.prototype.render = function(context, origin) {
-    var border = this.border(origin)
+Center.prototype.render = function(context, transform) {
+    var border = this.border(transform)
     context.beginPath()
     _.forEach(border, function(point) {
       context.lineTo(point.x, point.y)

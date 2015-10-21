@@ -11,19 +11,19 @@ function Path(options){
   this.color = options.color || '#939597'
 }
 
-Path.prototype.border = function(origin) {
+Path.prototype.border = function(transform) {
   var self = this
-  var bottom = origin.y + origin.size * Math.sqrt(3)/2
+  var bottom = transform.y + transform.scale * Math.sqrt(3)/2
   return [
-    {x: origin.x - self.width/2 * origin.size, y: origin.y},
-    {x: origin.x - self.width/2 * origin.size, y: bottom},
-    {x: origin.x + self.width/2 * origin.size, y: bottom},
-    {x: origin.x + self.width/2 * origin.size, y: origin.y}
+    {x: transform.x - self.width/2 * transform.size, y: transform.y},
+    {x: transform.x - self.width/2 * transform.size, y: bottom},
+    {x: transform.x + self.width/2 * transform.size, y: bottom},
+    {x: transform.x + self.width/2 * transform.size, y: transform.y}
   ]
 }
 
-Path.prototype.render = function(context, origin) {
-  var border = this.border(origin)
+Path.prototype.render = function(context, transform) {
+  var border = this.border(transform)
   context.beginPath()
   _.forEach(border, function(point) {
     context.lineTo(point.x, point.y)

@@ -19,7 +19,7 @@ var player = new Player({
   position: { x: game.width/2, y: game.height/2 },
   size: { x: 10, y: 10 },
   velocity: { x: 0, y: 0 },
-  speed: 0,
+  speed: 0.1,
   friction: 0.9,
   color: '#EB7576'
 });
@@ -32,7 +32,6 @@ var camera = new Camera({
   friction: 0.9,
   velocity: { x: 0, y: 0, z: 0}
 })
-
 
 player.addTo(game)
 camera.addTo(game)
