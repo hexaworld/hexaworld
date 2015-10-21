@@ -14,19 +14,20 @@ function Path(options){
 Path.prototype.border = function(transform) {
   var self = this
   var bottom = transform.position.y + transform.scale * Math.sqrt(3)/2
-  return [
-    {x: transform.position.x - self.width/2 * transform.scale, y: transform.position.y},
-    {x: transform.position.x - self.width/2 * transform.scale, y: bottom},
-    {x: transform.position.x + self.width/2 * transform.scale, y: bottom},
-    {x: transform.position.x + self.width/2 * transform.scale, y: transform.position.y}
+  var points = [
+    [transform.position.x - self.width/2 * transform.scale, transform.position.y],
+    [transform.position.x - self.width/2 * transform.scale, bottom],
+    [transform.position.x + self.width/2 * transform.scale, bottom],
+    [transform.position.x + self.width/2 * transform.scale, transform.position.y]
   ]
+  return math.multiply(points, transform.rotation)
 }
 
 Path.prototype.render = function(context, transform) {
   var border = this.border(transform)
   context.beginPath()
   _.forEach(border, function(point) {
-    context.lineTo(point.x, point.y)
+    context.lineTo(point[0], point[1])
   })
   context.closePath()
   context.fillStyle = this.color

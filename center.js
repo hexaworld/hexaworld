@@ -1,5 +1,6 @@
-aabb = require('aabb-2d')
 _ = require('lodash')
+math = require('mathjs')
+aabb = require('aabb-2d')
 
 module.exports = Center
 
@@ -11,20 +12,21 @@ function Center(options){
 
 Center.prototype.border = function(transform) {
   var self = this
-  return _.range(7).map(function(i) {
+  var points = _.range(7).map(function(i) {
     var dx = self.size * transform.scale * Math.cos(i * 2 * Math.PI / 6)
     var dy = self.size * transform.scale * Math.sin(i * 2 * Math.PI / 6)
-    return {x: transform.position.x + dx, y: transform.position.y + dy}
+    return [transform.position.x + dx, transform.position.y + dy]
   })
+  return math.multiply(points, transform.rotation)
 }
 
 Center.prototype.render = function(context, transform) {
-    var border = this.border(transform)
-    context.beginPath()
-    _.forEach(border, function(point) {
-      context.lineTo(point.x, point.y)
-    })
-    context.closePath()
-    context.fillStyle = this.color
-    context.fill()
+  var border = this.border(transform)
+  context.beginPath()
+  _.forEach(border, function(point) {
+    context.lineTo(point[0], point[1])
+  })
+  context.closePath()
+  context.fillStyle = this.color
+  context.fill()
 }
