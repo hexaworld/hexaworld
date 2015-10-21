@@ -13,12 +13,12 @@ function Path(options){
 
 Path.prototype.border = function(transform) {
   var self = this
-  var bottom = transform.y + transform.scale * Math.sqrt(3)/2
+  var bottom = transform.position.y + transform.scale * Math.sqrt(3)/2
   return [
-    {x: transform.x - self.width/2 * transform.size, y: transform.y},
-    {x: transform.x - self.width/2 * transform.size, y: bottom},
-    {x: transform.x + self.width/2 * transform.size, y: bottom},
-    {x: transform.x + self.width/2 * transform.size, y: transform.y}
+    {x: transform.position.x - self.width/2 * transform.scale, y: transform.position.y},
+    {x: transform.position.x - self.width/2 * transform.scale, y: bottom},
+    {x: transform.position.x + self.width/2 * transform.scale, y: bottom},
+    {x: transform.position.x + self.width/2 * transform.scale, y: transform.position.y}
   ]
 }
 
