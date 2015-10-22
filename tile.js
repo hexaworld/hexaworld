@@ -19,10 +19,13 @@ function Tile(options){
 Tile.prototype.transform = function(camera) {
 
   var scale = this.size * 0.1 * camera.position.z
-  var x = scale * 3/2 * this.position.r + camera.position.x
-  var y = scale * Math.sqrt(3) * (this.position.q + this.position.r/2) + camera.position.y
+  var x = scale * 3/2 * this.position.r
+  var y = scale * Math.sqrt(3) * (this.position.q + this.position.r/2)
   var angle = camera.orientation * Math.PI / 180
   var rotation = [[Math.cos(angle), -Math.sin(angle)], [Math.sin(angle), Math.cos(angle)]] 
+  var position = math.multiply([x, y], rotation)
+  x = position[0] + camera.position.x
+  y = position[1] + camera.position.y
   return {position: {x: x, y: y}, scale: scale, rotation: rotation}
 
 }
@@ -32,10 +35,12 @@ Tile.prototype.border = function(transform) {
   var points = _.range(7).map(function(i) {
     var dx = transform.scale * Math.cos(i * 2 * Math.PI / 6)
     var dy = transform.scale * Math.sin(i * 2 * Math.PI / 6)
-    return [transform.position.x + dx, transform.position.y + dy]
+    return [dx, dy]
   })
-  return math.multiply(points, transform.rotation)
-
+  points = math.multiply(points, transform.rotation)
+  return points.map(function(v) {
+    return math.add(v,[transform.position.x, transform.position.y])
+  })
 }
 
 Tile.prototype.draw = function(context, transform) {
