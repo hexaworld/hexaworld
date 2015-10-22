@@ -44,11 +44,11 @@ Camera.prototype.keyboardInput = function(keyboard){
     this.velocity.y = -this.speed;
   }
 
-  if ('P' in keyboard.keysDown){
+  if (',' in keyboard.keysDown){
     this.velocity.z = this.speed
   }
 
-  if ('L' in keyboard.keysDown){
+  if ('.' in keyboard.keysDown){
     this.velocity.z = -this.speed
   }
 

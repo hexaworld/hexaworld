@@ -5,6 +5,8 @@ var Entity = require('crtrdg-entity');
 module.exports = Player;
 inherits(Player, Entity);
 
+// add the camera position, subtract the center, rotate, add center
+
 function Player(options){
   this.position = { 
     x: options.position.x, 
@@ -56,20 +58,20 @@ Player.prototype.checkBoundaries = function(){
 };
 
 Player.prototype.keyboardInput = function(keyboard){
-  if ('A' in keyboard.keysDown){
-    this.velocity.x = -this.speed;
-  }
-
-  if ('D' in keyboard.keysDown){
+  if ('L' in keyboard.keysDown){
     this.velocity.x = this.speed;
   }
 
-  if ('W' in keyboard.keysDown){
-    this.velocity.y = -this.speed;
+  if ('J' in keyboard.keysDown){
+    this.velocity.x = -this.speed;
   }
 
-  if ('S' in keyboard.keysDown){
+  if ('K' in keyboard.keysDown){
     this.velocity.y = this.speed;
+  }
+
+  if ('I' in keyboard.keysDown){
+    this.velocity.y = -this.speed;
   }
 }
 
