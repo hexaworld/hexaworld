@@ -15,9 +15,12 @@ Center.prototype.border = function(transform) {
   var points = _.range(7).map(function(i) {
     var dx = self.size * transform.scale * Math.cos(i * 2 * Math.PI / 6)
     var dy = self.size * transform.scale * Math.sin(i * 2 * Math.PI / 6)
-    return [transform.position.x + dx, transform.position.y + dy]
+    return [dx, dy]
   })
-  return math.multiply(points, transform.rotation)
+  points = math.multiply(points, transform.rotation)
+  return points.map(function(v) {
+    return math.add(v,[transform.position.x, transform.position.y])
+  })
 }
 
 Center.prototype.render = function(context, transform) {

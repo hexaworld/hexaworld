@@ -18,6 +18,8 @@ function Player(options){
     y: options.size.y
   };
 
+  this.orientation = options.orientation
+
   this.velocity = {
     x: options.velocity.x,
     y: options.velocity.y
@@ -35,8 +37,9 @@ function Player(options){
 }
 
 Player.prototype.move = function(velocity){
-  this.position.x += velocity.x;
-  this.position.y += velocity.y;
+  var angle = this.orientation * Math.PI / 180
+  this.position.x += velocity.x*Math.cos(angle)-velocity.y*Math.sin(angle);
+  this.position.y += velocity.x*Math.sin(angle)+velocity.y*Math.cos(angle);
 };
 
 Player.prototype.checkBoundaries = function(){
@@ -73,24 +76,43 @@ Player.prototype.keyboardInput = function(keyboard){
   if ('I' in keyboard.keysDown){
     this.velocity.y = -this.speed;
   }
+
+  if ('U' in keyboard.keysDown){
+    this.orientation -= 0.7
+    if (this.orientation < 0) this.orientation = 360
+  }
+
+  if ('O' in keyboard.keysDown){
+    this.orientation += 0.7
+    if (this.orientation > 360) this.orientation = 0
+  }
 }
 
 Player.prototype.render = function(context, camera) {
 
   var self = this
-
+  var angle = self.orientation * Math.PI / 180
+    
   context.lineWidth = 3
 
   // ears
+  var x = -5
+  var y = -10
+  var dx = x*Math.cos(angle)-y*Math.sin(angle)
+  var dy = x*Math.sin(angle)+y*Math.cos(angle)
   context.beginPath()
   context.fillStyle = '#EB8686'
-  context.ellipse(self.position.x - 5, self.position.y - 10, 13, 6, 45 * Math.PI/180, 0, 2*Math.PI)
+  context.ellipse(self.position.x + dx, self.position.y + dy, 13, 6, angle + 45* Math.PI/180, 0, 2*Math.PI)
   context.closePath()
   context.fill()
 
+  var x = 5
+  var y = -10
+  var dx = x*Math.cos(angle)-y*Math.sin(angle)
+  var dy = x*Math.sin(angle)+y*Math.cos(angle)
   context.beginPath()
   context.fillStyle = '#EB8686'
-  context.ellipse(self.position.x + 5, self.position.y - 10, 13, 6, -45 * Math.PI/180, 0, 2*Math.PI)
+  context.ellipse(self.position.x + dx, self.position.y + dy, 13, 6, angle - 45 * Math.PI/180, 0, 2*Math.PI)
   context.closePath()
   context.fill()
 

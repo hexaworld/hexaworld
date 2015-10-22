@@ -13,14 +13,17 @@ function Path(options){
 
 Path.prototype.border = function(transform) {
   var self = this
-  var bottom = transform.position.y + transform.scale * Math.sqrt(3)/2
+  var bottom = transform.scale * Math.sqrt(3)/2
   var points = [
-    [transform.position.x - self.width/2 * transform.scale, transform.position.y],
-    [transform.position.x - self.width/2 * transform.scale, bottom],
-    [transform.position.x + self.width/2 * transform.scale, bottom],
-    [transform.position.x + self.width/2 * transform.scale, transform.position.y]
+    [-self.width/2 * transform.scale, 0],
+    [-self.width/2 * transform.scale, bottom],
+    [self.width/2 * transform.scale, bottom],
+    [self.width/2 * transform.scale, 0]
   ]
-  return math.multiply(points, transform.rotation)
+  points = math.multiply(points, transform.rotation)
+  return points.map(function(v) {
+    return math.add(v,[transform.position.x, transform.position.y])
+  })
 }
 
 Path.prototype.render = function(context, transform) {
