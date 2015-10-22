@@ -17,6 +17,7 @@ var world = new World()
 
 var player = new Player({
   position: { x: game.width/2, y: game.height/2 },
+  orientation: 0,
   size: { x: 10, y: 10 },
   velocity: { x: 0, y: 0 },
   speed: 2,
