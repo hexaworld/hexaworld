@@ -80,12 +80,12 @@ Player.prototype.keyboardInput = function(keyboard){
   }
 
   if ('J' in keyboard.keysDown){
-    this.orientation -= this.speed*.9
+    this.orientation -= this.speed*1.9
     if (this.orientation < 0) this.orientation = 360
   }
 
   if ('L' in keyboard.keysDown){
-    this.orientation += this.speed*.9
+    this.orientation += this.speed*1.9
     if (this.orientation > 360) this.orientation = 0
   }
 }

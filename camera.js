@@ -38,11 +38,11 @@ Camera.prototype.keyboardInput = function(keyboard){
   }
 
   if ('W' in keyboard.keysDown){
-    this.velocity.y = this.speed;
+    this.velocity.y = -this.speed;
   }
 
   if ('S' in keyboard.keysDown){
-    this.velocity.y = -this.speed;
+    this.velocity.y = this.speed;
   }
 
   if ('.' in keyboard.keysDown){

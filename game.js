@@ -26,13 +26,13 @@ var player = new Player({
 });
 
 var camera = new Camera({
-  position: {x: 0, y:0, z: 20},
+  position: {x: 0, y:0, z: 80},
   orientation: 0,
   speed: 2,
   velocity: 0,
   friction: 0.9,
   velocity: { x: 0, y: 0, z: 0},
-  yoked: true
+  yoked: false
 })
 
 player.addTo(game)
