@@ -45,20 +45,20 @@ Player.prototype.move = function(velocity){
 };
 
 Player.prototype.checkBoundaries = function(){
-  if (this.position.x <= -this.game.width/2* + this.size.x){
-    this.position.x = -this.game.width/2 + this.size.x;
+  if (this.position.x <= -this.game.width/4 + this.size.x){
+    this.position.x = -this.game.width/4 + this.size.x;
   }
 
-  if (this.position.x >= this.game.width/2 - this.size.x){
-    this.position.x = this.game.width/2 - this.size.x;
+  if (this.position.x >= this.game.width/4 - this.size.x){
+    this.position.x = this.game.width/4 - this.size.x;
   }
 
-  if (this.position.y <= -this.game.height/2 + this.size.y){
-    this.position.y = -this.game.height/2 + this.size.y;
+  if (this.position.y <= -this.game.height/4 + this.size.y){
+    this.position.y = -this.game.height/4 + this.size.y;
   }
 
-  if (this.position.y >= this.game.height/2 - this.size.y){
-    this.position.y = this.game.height/2 - this.size.y;
+  if (this.position.y >= this.game.height/4 - this.size.y){
+    this.position.y = this.game.height/4 - this.size.y;
   }
 };
 
@@ -80,12 +80,12 @@ Player.prototype.keyboardInput = function(keyboard){
   }
 
   if ('J' in keyboard.keysDown){
-    this.orientation -= 0.8
+    this.orientation -= this.speed*.9
     if (this.orientation < 0) this.orientation = 360
   }
 
   if ('L' in keyboard.keysDown){
-    this.orientation += 0.8
+    this.orientation += this.speed*.9
     if (this.orientation > 360) this.orientation = 0
   }
 }
@@ -95,7 +95,7 @@ Player.prototype.render = function(context, camera) {
   var self = this
   var angle = camera.orientation * Math.PI / 180
   var scale = 0.1 * camera.position.z
-  var position = [self.position.x, self.position.y]
+  var position = [self.position.x*scale, self.position.y*scale]
   var rotation = [[Math.cos(angle), -Math.sin(angle)], [Math.sin(angle), Math.cos(angle)]] 
 
   position[0] = position[0] - camera.position.x

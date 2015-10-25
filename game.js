@@ -20,7 +20,7 @@ var player = new Player({
   orientation: 0,
   size: { x: 2, y: 2 },
   velocity: { x: 0, y: 0 },
-  speed: 1,
+  speed: .7,
   friction: 0.9,
   color: '#EB7576'
 });
@@ -68,8 +68,8 @@ game.on('update', function(interval){
 
 game.on('draw', function(context){
   if (camera.yoked){
-    camera.position.x = player.position.x
-    camera.position.y = player.position.y 
+    camera.position.x = player.position.x * 0.1 * camera.position.z
+    camera.position.y = player.position.y * 0.1 * camera.position.z
     camera.orientation = player.orientation
   }
   world.render(context, camera)
