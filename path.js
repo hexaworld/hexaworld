@@ -25,9 +25,7 @@ Path.prototype.init = function() {
   this.points = points
 }
 
-Path.prototype.render = function(context, camera) {
-  var points = this.points
-  points = camera.transform.apply(points)
+Path.prototype.draw = function(context, points) {
   context.beginPath()
   _.forEach(points, function(point) {
     context.lineTo(point[0], point[1])
@@ -35,4 +33,10 @@ Path.prototype.render = function(context, camera) {
   context.closePath()
   context.fillStyle = this.color
   context.fill()
+}
+
+Path.prototype.render = function(context, camera) {
+  var points = this.points
+  points = camera.transform.apply(points)
+  this.draw(context, points)
 }

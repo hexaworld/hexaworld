@@ -1,5 +1,4 @@
 _ = require('lodash')
-math = require('mathjs')
 Path = require('./path.js')
 Center = require('./center.js')
 Transform = require('./transform.js')
@@ -9,12 +8,11 @@ module.exports = Tile
 function Tile(props){
   if (!props) props = {}
 
-  var scale = (props.size || 50)
-  var x = scale * 3/2 * props.position.r
-  var y = scale * Math.sqrt(3) * (props.position.q + props.position.r/2)
+  var scale = (props.scale || 50)
+  var x = scale * 3/2 * props.coordinate.r
+  var y = scale * Math.sqrt(3) * (props.coordinate.q + props.coordinate.r/2)
   
-  this.position = props.position
-  this.size = scale
+  this.coordinate = props.coordinate
   this.color = props.color || '#A5A5A5'
   this.parent = props.parent
   this.transform = new Transform({position: {x: x, y: y}, scale: scale})

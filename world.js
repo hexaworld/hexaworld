@@ -4,13 +4,13 @@ module.exports = World
 
 function World() {
   this.tiles = [
-    new tile({position: { r: -1, q: 0}}), 
-    new tile({position: { r: 0, q: 0}}), 
-    new tile({position: { r: 0, q: 1}}),
-    new tile({position: { r: -1, q: 1}}),
-    new tile({position: { r: 1, q: -1}}),
-    new tile({position: { r: 1, q: 0}}),
-    new tile({position: { r: 0, q: -1}})
+    new tile({coordinate: { r: -1, q: 0}}), 
+    new tile({coordinate: { r: 0, q: 0}}), 
+    new tile({coordinate: { r: 0, q: 1}}),
+    new tile({coordinate: { r: -1, q: 1}}),
+    new tile({coordinate: { r: 1, q: -1}}),
+    new tile({coordinate: { r: 1, q: 0}}),
+    new tile({coordinate: { r: 0, q: -1}})
   ]
 }
 

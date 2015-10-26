@@ -22,9 +22,7 @@ Center.prototype.init = function() {
   this.points = points
 }
 
-Center.prototype.render = function(context, camera) {
-  var points = this.points
-  points = camera.transform.apply(points)
+Center.prototype.draw = function(context, points) {
   context.beginPath()
   _.forEach(points, function(point) {
     context.lineTo(point[0], point[1])
@@ -32,4 +30,10 @@ Center.prototype.render = function(context, camera) {
   context.closePath()
   context.fillStyle = this.color
   context.fill()
+}
+
+Center.prototype.render = function(context, camera) {
+  var points = this.points
+  points = camera.transform.apply(points)
+  this.draw(context, points)
 }
