@@ -6,20 +6,20 @@ module.exports = Center
 
 function Center(options){
   options = options || {}
-  this.size = options.size || 0.2
+  this.size = options.size || 2
   this.color = options.color || "#DFE0E2"
 }
 
 Center.prototype.border = function(transform) {
   var self = this
   var points = _.range(7).map(function(i) {
-    var dx = self.size * transform.scale * Math.cos(i * 2 * Math.PI / 6)
-    var dy = self.size * transform.scale * Math.sin(i * 2 * Math.PI / 6)
+    var dx = self.size * .1 * transform.scale * Math.cos(i * 2 * Math.PI / 6)
+    var dy = self.size * .1 * transform.scale * Math.sin(i * 2 * Math.PI / 6)
     return [dx, dy]
   })
   points = math.multiply(points, transform.rotation)
   return points.map(function(v) {
-    return math.add(v,[transform.position.x, transform.position.y])
+    return math.add(v,[transform.position.x + game.width/2, transform.position.y + game.height/2])
   })
 }
 

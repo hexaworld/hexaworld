@@ -22,7 +22,7 @@ Path.prototype.border = function(transform) {
   ]
   points = math.multiply(points, transform.rotation)
   return points.map(function(v) {
-    return math.add(v,[transform.position.x, transform.position.y])
+    return math.add(v,[transform.position.x + game.width/2, transform.position.y + game.height/2])
   })
 }
 

@@ -16,22 +16,23 @@ var mouse = new Mouse(game)
 var world = new World()
 
 var player = new Player({
-  position: { x: game.width/2, y: game.height/2 },
+  position: { x: 0, y: 0 },
   orientation: 0,
-  size: { x: 10, y: 10 },
+  size: { x: 2, y: 2 },
   velocity: { x: 0, y: 0 },
-  speed: 2,
+  speed: .7,
   friction: 0.9,
   color: '#EB7576'
 });
 
 var camera = new Camera({
-  position: {x: game.width/2, y:game.height/2, z: 1},
+  position: {x: 0, y:0, z: 80},
   orientation: 0,
   speed: 2,
   velocity: 0,
   friction: 0.9,
-  velocity: { x: 0, y: 0, z: 0}
+  velocity: { x: 0, y: 0, z: 0},
+  yoked: true
 })
 
 player.addTo(game)
@@ -66,6 +67,11 @@ game.on('update', function(interval){
 
 
 game.on('draw', function(context){
+  if (camera.yoked){
+    camera.position.x = player.position.x * 0.1 * camera.position.z
+    camera.position.y = player.position.y * 0.1 * camera.position.z
+    camera.orientation = player.orientation
+  }
   world.render(context, camera)
   player.render(context, camera)
 });

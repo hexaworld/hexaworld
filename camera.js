@@ -14,6 +14,7 @@ function Camera(options){
   this.orientation = options.orientation
   this.speed = options.speed
   this.friction = options.friction
+  this.yoked = options.yoked
   this.velocity = {
     x: options.velocity.x,
     y: options.velocity.y,
@@ -29,19 +30,19 @@ Camera.prototype.move = function(velocity) {
 
 Camera.prototype.keyboardInput = function(keyboard){
   if ('A' in keyboard.keysDown){
-    this.velocity.x = this.speed;
-  }
-
-  if ('D' in keyboard.keysDown){
     this.velocity.x = -this.speed;
   }
 
+  if ('D' in keyboard.keysDown){
+    this.velocity.x = this.speed;
+  }
+
   if ('W' in keyboard.keysDown){
-    this.velocity.y = this.speed;
+    this.velocity.y = -this.speed;
   }
 
   if ('S' in keyboard.keysDown){
-    this.velocity.y = -this.speed;
+    this.velocity.y = this.speed;
   }
 
   if ('.' in keyboard.keysDown){
