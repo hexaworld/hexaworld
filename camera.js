@@ -29,19 +29,19 @@ Camera.prototype.move = function(velocity) {
 }
 
 Camera.prototype.keyboardInput = function(keyboard){
-  if ('A' in keyboard.keysDown){
+  if ('J' in keyboard.keysDown){
     this.velocity.x = -this.speed;
   }
 
-  if ('D' in keyboard.keysDown){
+  if ('L' in keyboard.keysDown){
     this.velocity.x = this.speed;
   }
 
-  if ('W' in keyboard.keysDown){
+  if ('I' in keyboard.keysDown){
     this.velocity.y = -this.speed;
   }
 
-  if ('S' in keyboard.keysDown){
+  if ('K' in keyboard.keysDown){
     this.velocity.y = this.speed;
   }
 
@@ -53,12 +53,12 @@ Camera.prototype.keyboardInput = function(keyboard){
     this.velocity.z = -this.speed
   }
 
-  if ('Q' in keyboard.keysDown){
+  if ('U' in keyboard.keysDown){
     this.orientation -= 0.1
     if (this.orientation < 0) this.orientation = 360
   }
 
-  if ('E' in keyboard.keysDown){
+  if ('O' in keyboard.keysDown){
     this.orientation += 0.1
     if (this.orientation > 360) this.orientation = 0
   }
