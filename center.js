@@ -3,24 +3,28 @@ aabb = require('aabb-2d')
 
 module.exports = Center
 
-function Center(options){
-  options = options || {}
-  this.size = options.size || 2
-  this.color = options.color || "#DFE0E2"
+function Center(props){
+  if (!props) props = {}
+  this.parent = props.parent
+  this.size = props.size || 2
+  this.color = props.color || "#DFE0E2"
+  this.init()
 }
 
-Center.prototype.points = function() {
+Center.prototype.init = function() {
   var self = this
   var points = _.range(7).map(function(i) {
     var dx = self.size * .1 * Math.cos(i * 2 * Math.PI / 6)
     var dy = self.size * .1 * Math.sin(i * 2 * Math.PI / 6)
     return [dx, dy]
   })
-  return points
+  if (this.parent) points = this.parent.transform.apply(points)
+  this.points = points
 }
 
-Center.prototype.render = function(context, transform) {
-  var points = transform.apply(this.points())
+Center.prototype.render = function(context, camera) {
+  var points = this.points
+  points = camera.transform.apply(points)
   context.beginPath()
   _.forEach(points, function(point) {
     context.lineTo(point[0], point[1])

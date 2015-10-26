@@ -16,23 +16,23 @@ var mouse = new Mouse(game)
 var world = new World()
 
 var player = new Player({
-  position: { x: 0, y: 0 },
+  position: {x: 0, y: 0},
   orientation: 0,
-  size: { x: 2, y: 2 },
-  velocity: { x: 0, y: 0 },
-  speed: .7,
+  size: {x: 10, y: 10},
+  velocity: {x: 0, y: 0},
+  speed: 2,
   friction: 0.9,
   color: '#EB7576'
 });
 
 var camera = new Camera({
-  position: {x: 0, y:0, z: 80},
+  position: {x: 0, y: 0, z: 10},
   orientation: 0,
-  speed: 2,
+  speed: 1,
   velocity: 0,
   friction: 0.9,
   velocity: { x: 0, y: 0, z: 0},
-  yoked: true
+  yoked: false
 })
 
 player.addTo(game)
