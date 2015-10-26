@@ -1,12 +1,9 @@
-math = require('mathjs')
-
 module.exports = Transform
 
 function Transform(parameters){
   this.position = parameters.position || {x: 0, y: 0}
   this.scale = parameters.scale || 1
-  var theta = (parameters.rotation * Math.PI / 180) || 0
-  this.rotation = [[Math.cos(theta), -Math.sin(theta)], [Math.sin(theta), Math.cos(theta)]] 
+  this.rotation = rotmat((parameters.rotation * Math.PI / 180) || 0)
   return this
 }
 
@@ -17,9 +14,15 @@ Transform.prototype.apply = function(points) {
   points = points.map( function(point) {
     return [point[0] * self.scale, point[1] * self.scale]
   })
+
   // rotate
-  points = math.multiply(points, self.rotation)
-  
+  points = points.map( function(point) {
+    return [
+      point[0] * self.rotation[0][0] + point[1] * self.rotation[0][1],
+      point[0] * self.rotation[1][0] + point[1] * self.rotation[1][1],
+    ]
+  })
+
   // translate
   points = points.map(function(point) {
     return [point[0] + self.position.x, point[1] + self.position.y]
@@ -30,8 +33,9 @@ Transform.prototype.apply = function(points) {
 Transform.prototype.update = function(parameters) {
   if (parameters.position) this.position = parameters.position
   if (parameters.scale) this.scale = parameters.scale
-  if (parameters.rotation) {
-    var theta = parameters.rotation * Math.PI / 180
-    this.rotation = [[Math.cos(theta), -Math.sin(theta)], [Math.sin(theta), Math.cos(theta)]] 
-  }
+  if (parameters.rotation) this.rotation = rotmat(parameters.rotation * Math.PI / 180)
+}
+
+rotmat = function(theta) {
+  return [[Math.cos(theta), -Math.sin(theta)], [Math.sin(theta), Math.cos(theta)]] 
 }
