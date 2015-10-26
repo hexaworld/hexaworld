@@ -2,6 +2,7 @@ _ = require('lodash')
 math = require('mathjs')
 Path = require('./path.js')
 Center = require('./center.js')
+Transform = require('./transform.js')
 
 module.exports = Tile
 
@@ -30,28 +31,24 @@ Tile.prototype.transform = function(camera) {
   y = position[1]
   //x = position[0] - camera.position.x
   //y = position[1] - camera.position.y
-  return {position: {x: x, y: y}, scale: scale, rotation: rotation}
+  return new Transform({position: {x: x, y: y}, scale: scale, rotation: rotation})
 
 }
 
-Tile.prototype.border = function(transform) {
-
+Tile.prototype.points = function() {
   var points = _.range(7).map(function(i) {
-    var dx = transform.scale * Math.cos(i * 2 * Math.PI / 6)
-    var dy = transform.scale * Math.sin(i * 2 * Math.PI / 6)
+    var dx = Math.cos(i * 2 * Math.PI / 6)
+    var dy = Math.sin(i * 2 * Math.PI / 6)
     return [dx, dy]
   })
-  points = math.multiply(points, transform.rotation)
-  return points.map(function(v) {
-    return math.add(v,[transform.position.x + game.width/2, transform.position.y + game.height/2])
-  })
+  return points
 }
 
 Tile.prototype.draw = function(context, transform) {
-
-  var border = this.border(transform)
+  var self = this
+  var points = transform.apply(self.points())
   context.beginPath()
-  _.forEach(border, function(point) {
+  _.forEach(points, function(point) {
     context.lineTo(point[0], point[1])
   })
   context.closePath()
@@ -59,7 +56,6 @@ Tile.prototype.draw = function(context, transform) {
   context.strokeStyle = this.color
   context.fill()
   context.stroke()
-
 }
 
 Tile.prototype.render = function(context, camera) {
@@ -67,9 +63,7 @@ Tile.prototype.render = function(context, camera) {
   var transform = this.transform(camera)
 
   this.draw(context, transform)
-
   this.center.render(context, transform)
-
   this.paths.forEach(function (path) {
     path.render(context, transform)
   })

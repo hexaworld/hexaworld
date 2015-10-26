@@ -11,25 +11,22 @@ function Path(options){
   this.color = options.color || "#DFE0E2"
 }
 
-Path.prototype.border = function(transform) {
+Path.prototype.points = function() {
   var self = this
-  var bottom = transform.scale * Math.sqrt(3)/2
+  var bottom = Math.sqrt(3)/2
   var points = [
-    [-self.width/2 * transform.scale, 0],
-    [-self.width/2 * transform.scale, bottom],
-    [self.width/2 * transform.scale, bottom],
-    [self.width/2 * transform.scale, 0]
+    [-self.width/2, 0],
+    [-self.width/2, bottom],
+    [self.width/2, bottom],
+    [self.width/2, 0]
   ]
-  points = math.multiply(points, transform.rotation)
-  return points.map(function(v) {
-    return math.add(v,[transform.position.x + game.width/2, transform.position.y + game.height/2])
-  })
+  return points
 }
 
 Path.prototype.render = function(context, transform) {
-  var border = this.border(transform)
+  var points = transform.apply(this.points())
   context.beginPath()
-  _.forEach(border, function(point) {
+  _.forEach(points, function(point) {
     context.lineTo(point[0], point[1])
   })
   context.closePath()
