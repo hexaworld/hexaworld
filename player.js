@@ -63,28 +63,28 @@ Player.prototype.checkBoundaries = function(){
 };
 
 Player.prototype.keyboardInput = function(keyboard){
-  if ('O' in keyboard.keysDown){
+  if ('E' in keyboard.keysDown){
     this.velocity.x = this.speed;
   }
 
-  if ('U' in keyboard.keysDown){
+  if ('Q' in keyboard.keysDown){
     this.velocity.x = -this.speed;
   }
 
-  if ('K' in keyboard.keysDown){
+  if ('S' in keyboard.keysDown){
     this.velocity.y = this.speed;
   }
 
-  if ('I' in keyboard.keysDown){
+  if ('W' in keyboard.keysDown){
     this.velocity.y = -this.speed;
   }
 
-  if ('J' in keyboard.keysDown){
+  if ('A' in keyboard.keysDown){
     this.orientation -= this.speed*1.9
     if (this.orientation < 0) this.orientation = 360
   }
 
-  if ('L' in keyboard.keysDown){
+  if ('D' in keyboard.keysDown){
     this.orientation += this.speed*1.9
     if (this.orientation > 360) this.orientation = 0
   }
