@@ -13,7 +13,7 @@ function Camera(options){
     y: options.position.y,
     z: options.position.z
   }
-  this.orientation = options.orientation
+  this.rotation = options.rotation
   this.speed = options.speed
   this.friction = options.friction
   this.yoked = options.yoked
@@ -25,7 +25,7 @@ function Camera(options){
   this.transform = new Transform({
     position: {x: -self.position.x, y: -self.position.y}, 
     scale: self.position.z,
-    rotation: self.orientation
+    rotation: self.rotation
   })
 }
 
@@ -37,8 +37,7 @@ Camera.prototype.move = function(velocity) {
   this.transform.update({
     position: {x: -self.position.x +this.game.width/2, y: -self.position.y +this.game.height/2}, 
     scale: self.position.z, 
-    rotation: self.orientation})
-  console.log(this.transform.position)
+    rotation: self.rotation})
 }
 
 Camera.prototype.keyboardInput = function(keyboard){
@@ -67,12 +66,12 @@ Camera.prototype.keyboardInput = function(keyboard){
   }
 
   if ('U' in keyboard.keysDown){
-    this.orientation -= 0.1
-    if (this.orientation < 0) this.orientation = 360
+    this.rotation -= 0.1
+    if (this.rotation < 0) this.rotation = 360
   }
 
   if ('O' in keyboard.keysDown){
-    this.orientation += 0.1
-    if (this.orientation > 360) this.orientation = 0
+    this.rotation += 0.1
+    if (this.rotation > 360) this.rotation = 0
   }
 }
