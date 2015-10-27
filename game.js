@@ -32,7 +32,7 @@ var camera = new Camera({
   velocity: 0,
   friction: 0.9,
   velocity: { x: 0, y: 0, z: 0},
-  yoked: false
+  yoked: true
 })
 
 player.addTo(game)
@@ -68,8 +68,8 @@ game.on('update', function(interval){
 
 game.on('draw', function(context){
   if (camera.yoked){
-    camera.position.x = player.position.x * 0.1 * camera.position.z
-    camera.position.y = player.position.y * 0.1 * camera.position.z
+    camera.position.x = player.position.x 
+    camera.position.y = player.position.y
     camera.orientation = player.orientation
   }
   world.render(context, camera)
