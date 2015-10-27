@@ -22,6 +22,6 @@ Center.prototype.init = function(props) {
   })
   this.points = points
 
-  var scale = (props.scale || 2)
+  var scale = (props.scale || 1.5)
   this.transform = new Transform({scale: scale})
 }
