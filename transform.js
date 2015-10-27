@@ -1,6 +1,7 @@
 module.exports = Transform
 
 function Transform(parameters){
+  parameters = parameters || {}
   this.position = parameters.position || {x: 0, y: 0}
   this.scale = parameters.scale || 1
   this.rotation = rotmat((parameters.rotation * Math.PI / 180) || 0)

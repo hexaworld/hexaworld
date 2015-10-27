@@ -1,17 +1,20 @@
-var tile = require('./tile.js')
+var Tile = require('./tile.js')
+var Path = require('./path.js')
+var Center = require('./center.js')
 
 module.exports = World
 
 function World() {
   this.tiles = [
-    new tile({coordinate: { r: -1, q: 0}}), 
-    new tile({coordinate: { r: 0, q: 0}}), 
-    new tile({coordinate: { r: 0, q: 1}}),
-    new tile({coordinate: { r: -1, q: 1}}),
-    new tile({coordinate: { r: 1, q: -1}}),
-    new tile({coordinate: { r: 1, q: 0}}),
-    new tile({coordinate: { r: 0, q: -1}})
+    new Tile({coordinate: {r: -1, q: 0}}, [new Center()]), 
+    new Tile({coordinate: {r: 0, q: 0}}, [new Center()]), 
+    new Tile({coordinate: {r: 0, q: 1}}, [new Center()]),
+    new Tile({coordinate: {r: -1, q: 1}}, [new Center()]),
+    new Tile({coordinate: {r: 1, q: -1}}, [new Center()]),
+    new Tile({coordinate: {r: 1, q: 0}}, [new Center()]),
+    new Tile({coordinate: {r: 0, q: -1}}, [new Center()])
   ]
+  console.log(this.tiles[0])
 }
 
 World.prototype.render = function(context, camera) {

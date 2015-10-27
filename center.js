@@ -1,39 +1,27 @@
-_ = require('lodash')
-aabb = require('aabb-2d')
+var inherits = require('inherits')
+var Geometry = require('./geometry.js')
+var Transform = require('./transform.js')
 
 module.exports = Center
+inherits(Center, Geometry)
 
-function Center(props){
-  if (!props) props = {}
-  this.parent = props.parent
-  this.size = props.size || 2
-  this.color = props.color || "#DFE0E2"
-  this.init()
+function Center(props, children) {
+  Geometry.call(this, props, children)
 }
 
-Center.prototype.init = function() {
-  var self = this
+Center.prototype.init = function(props) {
+  this.props = {
+    fill: props.fill || '#DFE0E2',
+    stroke: props.stroke || '#DFE0E2'
+  } 
+
   var points = _.range(7).map(function(i) {
-    var dx = self.size * .1 * Math.cos(i * 2 * Math.PI / 6)
-    var dy = self.size * .1 * Math.sin(i * 2 * Math.PI / 6)
+    var dx = .1 * Math.cos(i * 2 * Math.PI / 6)
+    var dy = .1 * Math.sin(i * 2 * Math.PI / 6)
     return [dx, dy]
   })
-  if (this.parent) points = this.parent.transform.apply(points)
   this.points = points
-}
 
-Center.prototype.draw = function(context, points) {
-  context.beginPath()
-  _.forEach(points, function(point) {
-    context.lineTo(point[0], point[1])
-  })
-  context.closePath()
-  context.fillStyle = this.color
-  context.fill()
-}
-
-Center.prototype.render = function(context, camera) {
-  var points = this.points
-  points = camera.transform.apply(points)
-  this.draw(context, points)
+  var scale = (props.scale || 2)
+  this.transform = new Transform({scale: scale})
 }
