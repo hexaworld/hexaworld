@@ -94,16 +94,17 @@ Player.prototype.render = function(context, camera) {
 
   var self = this
   var angle = camera.rotation * Math.PI / 180
-  var scale = 0.1 * camera.position.z
-  var position = [self.position.x*scale, self.position.y*scale]
+  var scale = 1/camera.transform.scale
+//  var position = [self.position.x*scale, self.position.y*scale]
+  var position = [self.position.x, self.position.y]
   var rotation = [[Math.cos(angle), -Math.sin(angle)], [Math.sin(angle), Math.cos(angle)]] 
 
   position[0] = position[0] - camera.position.x
   position[1] = position[1] - camera.position.y
   var position = math.multiply(position, rotation)
 
-  var originX = position[0] + game.width/2
-  var originY = position[1] + game.height/2
+  var originX = scale*position[0] + game.width/2
+  var originY = scale*position[1] + game.height/2
 
 //  var originX = position[0] - camera.position.x+game.width/2
 //  var originY = position[1] - camera.position.y+game.height/2

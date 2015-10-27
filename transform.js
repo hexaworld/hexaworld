@@ -31,6 +31,31 @@ Transform.prototype.apply = function(points) {
   return points
 }
 
+Transform.prototype.invert = function(points) {
+  var self = this
+
+  // translate
+  points = points.map(function(point) {
+    return [point[0] - self.position.x, point[1] - self.position.y]
+  })
+
+  // rotate
+  points = points.map( function(point) {
+    return [
+      point[0] * self.rotation[0][0] - point[1] * self.rotation[0][1],
+      - point[0] * self.rotation[1][0] + point[1] * self.rotation[1][1],
+    ]
+  })
+
+  // rescale
+  points = points.map( function(point) {
+    return [point[0] / self.scale, point[1] / self.scale]
+  })
+
+  return points
+}
+
+
 Transform.prototype.update = function(parameters) {
   if (parameters.position) this.position = parameters.position
   if (parameters.scale) this.scale = parameters.scale

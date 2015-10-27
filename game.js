@@ -18,17 +18,17 @@ var world = new World()
 var player = new Player({
   position: {x: 0, y: 0},
   rotation: 0,
-  size: {x: 10, y: 10},
+  size: {x: 2, y: 2},
   velocity: {x: 0, y: 0},
-  speed: 2,
+  speed: .5,
   friction: 0.9,
   color: '#EB7576'
 });
 
 var camera = new Camera({
-  position: {x: 0, y: 0, z: 10},
+  position: {x: 0, y: 0, z: .1},
   rotation: 0,
-  speed: 1,
+  speed: .5,
   velocity: 0,
   friction: 0.9,
   velocity: { x: 0, y: 0, z: 0},
