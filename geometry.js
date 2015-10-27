@@ -38,9 +38,12 @@ Geometry.prototype.draw = function(context, points) {
 }
 
 Geometry.prototype.render = function(context, camera) {
-
   var points = this.points
-  points = camera.transform.apply(points)
+
+  points = camera.transform.invert(points)
+  points = points.map(function (point) {
+    return [point[0] + camera.game.width/2, point[1] + camera.game.height/2]
+  })
   this.draw(context, points)
 
   if (this.children) {
