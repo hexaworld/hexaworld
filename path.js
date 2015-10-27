@@ -3,7 +3,7 @@ _ = require('lodash')
 
 module.exports = Path
 
-function Path(props){
+function Path (props) {
   if (!props) props = {}
   this.parent = props.parent
   this.type = 'path'

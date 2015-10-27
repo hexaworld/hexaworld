@@ -5,33 +5,41 @@ Transform = require('./transform.js')
 
 module.exports = Tile
 
-function Tile(props){
+function Tile(props) {
   if (!props) props = {}
-
-  var scale = (props.scale || 50)
-  var x = scale * 3/2 * props.coordinate.r
-  var y = scale * Math.sqrt(3) * (props.coordinate.q + props.coordinate.r/2)
   
   this.coordinate = props.coordinate
   this.color = props.color || '#A5A5A5'
   this.parent = props.parent
-  this.transform = new Transform({position: {x: x, y: y}, scale: scale})
+
+  this.init(props)
+  this.update()
+
   this.children = [
     new Path({parent: this}), 
     new Center({parent: this})
   ]
-  this.init()
+
 }
 
-Tile.prototype.init = function() {
+Tile.prototype.init = function(props) {
+  var scale = (props.scale || 50)
+  var x = scale * 3/2 * props.coordinate.r
+  var y = scale * Math.sqrt(3) * (props.coordinate.q + props.coordinate.r/2)
+  this.transform = new Transform({position: {x: x, y: y}, scale: scale})
+  
   var points = _.range(7).map(function(i) {
     var dx = Math.cos(i * 2 * Math.PI / 6)
     var dy = Math.sin(i * 2 * Math.PI / 6)
     return [dx, dy]
   })
-  points = this.transform.apply(points)
-  if (this.parent) points = this.parent.transform.apply(points)
   this.points = points
+}
+
+Tile.prototype.update = function() {
+  var self = this
+  self.points = self.transform.apply(self.points)
+  if (self.parent) self.points = self.parent.transform.apply(self.points)
 }
 
 Tile.prototype.draw = function(context, points) {
@@ -53,5 +61,4 @@ Tile.prototype.render = function(context, camera) {
   this.children.forEach(function (child) {
     child.render(context, camera)
   })
-
 }
