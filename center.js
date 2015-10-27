@@ -1,3 +1,4 @@
+var _ = require('lodash')
 var inherits = require('inherits')
 var Geometry = require('./geometry.js')
 var Transform = require('./transform.js')
@@ -22,6 +23,6 @@ Center.prototype.init = function(props) {
   })
   this.points = points
 
-  var scale = (props.scale || 1.5)
+  var scale = (props.scale || 1.4)
   this.transform = new Transform({scale: scale})
 }

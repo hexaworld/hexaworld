@@ -6,13 +6,13 @@ module.exports = World
 
 function World() {
   this.tiles = [
-    new Tile({coordinate: {r: -1, q: 0}}, [new Center()]), 
-    new Tile({coordinate: {r: 0, q: 0}}, [new Center()]), 
-    new Tile({coordinate: {r: 0, q: 1}}, [new Center()]),
-    new Tile({coordinate: {r: -1, q: 1}}, [new Center()]),
-    new Tile({coordinate: {r: 1, q: -1}}, [new Center()]),
-    new Tile({coordinate: {r: 1, q: 0}}, [new Center()]),
-    new Tile({coordinate: {r: 0, q: -1}}, [new Center()])
+    new Tile({coordinate: {r: -1, q: 0}}, [new Center(), new Path()]), 
+    new Tile({coordinate: {r: 0, q: 0}}, [new Center(), new Path()]), 
+    new Tile({coordinate: {r: 0, q: 1}}, [new Center(), new Path()]),
+    new Tile({coordinate: {r: -1, q: 1}}, [new Center(), new Path()]),
+    new Tile({coordinate: {r: 1, q: -1}}, [new Center(), new Path()]),
+    new Tile({coordinate: {r: 1, q: 0}}, [new Center(), new Path()]),
+    new Tile({coordinate: {r: 0, q: -1}}, [new Center(), new Path()])
   ]
   console.log(this.tiles[0])
 }

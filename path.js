@@ -1,46 +1,28 @@
-aabb = require('aabb-2d')
-_ = require('lodash')
+var inherits = require('inherits')
+var Geometry = require('./geometry.js')
+var Transform = require('./transform.js')
 
 module.exports = Path
+inherits(Path, Geometry)
 
-function Path (props) {
-  if (!props) props = {}
-  this.parent = props.parent
-  this.type = 'path'
-  this.width = props.width || 0.2
-  this.color = props.color || "#DFE0E2"
-  this.init()
+function Path(props, children) {
+  Geometry.call(this, props, children)
 }
 
-Path.prototype.init = function() {
-  var self = this
-  var bottom = Math.sqrt(3)/2
+Path.prototype.init = function(props) {
+  
+  this.props = {
+    fill: props.fill || '#DFE0E2',
+    stroke: props.stroke || '#DFE0E2'
+  } 
+
+  this.transform = new Transform()
+
   var points = [
-    [-self.width/2, 0],
-    [-self.width/2, bottom],
-    [self.width/2, bottom],
-    [self.width/2, 0]
+    [-0.2/2, 0],
+    [-0.2/2, Math.sqrt(3)/2],
+    [0.2/2, Math.sqrt(3)/2],
+    [0.2/2, 0]
   ]
-  if (this.parent) points = this.parent.transform.apply(points)
   this.points = points
-}
-
-Path.prototype.draw = function(context, points) {
-  context.beginPath()
-  _.forEach(points, function(point) {
-    context.lineTo(point[0], point[1])
-  })
-  context.closePath()
-  context.fillStyle = this.color
-  context.fill()
-}
-
-Path.prototype.render = function(context, camera) {
-  var points = this.points
-  points = camera.transform.invert(points)
-  // translate
-  points = points.map(function(point) {
-    return [point[0] + this.game.width/2, point[1] + this.game.height/2]
-  })
-  this.draw(context, points)
 }
