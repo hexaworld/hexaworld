@@ -16,7 +16,10 @@ Path.prototype.init = function(props) {
     stroke: props.stroke || '#DFE0E2'
   } 
 
-  this.transform = new Transform()
+  
+  var scale = (props.scale || 1)
+  var rotation = (props.rotation || 0)
+  this.transform = new Transform({scale: scale, rotation:rotation})
 
   var points = [
     [-0.25/2, 0],
