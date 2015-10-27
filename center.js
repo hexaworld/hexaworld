@@ -34,6 +34,10 @@ Center.prototype.draw = function(context, points) {
 
 Center.prototype.render = function(context, camera) {
   var points = this.points
-  points = camera.transform.apply(points)
+  points = camera.transform.invert(points)
+  // translate
+  points = points.map(function(point) {
+    return [point[0] + this.game.width/2, point[1] + this.game.height/2]
+  })
   this.draw(context, points)
 }

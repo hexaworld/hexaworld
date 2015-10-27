@@ -33,9 +33,9 @@ Camera.prototype.move = function(velocity) {
   var self = this
   this.position.x += velocity.x
   this.position.y += velocity.y
-  this.position.z += velocity.z * 0.1
+  this.position.z = Math.exp(Math.log(this.position.z) + velocity.z * .05)
   this.transform.update({
-    position: {x: -self.position.x +this.game.width/2, y: -self.position.y +this.game.height/2}, 
+    position: {x: self.position.x, y: self.position.y}, 
     scale: self.position.z, 
     rotation: self.rotation})
 }
@@ -58,11 +58,11 @@ Camera.prototype.keyboardInput = function(keyboard){
   }
 
   if ('.' in keyboard.keysDown){
-    this.velocity.z = this.speed
+    this.velocity.z = -this.speed
   }
 
   if (',' in keyboard.keysDown){
-    this.velocity.z = -this.speed
+    this.velocity.z = this.speed
   }
 
   if ('U' in keyboard.keysDown){
