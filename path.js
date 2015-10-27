@@ -13,19 +13,19 @@ Path.prototype.init = function(props) {
   
   this.props = {
     fill: props.fill || '#DFE0E2',
-    stroke: props.stroke || '#DFE0E2'
+    stroke: props.stroke || '#DFE0E2',
+    type: 'polygon'
   } 
 
-  
   var scale = (props.scale || 1)
   var rotation = (props.rotation || 0)
   this.transform = new Transform({scale: scale, rotation:rotation})
 
-  var points = [
+  var shape = [
     [-0.25/2, 0],
     [-0.25/2, Math.sqrt(3)/2],
     [0.25/2, Math.sqrt(3)/2],
     [0.25/2, 0]
   ]
-  this.points = points
+  this.shape = shape
 }
