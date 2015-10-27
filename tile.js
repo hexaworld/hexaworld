@@ -1,77 +1,30 @@
-_ = require('lodash')
-math = require('mathjs')
-Path = require('./path.js')
-Center = require('./center.js')
+var _ = require('lodash')
+var inherits = require('inherits')
+var Geometry = require('./geometry.js')
+var Transform = require('./transform.js')
 
 module.exports = Tile
+inherits(Tile, Geometry);
 
-function Tile(options){
-  this.position = { 
-    r: options.position.r, 
-    q: options.position.q
-  }
-  this.paths = options.paths || [new Path({position: 0}), new Path({position: 1})]
-  this.center = new Center()
-  this.size = options.size || 50
-  this.color = options.color || '#A5A5A5'
+function Tile(props, children) {
+  Geometry.call(this, props, children)
 }
 
-Tile.prototype.transform = function(camera) {
+Tile.prototype.init = function(props) {
+  this.props = {
+    fill: props.fill || '#A5A5A5',
+    stroke: props.stroke || '#A5A5A5'
+  } 
 
-  var scale = this.size * 0.1 * camera.position.z
-  var x = scale * 3/2 * this.position.r
-  var y = scale * Math.sqrt(3) * (this.position.q + this.position.r/2)
-  var angle = camera.orientation * Math.PI / 180
-  var rotation = [[Math.cos(angle), -Math.sin(angle)], [Math.sin(angle), Math.cos(angle)]] 
-  x = x - camera.position.x
-  y = y - camera.position.y
-  var position = math.multiply([x, y], rotation)
-  x = position[0]
-  y = position[1]
-  //x = position[0] - camera.position.x
-  //y = position[1] - camera.position.y
-  return {position: {x: x, y: y}, scale: scale, rotation: rotation}
-
-}
-
-Tile.prototype.border = function(transform) {
-
+  var scale = (props.scale || 50)
+  var x = scale * 3/2 * props.coordinate.r
+  var y = scale * Math.sqrt(3) * (props.coordinate.q + props.coordinate.r/2)
+  this.transform = new Transform({position: {x: x, y: y}, scale: scale})
+  
   var points = _.range(7).map(function(i) {
-    var dx = transform.scale * Math.cos(i * 2 * Math.PI / 6)
-    var dy = transform.scale * Math.sin(i * 2 * Math.PI / 6)
+    var dx = Math.cos(i * 2 * Math.PI / 6)
+    var dy = Math.sin(i * 2 * Math.PI / 6)
     return [dx, dy]
   })
-  points = math.multiply(points, transform.rotation)
-  return points.map(function(v) {
-    return math.add(v,[transform.position.x + game.width/2, transform.position.y + game.height/2])
-  })
-}
-
-Tile.prototype.draw = function(context, transform) {
-
-  var border = this.border(transform)
-  context.beginPath()
-  _.forEach(border, function(point) {
-    context.lineTo(point[0], point[1])
-  })
-  context.closePath()
-  context.fillStyle = this.color
-  context.strokeStyle = this.color
-  context.fill()
-  context.stroke()
-
-}
-
-Tile.prototype.render = function(context, camera) {
-
-  var transform = this.transform(camera)
-
-  this.draw(context, transform)
-
-  this.center.render(context, transform)
-
-  this.paths.forEach(function (path) {
-    path.render(context, transform)
-  })
-
+  this.points = points
 }

@@ -1,35 +1,28 @@
-_ = require('lodash')
-math = require('mathjs')
-aabb = require('aabb-2d')
+var _ = require('lodash')
+var inherits = require('inherits')
+var Geometry = require('./geometry.js')
+var Transform = require('./transform.js')
 
 module.exports = Center
+inherits(Center, Geometry)
 
-function Center(options){
-  options = options || {}
-  this.size = options.size || 2
-  this.color = options.color || "#DFE0E2"
+function Center(props, children) {
+  Geometry.call(this, props, children)
 }
 
-Center.prototype.border = function(transform) {
-  var self = this
+Center.prototype.init = function(props) {
+  this.props = {
+    fill: props.fill || '#DFE0E2',
+    stroke: props.stroke || '#DFE0E2'
+  } 
+
   var points = _.range(7).map(function(i) {
-    var dx = self.size * .1 * transform.scale * Math.cos(i * 2 * Math.PI / 6)
-    var dy = self.size * .1 * transform.scale * Math.sin(i * 2 * Math.PI / 6)
+    var dx = .1 * Math.cos(i * 2 * Math.PI / 6)
+    var dy = .1 * Math.sin(i * 2 * Math.PI / 6)
     return [dx, dy]
   })
-  points = math.multiply(points, transform.rotation)
-  return points.map(function(v) {
-    return math.add(v,[transform.position.x + game.width/2, transform.position.y + game.height/2])
-  })
-}
+  this.points = points
 
-Center.prototype.render = function(context, transform) {
-  var border = this.border(transform)
-  context.beginPath()
-  _.forEach(border, function(point) {
-    context.lineTo(point[0], point[1])
-  })
-  context.closePath()
-  context.fillStyle = this.color
-  context.fill()
+  var scale = (props.scale || 1.4)
+  this.transform = new Transform({scale: scale})
 }

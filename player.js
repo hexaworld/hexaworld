@@ -1,11 +1,11 @@
-var inherits = require('inherits');
-var aabb = require('aabb-2d');
-var Entity = require('crtrdg-entity');
+var inherits = require('inherits')
+var aabb = require('aabb-2d')
+var math = require('mathjs')
+var Entity = require('crtrdg-entity')
+
 
 module.exports = Player;
 inherits(Player, Entity);
-
-// add the camera position, subtract the center, rotate, add center
 
 function Player(options){
   this.position = { 
@@ -18,7 +18,7 @@ function Player(options){
     y: options.size.y
   };
 
-  this.orientation = options.orientation
+  this.rotation = options.rotation
 
   this.velocity = {
     x: options.velocity.x,
@@ -37,7 +37,7 @@ function Player(options){
 }
 
 Player.prototype.move = function(velocity){
-  var angle = this.orientation * Math.PI / 180
+  var angle = this.rotation * Math.PI / 180
   this.position.x += velocity.x*Math.cos(angle)-velocity.y*Math.sin(angle);
   this.position.y += velocity.x*Math.sin(angle)+velocity.y*Math.cos(angle);
 //  this.position.x += velocity.x;
@@ -80,35 +80,36 @@ Player.prototype.keyboardInput = function(keyboard){
   }
 
   if ('A' in keyboard.keysDown){
-    this.orientation -= this.speed*1.9
-    if (this.orientation < 0) this.orientation = 360
+    this.rotation -= this.speed*1.9
+    if (this.rotation < 0) this.rotation = 360
   }
 
   if ('D' in keyboard.keysDown){
-    this.orientation += this.speed*1.9
-    if (this.orientation > 360) this.orientation = 0
+    this.rotation += this.speed*1.9
+    if (this.rotation > 360) this.rotation = 0
   }
 }
 
 Player.prototype.render = function(context, camera) {
 
   var self = this
-  var angle = camera.orientation * Math.PI / 180
-  var scale = 0.1 * camera.position.z
-  var position = [self.position.x*scale, self.position.y*scale]
+  var angle = camera.rotation * Math.PI / 180
+  var scale = 1/camera.transform.scale
+//  var position = [self.position.x*scale, self.position.y*scale]
+  var position = [self.position.x, self.position.y]
   var rotation = [[Math.cos(angle), -Math.sin(angle)], [Math.sin(angle), Math.cos(angle)]] 
 
   position[0] = position[0] - camera.position.x
   position[1] = position[1] - camera.position.y
   var position = math.multiply(position, rotation)
 
-  var originX = position[0] + game.width/2
-  var originY = position[1] + game.height/2
+  var originX = scale*position[0] + game.width/2
+  var originY = scale*position[1] + game.height/2
 
 //  var originX = position[0] - camera.position.x+game.width/2
 //  var originY = position[1] - camera.position.y+game.height/2
   
-  angle = self.orientation * Math.PI / 180 - angle
+  angle = self.rotation * Math.PI / 180 - angle
 
   context.lineWidth = 3
 
