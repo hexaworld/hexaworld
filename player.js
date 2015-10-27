@@ -104,7 +104,7 @@ Player.prototype.render = function(context, camera) {
   var position = math.multiply(position, rotation)
 
   var originX = scale*position[0] + game.width/2
-  var originY = scale*position[1] + game.height/2
+  var originY = scale*position[1] + 2*game.height/4
 
 //  var originX = position[0] - camera.position.x+game.width/2
 //  var originY = position[1] - camera.position.y+game.height/2

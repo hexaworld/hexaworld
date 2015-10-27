@@ -18,7 +18,7 @@ var world = new World()
 var player = new Player({
   position: {x: 0, y: 0},
   rotation: 0,
-  size: {x: 2, y: 2},
+  size: {x: 1.5, y: 1.5},
   velocity: {x: 0, y: 0},
   speed: .5,
   friction: 0.9,
@@ -26,7 +26,7 @@ var player = new Player({
 });
 
 var camera = new Camera({
-  position: {x: 0, y: 0, z: .1},
+  position: {x: 0, y: 0, z: .6},
   rotation: 0,
   speed: .5,
   velocity: 0,

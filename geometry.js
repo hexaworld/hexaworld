@@ -43,7 +43,7 @@ Geometry.prototype.render = function(context, camera) {
 
   points = camera.transform.invert(points)
   points = points.map(function (point) {
-    return [point[0] + camera.game.width/2, point[1] + camera.game.height/2]
+    return [point[0] + camera.game.width/2, point[1] + 2*camera.game.height/4]
   })
   this.draw(context, points)
 
