@@ -7,7 +7,7 @@ module.exports = World
 function World() {
   this.tiles = [
     new Tile({coordinate: {r: -1, q: 0}}, [new Center(), new Path(), new Path({rotation: 120}), new Path({rotation: 150})]), 
-    new Tile({coordinate: {r: 0, q: 0}}, [new Center(), new Path(), new Path({rotation: 60}), new Path({rotation: 120})]), 
+    new Tile({coordinate: {r: 0, q: 0}}, [new Path(), new Path({rotation: 60}), new Path({rotation: 120}), new Center({fill: '#EF938D', scale:0.5}, [new Center({fill: 'blue', scale:.5})]), 
     new Tile({coordinate: {r: 0, q: 1}}, [new Center(), new Path({rotation: 60}), new Path({rotation: 90}), new Path({rotation: 120})]),
     new Tile({coordinate: {r: -1, q: 1}}, [new Center(), new Path({rotation: 120}), new Path({rotation: 150})]),
     new Tile({coordinate: {r: 1, q: -1}}, [new Center(),  new Path(), new Path({rotation: 60})]),

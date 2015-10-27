@@ -22,10 +22,10 @@ Path.prototype.init = function(props) {
   this.transform = new Transform({scale: scale, rotation:rotation})
 
   var points = [
-    [-.2/2, 0],
-    [-.2/2, Math.sqrt(3)/2],
-    [.2/2, Math.sqrt(3)/2],
-    [.2/2, 0]
+    [-0.25/2, 0],
+    [-0.25/2, Math.sqrt(3)/2],
+    [0.25/2, Math.sqrt(3)/2],
+    [0.25/2, 0]
   ]
   this.points = points
 }

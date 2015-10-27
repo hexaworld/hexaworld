@@ -17,12 +17,12 @@ Center.prototype.init = function(props) {
   } 
 
   var points = _.range(7).map(function(i) {
-    var dx = .1 * Math.cos(i * 2 * Math.PI / 6)
-    var dy = .1 * Math.sin(i * 2 * Math.PI / 6)
+    var dx =  Math.cos(i * 2 * Math.PI / 6)
+    var dy =  Math.sin(i * 2 * Math.PI / 6)
     return [dx, dy]
   })
   this.points = points
 
-  var scale = (props.scale || 1.4)
+  var scale = (props.scale || .25)
   this.transform = new Transform({scale: scale})
 }

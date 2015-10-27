@@ -8,18 +8,17 @@ function Geometry(props, children) {
 
 }
 
-Geometry.prototype.update = function(context) {
+Geometry.prototype.update = function(transform) {
 
   var self = this
-
-  self.points = self.transform.apply(self.points)
-
-  if (self.parent) self.points = self.parent.transform.apply(self.points)
+  
+  transform = transform || self.transform
+  
+  self.points = transform.apply(self.points)
 
   if (self.children.length) {
     _.forEach(self.children, function(child) {
-      child.parent = self
-      child.update()
+      child.update(transform)
     })
   }
 
