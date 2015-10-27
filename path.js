@@ -19,10 +19,10 @@ Path.prototype.init = function(props) {
   this.transform = new Transform()
 
   var points = [
-    [-0.2/2, 0],
-    [-0.2/2, Math.sqrt(3)/2],
-    [0.2/2, Math.sqrt(3)/2],
-    [0.2/2, 0]
+    [-0.25/2, 0],
+    [-0.25/2, Math.sqrt(3)/2],
+    [0.25/2, Math.sqrt(3)/2],
+    [0.25/2, 0]
   ]
   this.points = points
 }
