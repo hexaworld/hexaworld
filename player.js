@@ -3,7 +3,6 @@ var aabb = require('aabb-2d')
 var math = require('mathjs')
 var Entity = require('crtrdg-entity')
 
-
 module.exports = Player;
 inherits(Player, Entity);
 
