@@ -1,11 +1,17 @@
 var _ = require('lodash')
+var Transform = require('./transform.js')
 
-function Geometry(props, children) {
-
-  this.init(props || {})
-  this.children = children || []
+function Geometry(data) {
+  // throw errors if props or shape undefined
+  this.props = data.props
+  this.shape = data.shape
+  if (_.isArray(data.children)) {
+    this.children = data.children
+  } else {
+    this.children = data.children ? [data.children] : []
+  }
+  this.transform = data.transform ? new Transform(data.transform) : new Transform()  
   this.update()
-
 }
 
 Geometry.prototype.update = function(transform) {
@@ -35,13 +41,9 @@ Geometry.prototype.drawCircle = function(context, shape) {
   context.beginPath()
   context.fillStyle = this.props.fill
   context.strokeStyle = this.props.stroke
-  context.arc(shape.center.x, shape.center.y , shape.size, 0, 2*Math.PI)
+  context.arc(shape.position[0], shape.position[1], shape.scale, 0, 2*Math.PI)
   context.stroke()
   context.fill()
-}
-
-Geometry.prototype.drawEllipse = function(context, shape) {
-
 }
 
 Geometry.prototype.render = function(context, camera) {
@@ -53,8 +55,8 @@ Geometry.prototype.render = function(context, camera) {
       return [xy[0] + camera.game.width/2, xy[1] + 2*camera.game.height/4]
     })
   } else {
-    shape.center.x += camera.game.width/2
-    shape.center.y += camera.game.height/2
+    shape.position[0] += camera.game.width/2
+    shape.position[1] += camera.game.height/2
   }
    
   if (this.props.type == 'polygon') this.drawPolygon(context, shape)
