@@ -1,14 +1,16 @@
-var _ = require('lodash')
+module.exports = function(opts) {
 
-module.exports = function(parameters) {
+  opts = opts || {}
+  var position, scale, angle, rotation
+  
+  var set = function (opts) {
+    position = opts.position || [0, 0]
+    scale = opts.scale || 1
+    angle = (opts.angle * Math.PI / 180) || 0
+    rotation =  [[Math.cos(angle), -Math.sin(angle)], [Math.sin(angle), Math.cos(angle)]]
+  }
 
-  parameters = parameters || {}
-  var position = parameters.position || {x: 0, y: 0}
-  var scale = parameters.scale || 1
-  var theta = (parameters.rotation * Math.PI / 180) || 0
-  var rotation =  [[Math.cos(theta), -Math.sin(theta)], [Math.sin(theta), Math.cos(theta)]]
-
-  var points = function (shape) {
+  var fwdpoints = function (shape) {
     shape = shape.map( function(xy) {
       return [xy[0] * scale, xy[1] * scale]
     })
@@ -19,14 +21,14 @@ module.exports = function(parameters) {
       ]
     })
     shape = shape.map(function(xy) {
-      return [xy[0] + position.x, xy[1] + position.y]
+      return [xy[0] + position[0], xy[1] + position[1]]
     })
     return shape
   }
 
   var invpoints = function (shape) {
     shape = shape.map(function (xy) {
-      return [xy[0] - position.x, xy[1] - position.y]
+      return [xy[0] - position[0], xy[1] - position[1]]
     })
     shape = shape.map(function (xy) {
       return [
@@ -40,42 +42,44 @@ module.exports = function(parameters) {
     return shape
   }
 
-  var params = function (shape) {
-    var newcenter = points([[shape.center.x, shape.center.y]])
+  var fwdparams = function (shape) {
     shape = {
-      center: {x: newcenter[0][0], y: newcenter[0][1]},
-      orientation: shape.orientation + theta,
-      size: shape.size * scale
+      position: fwdpoints([shape.position])[0],
+      angle: shape.angle + angle,
+      scale: shape.scale * scale
     }
     return shape
   }
 
   var invparams = function (shape) {
-    var newcenter = invpoints([[shape.center.x, shape.center.y]])
     shape = {
-      center: {x: newcenter[0][0], y: newcenter[0][1]},
-      orientation: shape.orientation - theta,
-      size: shape.size / scale
+      position: invpoints([shape.position])[0],
+      angle: shape.angle - angle,
+      scale: shape.scale / scale
     }
     return shape
   }
 
   var apply = function (shape) {
-    if (_.isArray(shape)) return points(shape)
-    if (_.isObject(shape)) return params(shape)
+    if (shape instanceof Array) return fwdpoints(shape)
+    return fwdparams(shape)
   }
 
   var invert = function (shape) {
-    if (_.isArray(shape)) return invpoints(shape)
-    if (_.isObject(shape)) return invparams(shape)
+    if (shape instanceof Array) return invpoints(shape)
+    return invparams(shape)
   }
+
+  set(opts)
 
   return {
     apply: apply,
     invert: invert,
     position: position,
     scale: scale,
-    rotation: rotation
+    angle: angle,
+    rotation: rotation,
+    set: set
   }
 
 }

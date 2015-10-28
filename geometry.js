@@ -1,5 +1,5 @@
 var _ = require('lodash')
-var Transform = require('./transform.js')
+var transform = require('./transform.js')
 
 function Geometry(data) {
   // throw errors if props or shape undefined
@@ -10,7 +10,7 @@ function Geometry(data) {
   } else {
     this.children = data.children ? [data.children] : []
   }
-  this.transform = data.transform ? new Transform(data.transform) : new Transform()  
+  this.transform = data.transform ? transform(data.transform) : transform()  
   this.update()
 }
 

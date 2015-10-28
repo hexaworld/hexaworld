@@ -23,9 +23,9 @@ function Camera(options){
     z: options.velocity.z
   }
   this.transform = transform({
-    position: {x: -self.position.x, y: -self.position.y}, 
+    position: [-self.position.x, -self.position.y], 
     scale: self.position.z,
-    rotation: self.rotation
+    angle: self.rotation
   })
 }
 
@@ -36,10 +36,10 @@ Camera.prototype.move = function(velocity) {
   this.position.x += velocity.x * rotation[0][0] + velocity.y * rotation[0][1]
   this.position.y += velocity.x * rotation[1][0] + velocity.y * rotation[1][1]
   this.position.z = Math.exp(Math.log(this.position.z) + velocity.z * .05)
-  this.transform = transform({
-    position: {x: self.position.x, y: self.position.y}, 
+  this.transform.set({
+    position: [self.position.x, self.position.y],
     scale: self.position.z, 
-    rotation: self.rotation})
+    angle: self.rotation})
 }
 
 Camera.prototype.keyboardInput = function(keyboard){

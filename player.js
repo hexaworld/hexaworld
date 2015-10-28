@@ -39,8 +39,6 @@ Player.prototype.move = function(velocity){
   var angle = this.rotation * Math.PI / 180
   this.position.x += velocity.x*Math.cos(angle)-velocity.y*Math.sin(angle);
   this.position.y += velocity.x*Math.sin(angle)+velocity.y*Math.cos(angle);
-//  this.position.x += velocity.x;
-//  this.position.y += velocity.y;
 };
 
 Player.prototype.checkBoundaries = function(){
