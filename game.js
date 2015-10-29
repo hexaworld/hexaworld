@@ -32,7 +32,7 @@ var camera = new Camera({
   velocity: 0,
   friction: 0.9,
   velocity: {x: 0, y: 0, z: 0},
-  yoked: false
+  yoked: true
 })
 
 player.addTo(game)
