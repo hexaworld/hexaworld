@@ -17,7 +17,7 @@ var world = new World()
 
 var player = new Player({
   position: [0, 0],
-  velocity: [0, 0],
+  velocity: {position: [0, 0], angle: 0},
   angle: 0,
   scale: 1.5,
   speed: .5,
@@ -31,8 +31,8 @@ var camera = new Camera({
   speed: .5,
   velocity: 0,
   friction: 0.9,
-  velocity: { x: 0, y: 0, z: 0},
-  yoked: true
+  velocity: {x: 0, y: 0, z: 0},
+  yoked: false
 })
 
 player.addTo(game)
@@ -41,8 +41,7 @@ camera.addTo(game)
 player.on('update', function(interval) {
   this.keyboardInput(keyboard)
   this.move(this.velocity)
-  this.velocity[0] *= this.friction
-  this.velocity[1] *= this.friction
+  this.dampen()
 });
 
 camera.on('update', function(interval) {

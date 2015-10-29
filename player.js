@@ -1,6 +1,7 @@
 var inherits = require('inherits')
 var aabb = require('aabb-2d')
 var math = require('mathjs')
+var transform = require('./transform.js')
 var circle = require('./geo/circle.js')
 var Entity = require('crtrdg-entity')
 
@@ -18,50 +19,48 @@ function Player(opts){
     fill: opts.color, 
     stroke: opts.color,
     scale: 2,
-    moveable: true,
     children: [
-      circle({fill: '#EB8686', stroke: '#EB8686', position: [-0.75, -1], scale: 0.5, moveable: true}), 
-      circle({fill: '#EB8686', stroke: '#EB8686', position: [0.75, -1], scale: 0.5, moveable: true})
+      circle({fill: '#EB8686', stroke: '#EB8686', position: [-0.75, -1], scale: 0.5}), 
+      circle({fill: '#EB8686', stroke: '#EB8686', position: [0.75, -1], scale: 0.5})
     ]
   })
 }
 
 Player.prototype.move = function(velocity){
   var self = this
+  this.angle += velocity.angle
   var angle = this.angle * Math.PI / 180
-  this.position[0] += velocity[0] * Math.cos(angle) - velocity[1] * Math.sin(angle)
-  this.position[1] += velocity[0] * Math.sin(angle) + velocity[1] * Math.cos(angle)
-  this.geometry.transform.set({
-    position: self.position,
-    scale: self.scale, 
-    angle: self.angle})
+  var delta = {}
+  delta.position = [
+    velocity.position[0] * Math.cos(angle) - velocity.position[1] * Math.sin(angle),
+    velocity.position[0] * Math.sin(angle) + velocity.position[1] * Math.cos(angle)
+  ]
+  this.geometry.update(transform(delta))
 }
 
 Player.prototype.keyboardInput = function(keyboard){
   if ('E' in keyboard.keysDown){
-    this.velocity[0] = this.speed;
+    this.velocity.position[0] = this.speed;
   }
 
   if ('Q' in keyboard.keysDown){
-    this.velocity[0] = -this.speed;
+    this.velocity.position[0] = -this.speed;
   }
 
-  if ('S' in keyboard.keysDown){
-    this.velocity[1] = this.speed;
+  if ('S' in keyboard.keysDown) {
+    this.velocity.position[1] = this.speed;
   }
 
-  if ('W' in keyboard.keysDown){
-    this.velocity[1] = -this.speed;
+  if ('W' in keyboard.keysDown) {
+    this.velocity.position[1] = -this.speed;
   }
 
-  if ('A' in keyboard.keysDown){
-    this.angle -= this.speed*1.9
-    if (this.angle < 0) this.angle = 360
+  if ('A' in keyboard.keysDown) {
+    this.velocity.angle = -this.speed * 2
   }
 
-  if ('D' in keyboard.keysDown){
-    this.angle += this.speed*1.9
-    if (this.angle > 360) this.angle = 0
+  if ('D' in keyboard.keysDown) {
+    this.velocity.angle = this.speed * 2
   }
 }
 
@@ -69,6 +68,13 @@ Player.prototype.draw = function(context, camera) {
 
   this.geometry.draw(context, camera)
 
+}
+
+Player.prototype.dampen = function() {
+  this.velocity.position[0] *= this.friction
+  this.velocity.position[1] *= this.friction
+  this.velocity.angle *= this.friction
+}
 //   var self = this
 //   var angle = camera.rotation * Math.PI / 180
 //   var scale = 1/camera.transform.scale()
@@ -117,5 +123,3 @@ Player.prototype.draw = function(context, camera) {
 //   context.arc(originX, originY, scale*this.size.x*1.5, 0, 2*Math.PI)
 //   context.closePath()
 //   context.fill()
-
-}

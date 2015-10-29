@@ -57,10 +57,8 @@ Geometry.prototype.drawBezier = function(context, points) {
 }
 
 Geometry.prototype.draw = function(context, camera) {
+  var self = this
   var points = this.points 
-  if (this.moveable) {
-    points = this.transform.apply(points)
-  }
   points = camera.transform.invert(points)
   points = points.map(function (xy) {
     return [xy[0] + camera.game.width/2, xy[1] + 2*camera.game.height/4]
