@@ -48,10 +48,10 @@ function World() {
   ]
 }
 
-World.prototype.render = function(context, camera) {
+World.prototype.draw = function(context, camera) {
   // figure out which tiles to show given the camera position
   this.tiles.forEach(function (tile) {
-    tile.render(context, camera)
+    tile.draw(context, camera)
   })
 }
 

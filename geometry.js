@@ -12,6 +12,7 @@ function Geometry(data) {
     this.children = data.children ? [data.children] : []
   }
   this.transform = data.transform ? transform(data.transform) : transform()  
+  this.moveable = data.moveable || false
   this.update()
 }
 
@@ -55,8 +56,11 @@ Geometry.prototype.drawBezier = function(context, points) {
   context.fill()
 }
 
-Geometry.prototype.render = function(context, camera) {
-  var points = this.points
+Geometry.prototype.draw = function(context, camera) {
+  var points = this.points 
+  if (this.moveable) {
+    points = this.transform.apply(points)
+  }
   points = camera.transform.invert(points)
   points = points.map(function (xy) {
     return [xy[0] + camera.game.width/2, xy[1] + 2*camera.game.height/4]
@@ -67,7 +71,7 @@ Geometry.prototype.render = function(context, camera) {
 
   if (this.children) {
     this.children.forEach(function (child) {
-      child.render(context, camera)
+      child.draw(context, camera)
     })
   }
 }

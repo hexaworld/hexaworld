@@ -16,10 +16,10 @@ var mouse = new Mouse(game)
 var world = new World()
 
 var player = new Player({
-  position: {x: 0, y: 0},
-  rotation: 0,
-  size: {x: 1.5, y: 1.5},
-  velocity: {x: 0, y: 0},
+  position: [0, 0],
+  velocity: [0, 0],
+  angle: 0,
+  scale: 1.5,
   speed: .5,
   friction: 0.9,
   color: '#EB7576'
@@ -39,11 +39,10 @@ player.addTo(game)
 camera.addTo(game)
 
 player.on('update', function(interval) {
-  this.keyboardInput(keyboard);
+  this.keyboardInput(keyboard)
   this.move(this.velocity)
-  this.velocity.x *= this.friction;
-  this.velocity.y *= this.friction;
-  this.checkBoundaries();
+  this.velocity[0] *= this.friction
+  this.velocity[1] *= this.friction
 });
 
 camera.on('update', function(interval) {
@@ -60,21 +59,21 @@ game.on('draw-background', function(context) {
 })
 
 game.on('update', function(interval){
+  if (camera.yoked){
+    camera.position.x = player.position[0]
+    camera.position.y = player.position[1]
+    camera.rotation = player.angle
+  }
   // get camera coordinates
   // draw world within those coordinates
   // need a function that renders a world given a camera (zoom, position, orientation)
 });
 
 
-game.on('draw', function(context){
-  if (camera.yoked){
-    camera.position.x = player.position.x 
-    camera.position.y = player.position.y
-    camera.rotation = player.rotation
-  }
-  world.render(context, camera)
-  player.render(context, camera)
-});
+game.on('draw', function(context) {
+  world.draw(context, camera)
+  player.draw(context, camera)
+})
 
 game.on('pause', function(){});
 
