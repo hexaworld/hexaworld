@@ -91,7 +91,7 @@ Player.prototype.render = function(context, camera) {
 
   var self = this
   var angle = camera.rotation * Math.PI / 180
-  var scale = 1/camera.transform.scale
+  var scale = 1/camera.transform.scale()
 //  var position = [self.position.x*scale, self.position.y*scale]
   var position = [self.position.x, self.position.y]
   var rotation = [[Math.cos(angle), -Math.sin(angle)], [Math.sin(angle), Math.cos(angle)]] 
