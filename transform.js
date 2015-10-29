@@ -10,7 +10,7 @@ module.exports = function(opts) {
     rotation =  [[Math.cos(angle), -Math.sin(angle)], [Math.sin(angle), Math.cos(angle)]]
   }
 
-  var fwdpoints = function (points) {
+  var apply = function (points) {
     points = points.map( function(xy) {
       return [xy[0] * scale, xy[1] * scale]
     })
@@ -26,7 +26,7 @@ module.exports = function(opts) {
     return points
   }
 
-  var invpoints = function (points) {
+  var invert = function (points) {
     points = points.map(function (xy) {
       return [xy[0] - position[0], xy[1] - position[1]]
     })
@@ -40,38 +40,6 @@ module.exports = function(opts) {
       return [xy[0] / scale, xy[1] / scale]
     })
     return points
-  }
-
-  var fwdparams = function (shape) {
-    shape = {
-      position: fwdpoints([shape.position])[0],
-      angle: shape.angle + angle,
-      scale: shape.scale * scale
-    }
-    return shape
-  }
-
-  var invparams = function (shape) {
-    shape = {
-      position: invpoints([shape.position])[0],
-      angle: shape.angle - angle,
-      scale: shape.scale / scale
-    }
-    return shape
-  }
-
-  var apply = function (obj) {
-    if (obj instanceof Array) return fwdpoints(obj)
-    return fwdparams(obj)
-  }
-
-  var invert = function (obj) {
-    if (obj instanceof Array) return invpoints(obj)
-    return invparams(obj)
-  }
-
-  var position = function () {
-    return position
   }
 
   set(opts)

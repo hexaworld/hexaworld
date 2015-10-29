@@ -11,7 +11,7 @@ module.exports = function (opts) {
       type: 'polygon'
     },
 
-    shape: _.range(7).map(function(i) {
+    points: _.range(7).map(function(i) {
       var dx =  Math.cos(i * 2 * Math.PI / 6)
       var dy =  Math.sin(i * 2 * Math.PI / 6)
       return [dx, dy]

@@ -12,18 +12,17 @@ module.exports = function (opts) {
       type: 'polygon'
     },
 
-    transform: {
-      position: opts.position || [0, 0],
-      scale: width,
-      angle: opts.angle || 0
-    },
-
-    shape: [
+    points: [
       [-1/2, Math.sqrt(3)/2],
       [-1/2, Math.sqrt(3)/2/width],
       [1/2, Math.sqrt(3)/2/width],
       [1/2, Math.sqrt(3)/2]
     ],
+
+    transform: {
+      scale: width,
+      angle: opts.angle || 0
+    },
 
     children: opts.children
   })

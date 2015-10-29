@@ -11,6 +11,12 @@ module.exports = function (opts) {
       type: 'polygon'
     },
 
+    points: _.range(7).map(function (i) {
+      var dx = Math.cos(i * 2 * Math.PI / 6)
+      var dy = Math.sin(i * 2 * Math.PI / 6)
+      return [dx, dy]
+    }),
+
     transform: {
       position: [
         opts.scale * 3/2 * opts.position[0], 
@@ -18,12 +24,6 @@ module.exports = function (opts) {
       ],
       scale: opts.scale
     },
-
-    shape: _.range(7).map(function (i) {
-      var dx = Math.cos(i * 2 * Math.PI / 6)
-      var dy = Math.sin(i * 2 * Math.PI / 6)
-      return [dx, dy]
-    }),
 
     children: opts.children
   })

@@ -2,9 +2,10 @@ var _ = require('lodash')
 var transform = require('./transform.js')
 
 function Geometry(data) {
-  // throw errors if props or shape undefined
+  if (!data.props) throw new Error('Must provide properties')
+  if (!data.points) throw new Error('Must provide points')
   this.props = data.props
-  this.shape = data.shape
+  this.points = data.points
   if (_.isArray(data.children)) {
     this.children = data.children
   } else {
@@ -17,7 +18,7 @@ function Geometry(data) {
 Geometry.prototype.update = function(transform) {
   var self = this
   transform = transform || self.transform
-  self.shape = transform.apply(self.shape)
+  self.points = transform.apply(self.points)
   if (self.children.length) {
     _.forEach(self.children, function(child) {
       child.update(transform)
@@ -25,9 +26,9 @@ Geometry.prototype.update = function(transform) {
   }
 }
 
-Geometry.prototype.drawPolygon = function(context, shape) {
+Geometry.prototype.drawPolygon = function(context, points) {
   context.beginPath()
-  _.forEach(shape, function(xy) {
+  _.forEach(points, function(xy) {
     context.lineTo(xy[0], xy[1])
   })
   context.closePath()
@@ -37,31 +38,32 @@ Geometry.prototype.drawPolygon = function(context, shape) {
   context.stroke()
 }
 
-Geometry.prototype.drawCircle = function(context, shape) {
+Geometry.prototype.drawBezier = function(context, points) {
+  var n = points.length / 3
   context.beginPath()
   context.fillStyle = this.props.fill
   context.strokeStyle = this.props.stroke
-  context.arc(shape.position[0], shape.position[1], shape.scale, 0, 2*Math.PI)
+  context.moveTo(points[0][0], points[0][1])
+  _.range(n).forEach(function (i) {
+    var b1 = points[i*3+1]
+    var b2 = points[i*3+2]
+    var b3 = i === (n - 1) ? points[0] : points[i*3+3]
+    context.bezierCurveTo(b1[0], b1[1], b2[0], b2[1], b3[0], b3[1])
+  })
+  context.closePath()
   context.stroke()
   context.fill()
 }
 
 Geometry.prototype.render = function(context, camera) {
-  var shape = this.shape
-  shape = camera.transform.invert(shape)
+  var points = this.points
+  points = camera.transform.invert(points)
+  points = points.map(function (xy) {
+    return [xy[0] + camera.game.width/2, xy[1] + 2*camera.game.height/4]
+  })
 
-  if (this.props.type == 'polygon') {
-    shape = shape.map(function (xy) {
-      return [xy[0] + camera.game.width/2, xy[1] + 2*camera.game.height/4]
-    })
-  } else {
-    shape.position[0] += camera.game.width/2
-    shape.position[1] += camera.game.height/2
-  }
-   
-  if (this.props.type == 'polygon') this.drawPolygon(context, shape)
-  if (this.props.type == 'circle') this.drawCircle(context, shape)
-  if (this.props.ellipse == 'ellipse') this.drawEllipse(context, shape)
+  if (this.props.type == 'polygon') this.drawPolygon(context, points)
+  if (this.props.type == 'bezier') this.drawBezier(context, points)
 
   if (this.children) {
     this.children.forEach(function (child) {

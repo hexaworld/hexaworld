@@ -7,14 +7,15 @@ module.exports = function (opts) {
     props: {
       fill: opts.fill || '#DFE0E2',
       stroke: opts.stroke || '#DFE0E2',
-      type: 'circle'
+      type: 'bezier'
     },
 
-    shape: {
-      position: [0, 0],
-      scale: 1,
-      angle: 0
-    },
+    points: [
+      [0, -1], [0.55, -1], [1, -0.55],
+      [1, 0], [1, 0.55], [0.55, 1],
+      [0, 1], [-0.55, 1], [-1, 0.55],
+      [-1, 0], [-1, -0.55], [-0.55, -1]
+    ],
 
     transform: {
       scale: opts.scale
