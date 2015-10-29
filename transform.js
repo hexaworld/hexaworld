@@ -1,67 +1,89 @@
-module.exports = Transform
+module.exports = function(opts) {
 
-function Transform(parameters){
-  parameters = parameters || {}
-  this.position = parameters.position || {x: 0, y: 0}
-  this.scale = parameters.scale || 1
-  this.rotation = rotmat((parameters.rotation * Math.PI / 180) || 0)
-  return this
-}
+  opts = opts || {}
+  var position, scale, angle, rotation
+  
+  var set = function (opts) {
+    position = opts.position || [0, 0]
+    scale = opts.scale || 1
+    angle = (opts.angle * Math.PI / 180) || 0
+    rotation =  [[Math.cos(angle), -Math.sin(angle)], [Math.sin(angle), Math.cos(angle)]]
+  }
 
-Transform.prototype.apply = function(points) {
-  var self = this
+  var fwdpoints = function (points) {
+    points = points.map( function(xy) {
+      return [xy[0] * scale, xy[1] * scale]
+    })
+    points = points.map( function(xy) {
+      return [
+        xy[0] * rotation[0][0] + xy[1] * rotation[0][1],
+        xy[0] * rotation[1][0] + xy[1] * rotation[1][1],
+      ]
+    })
+    points = points.map(function(xy) {
+      return [xy[0] + position[0], xy[1] + position[1]]
+    })
+    return points
+  }
 
-  // rescale
-  points = points.map( function(point) {
-    return [point[0] * self.scale, point[1] * self.scale]
-  })
+  var invpoints = function (points) {
+    points = points.map(function (xy) {
+      return [xy[0] - position[0], xy[1] - position[1]]
+    })
+    points = points.map(function (xy) {
+      return [
+        xy[0] * rotation[0][0] - xy[1] * rotation[0][1],
+        -xy[0] * rotation[1][0] + xy[1] * rotation[1][1]
+      ]
+    })
+    points = points.map(function (xy) {
+      return [xy[0] / scale, xy[1] / scale]
+    })
+    return points
+  }
 
-  // rotate
-  points = points.map( function(point) {
-    return [
-      point[0] * self.rotation[0][0] + point[1] * self.rotation[0][1],
-      point[0] * self.rotation[1][0] + point[1] * self.rotation[1][1],
-    ]
-  })
+  var fwdparams = function (shape) {
+    shape = {
+      position: fwdpoints([shape.position])[0],
+      angle: shape.angle + angle,
+      scale: shape.scale * scale
+    }
+    return shape
+  }
 
-  // translate
-  points = points.map(function(point) {
-    return [point[0] + self.position.x, point[1] + self.position.y]
-  })
-  return points
-}
+  var invparams = function (shape) {
+    shape = {
+      position: invpoints([shape.position])[0],
+      angle: shape.angle - angle,
+      scale: shape.scale / scale
+    }
+    return shape
+  }
 
-Transform.prototype.invert = function(points) {
-  var self = this
+  var apply = function (obj) {
+    if (obj instanceof Array) return fwdpoints(obj)
+    return fwdparams(obj)
+  }
 
-  // translate
-  points = points.map(function(point) {
-    return [point[0] - self.position.x, point[1] - self.position.y]
-  })
+  var invert = function (obj) {
+    if (obj instanceof Array) return invpoints(obj)
+    return invparams(obj)
+  }
 
-  // rotate
-  points = points.map( function(point) {
-    return [
-      point[0] * self.rotation[0][0] - point[1] * self.rotation[0][1],
-      - point[0] * self.rotation[1][0] + point[1] * self.rotation[1][1],
-    ]
-  })
+  var position = function () {
+    return position
+  }
 
-  // rescale
-  points = points.map( function(point) {
-    return [point[0] / self.scale, point[1] / self.scale]
-  })
+  set(opts)
 
-  return points
-}
+  return {
+    apply: apply,
+    invert: invert,
+    set: set,
+    position: function () {return position},
+    scale: function () {return scale},
+    angle: function () {return angle},
+    rotation: function () {return rotation}
+  }
 
-
-Transform.prototype.update = function(parameters) {
-  if (parameters.position) this.position = parameters.position
-  if (parameters.scale) this.scale = parameters.scale
-  if (parameters.rotation) this.rotation = rotmat(parameters.rotation * Math.PI / 180)
-}
-
-rotmat = function(theta) {
-  return [[Math.cos(theta), -Math.sin(theta)], [Math.sin(theta), Math.cos(theta)]] 
 }

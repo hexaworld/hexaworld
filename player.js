@@ -3,7 +3,6 @@ var aabb = require('aabb-2d')
 var math = require('mathjs')
 var Entity = require('crtrdg-entity')
 
-
 module.exports = Player;
 inherits(Player, Entity);
 
@@ -40,8 +39,6 @@ Player.prototype.move = function(velocity){
   var angle = this.rotation * Math.PI / 180
   this.position.x += velocity.x*Math.cos(angle)-velocity.y*Math.sin(angle);
   this.position.y += velocity.x*Math.sin(angle)+velocity.y*Math.cos(angle);
-//  this.position.x += velocity.x;
-//  this.position.y += velocity.y;
 };
 
 Player.prototype.checkBoundaries = function(){
@@ -94,7 +91,7 @@ Player.prototype.render = function(context, camera) {
 
   var self = this
   var angle = camera.rotation * Math.PI / 180
-  var scale = 1/camera.transform.scale
+  var scale = 1/camera.transform.scale()
 //  var position = [self.position.x*scale, self.position.y*scale]
   var position = [self.position.x, self.position.y]
   var rotation = [[Math.cos(angle), -Math.sin(angle)], [Math.sin(angle), Math.cos(angle)]] 

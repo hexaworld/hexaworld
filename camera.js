@@ -1,7 +1,7 @@
 var inherits = require('inherits');
 var aabb = require('aabb-2d');
 var Entity = require('crtrdg-entity');
-var Transform = require('./transform.js')
+var transform = require('./transform.js')
 
 module.exports = Camera;
 inherits(Camera, Entity);
@@ -22,10 +22,10 @@ function Camera(options){
     y: options.velocity.y,
     z: options.velocity.z
   }
-  this.transform = new Transform({
-    position: {x: -self.position.x, y: -self.position.y}, 
+  this.transform = transform({
+    position: [-self.position.x, -self.position.y], 
     scale: self.position.z,
-    rotation: self.rotation
+    angle: self.rotation
   })
 }
 
@@ -36,10 +36,10 @@ Camera.prototype.move = function(velocity) {
   this.position.x += velocity.x * rotation[0][0] + velocity.y * rotation[0][1]
   this.position.y += velocity.x * rotation[1][0] + velocity.y * rotation[1][1]
   this.position.z = Math.exp(Math.log(this.position.z) + velocity.z * .05)
-  this.transform.update({
-    position: {x: self.position.x, y: self.position.y}, 
+  this.transform.set({
+    position: [self.position.x, self.position.y],
     scale: self.position.z, 
-    rotation: self.rotation})
+    angle: self.rotation})
 }
 
 Camera.prototype.keyboardInput = function(keyboard){

@@ -1,21 +1,51 @@
-var Tile = require('./tile.js')
-var Path = require('./path.js')
-var Center = require('./center.js')
+var tile = require('./geo/tile.js')
+var hex = require('./geo/hex.js')
+var circle = require('./geo/circle.js')
+var path = require('./geo/path.js')
 
 module.exports = World
 
 function World() {
   this.tiles = [
-    new Tile({coordinate: {r: -1, q: 0}}, [new Center(), new Path(), new Path({rotation: 240}), new Path({rotation: 300})]), 
-//    new Tile({coordinate: {r: 0, q: 0}}, [new Center(null, [new Center({fill: 'blue', scale:.5})]), new Path(), new Path({rotation: 120}), new Path({rotation: 240})]), 
-    new Tile({coordinate: {r: 0, q: 0}}, [new Path(), new Path({rotation: 120}), new Path({rotation: 240}), new Center(null, [new Center({fill: 'blue', scale:.5})])]), 
-    new Tile({coordinate: {r: 0, q: 1}}, [new Center(), new Path({rotation: 120}), new Path({rotation: 180}), new Path({rotation: 240})]),
-    new Tile({coordinate: {r: -1, q: 1}}, [new Center(), new Path({rotation: 240}), new Path({rotation: 300})]),
-    new Tile({coordinate: {r: 1, q: -1}}, [new Center(),  new Path(), new Path({rotation: 120})]),
-    new Tile({coordinate: {r: 1, q: 0}}, [new Center(), new Path({rotation: 60}), new Path({rotation: 180})]),
-    new Tile({coordinate: {r: 0, q: -1}}, [new Center(), new Path({rotation: 60}), new Path({rotation: 300})])
+    tile({
+      position: [-1, 0],
+      scale: 50,
+      children: [hex({scale: 0.25}), path({angle: 0}), path({angle: 240}), path({angle: 300})]
+    }),
+    tile({
+      position: [0, 0],
+      scale: 50,
+      children: [
+        path({angle: 0}), path({angle: 120}), path({angle: 240}),
+        circle({scale: 0.25, children: [circle({fill: 'white', stroke: 'white', scale: 0.5})]})
+      ]
+    }),
+    tile({
+      position: [0, 1],
+      scale: 50,
+      children: [hex({scale: 0.25}), path({angle: 120}), path({angle: 180}), path({angle: 240})]
+    }),
+    tile({
+      position: [-1, 1],
+      scale: 50,
+      children: [hex({scale: 0.25}), path({angle: 240}), path({angle: 300})]
+    }),
+    tile({
+      position: [1, -1],
+      scale: 50,
+      children: [hex({scale: 0.25}), path({angle: 120})]
+    }),
+    tile({
+      position: [1, 0],
+      scale: 50,
+      children: [hex({scale: 0.25}), path({angle: 60}), path({angle: 180})]
+    }),
+    tile({
+      position: [0, -1],
+      scale: 50,
+      children: [hex({scale: 0.25}), path({angle: 60}), path({angle: 300})]
+    })
   ]
-  console.log(this.tiles[0])
 }
 
 World.prototype.render = function(context, camera) {
