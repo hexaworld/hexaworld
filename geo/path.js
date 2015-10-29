@@ -3,7 +3,8 @@ var Geometry = require('../geometry.js')
 
 module.exports = function (opts) {
   opts = opts || {}
-
+  var width = opts.scale || 0.25
+  
   return new Geometry({
     props: {
       fill: opts.fill || '#DFE0E2',
@@ -12,15 +13,16 @@ module.exports = function (opts) {
     },
 
     transform: {
-      scale: opts.scale || 1,
+      position: opts.position || [0, 0],
+      scale: width,
       angle: opts.angle || 0
     },
 
     shape: [
-      [-0.25/2, 0],
-      [-0.25/2, Math.sqrt(3)/2],
-      [0.25/2, Math.sqrt(3)/2],
-      [0.25/2, 0]
+      [-1/2, Math.sqrt(3)/2],
+      [-1/2, Math.sqrt(3)/2/width],
+      [1/2, Math.sqrt(3)/2/width],
+      [1/2, Math.sqrt(3)/2]
     ],
 
     children: opts.children
