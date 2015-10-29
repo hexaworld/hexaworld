@@ -12,7 +12,6 @@ function Geometry(data) {
     this.children = data.children ? [data.children] : []
   }
   this.transform = data.transform ? transform(data.transform) : transform()  
-  this.moveable = data.moveable || false
   this.update()
 }
 

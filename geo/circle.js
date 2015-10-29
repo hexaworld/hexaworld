@@ -22,9 +22,7 @@ module.exports = function (opts) {
       position: opts.position || [0, 0]
     },
 
-    children: opts.children,
-
-    moveable: opts.moveable
+    children: opts.children
   })
 
 } 
