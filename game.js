@@ -69,7 +69,6 @@ game.on('update', function(interval){
 
 
 game.on('draw', function(context) {
-  
   world.draw(context, camera)
   player.draw(context, camera)
 })
