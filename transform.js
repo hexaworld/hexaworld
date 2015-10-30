@@ -1,12 +1,15 @@
 module.exports = function(opts) {
 
   opts = opts || {}
-  var position, scale, angle, rotation
+  var position = [0, 0]
+  var scale = 1
+  var angle = 0
+  var rotation
   
   var set = function (opts) {
-    position = opts.position || [0, 0]
-    scale = opts.scale || 1
-    angle = opts.angle || 0
+    position = opts.position ? opts.position : position
+    scale = opts.scale ? opts.scale : scale
+    angle = opts.angle ? opts.angle : angle
     rotation = rotmat(angle)
   }
 
