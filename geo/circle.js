@@ -18,7 +18,9 @@ module.exports = function (opts) {
     ],
 
     transform: {
-      scale: opts.scale
+      scale: opts.scale || 1,
+      position: opts.position || [0, 0],
+      angle: opts.angle || 0
     },
 
     children: opts.children

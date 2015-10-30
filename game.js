@@ -16,22 +16,22 @@ var mouse = new Mouse(game)
 var world = new World()
 
 var player = new Player({
-  position: {x: 0, y: 0},
-  rotation: 0,
-  size: {x: 1.5, y: 1.5},
-  velocity: {x: 0, y: 0},
+  position: [0, 0],
+  angle: 0,
+  scale: 1.5,
+  velocity: {position: [0, 0], angle: 0},
   speed: .5,
   friction: 0.9,
   color: '#EB7576'
 });
 
 var camera = new Camera({
-  position: {x: 0, y: 0, z: .6},
-  rotation: 0,
+  position: [0, 0],
+  angle: 0,
+  scale: 0.6,
+  velocity: {position: [0, 0], angle: 0},
   speed: .5,
-  velocity: 0,
   friction: 0.9,
-  velocity: { x: 0, y: 0, z: 0},
   yoked: true
 })
 
@@ -39,19 +39,21 @@ player.addTo(game)
 camera.addTo(game)
 
 player.on('update', function(interval) {
-  this.keyboardInput(keyboard);
+  this.keyboardInput(keyboard)
   this.move(this.velocity)
-  this.velocity.x *= this.friction;
-  this.velocity.y *= this.friction;
-  this.checkBoundaries();
+  this.dampen()
 });
 
 camera.on('update', function(interval) {
+  if (camera.yoked) {
+    camera.transform.set({
+      position: player.position(),
+      angle: player.angle()
+    })
+  }
   this.keyboardInput(keyboard)
   this.move(this.velocity)
-  this.velocity.x *= this.friction
-  this.velocity.y *= this.friction
-  this.velocity.z *= this.friction
+  this.dampen()
 })
 
 game.on('draw-background', function(context) {
@@ -66,15 +68,10 @@ game.on('update', function(interval){
 });
 
 
-game.on('draw', function(context){
-  if (camera.yoked){
-    camera.position.x = player.position.x 
-    camera.position.y = player.position.y
-    camera.rotation = player.rotation
-  }
-  world.render(context, camera)
-  player.render(context, camera)
-});
+game.on('draw', function(context) {
+  world.draw(context, camera)
+  player.draw(context, camera)
+})
 
 game.on('pause', function(){});
 

@@ -12,21 +12,23 @@ function Geometry(data) {
     this.children = data.children ? [data.children] : []
   }
   this.transform = data.transform ? transform(data.transform) : transform()  
-  this.update()
+  this.move()
 }
 
-Geometry.prototype.update = function(transform) {
+Geometry.prototype.move = function(transform, opts) {
   var self = this
+  opts = opts || {}
   transform = transform || self.transform
-  self.points = transform.apply(self.points)
+  op = opts.invert ? transform.invert : transform.apply
+  self.points = op(self.points)
   if (self.children.length) {
     _.forEach(self.children, function(child) {
-      child.update(transform)
+      child.move(transform, opts)
     })
   }
 }
 
-Geometry.prototype.drawPolygon = function(context, points) {
+Geometry.prototype.polygon = function(context, points) {
   context.beginPath()
   _.forEach(points, function(xy) {
     context.lineTo(xy[0], xy[1])
@@ -38,7 +40,7 @@ Geometry.prototype.drawPolygon = function(context, points) {
   context.stroke()
 }
 
-Geometry.prototype.drawBezier = function(context, points) {
+Geometry.prototype.bezier = function(context, points) {
   var n = points.length / 3
   context.beginPath()
   context.fillStyle = this.props.fill
@@ -55,20 +57,34 @@ Geometry.prototype.drawBezier = function(context, points) {
   context.fill()
 }
 
-Geometry.prototype.render = function(context, camera) {
-  var points = this.points
+Geometry.prototype.drawChildren = function(context, camera) {
+  if (this.children) {
+    this.children.forEach(function (child) {
+      child.draw(context, camera)
+    })
+  }
+}
+
+Geometry.prototype.drawSelf = function(context, camera) {
+  var points = this.points 
   points = camera.transform.invert(points)
   points = points.map(function (xy) {
     return [xy[0] + camera.game.width/2, xy[1] + 2*camera.game.height/4]
   })
+  if (this.props.type == 'polygon') this.polygon(context, points)
+  if (this.props.type == 'bezier') this.bezier(context, points)
+}
 
-  if (this.props.type == 'polygon') this.drawPolygon(context, points)
-  if (this.props.type == 'bezier') this.drawBezier(context, points)
-
-  if (this.children) {
-    this.children.forEach(function (child) {
-      child.render(context, camera)
-    })
+Geometry.prototype.draw = function(context, camera, opts) {
+  opts = opts || {order: 'top'}
+  if (opts.order === 'top') {
+    this.drawSelf(context, camera)
+    this.drawChildren(context, camera)
+  } else if (opts.order === 'bottom') {
+    this.drawChildren(context, camera)
+    this.drawSelf(context, camera)
+  } else {
+    throw Error('Order ' + opts.order + ' not recognized')
   }
 }
 

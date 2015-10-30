@@ -1,13 +1,30 @@
 module.exports = function(opts) {
 
   opts = opts || {}
-  var position, scale, angle, rotation
+  var position = [0, 0]
+  var scale = 1
+  var angle = 0
+  var rotation
   
   var set = function (opts) {
-    position = opts.position || [0, 0]
-    scale = opts.scale || 1
-    angle = (opts.angle * Math.PI / 180) || 0
-    rotation =  [[Math.cos(angle), -Math.sin(angle)], [Math.sin(angle), Math.cos(angle)]]
+    position = opts.position ? opts.position : position
+    scale = opts.scale ? opts.scale : scale
+    angle = opts.angle ? opts.angle : angle
+    rotation = rotmat(angle)
+  }
+
+  var update = function (opts) {
+    position = opts.position 
+      ? [position[0] + opts.position[0], position[1] + opts.position[1]] 
+      : position
+    angle = opts.angle ? angle + opts.angle : angle
+    scale = opts.scale ? Math.exp(Math.log(scale) + opts.scale) : scale
+    rotation = rotmat(angle)
+  }
+
+  var rotmat = function (angle) {
+    var rad = angle * Math.PI / 180
+    return [[Math.cos(rad), -Math.sin(rad)], [Math.sin(rad), Math.cos(rad)]]
   }
 
   var apply = function (points) {
@@ -48,6 +65,7 @@ module.exports = function(opts) {
     apply: apply,
     invert: invert,
     set: set,
+    update: update,
     position: function () {return position},
     scale: function () {return scale},
     angle: function () {return angle},
