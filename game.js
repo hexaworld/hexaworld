@@ -13,7 +13,6 @@ var game = new Game({
 
 var keyboard = new Keyboard(game)
 var mouse = new Mouse(game)
-var world = new World()
 
 var player = new Player({
   position: [0, 0],
@@ -35,12 +34,15 @@ var camera = new Camera({
   yoked: true
 })
 
+var world = new World({player: player})
+
 player.addTo(game)
 camera.addTo(game)
+world.addTo(game)
 
 player.on('update', function(interval) {
   this.keyboardInput(keyboard)
-  this.move(this.velocity)
+  this.move(this.velocity, world)
   this.dampen()
 });
 
@@ -56,12 +58,17 @@ camera.on('update', function(interval) {
   this.dampen()
 })
 
+world.on('location', function(msg) {
+  console.log(msg)
+})
+
 game.on('draw-background', function(context) {
   context.fillStyle = '#F7F7F7'
   context.fillRect(0, 0, game.width, game.height)
 })
 
 game.on('update', function(interval){
+  // console.log(world.tiles[1].children[3].contains(player.position()))
   // get camera coordinates
   // draw world within those coordinates
   // need a function that renders a world given a camera (zoom, position, orientation)

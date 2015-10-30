@@ -1,4 +1,6 @@
 var _ = require('lodash')
+var inside = require('point-in-polygon')
+var sat = require('sat')
 var transform = require('./transform.js')
 
 function Geometry(data) {
@@ -26,6 +28,15 @@ Geometry.prototype.move = function(transform, opts) {
       child.move(transform, opts)
     })
   }
+}
+
+Geometry.prototype.contains = function(point) {
+  var self = this
+  return inside(point, self.points)
+}
+
+Geometry.prototype.intersects = function(geometry) {
+
 }
 
 Geometry.prototype.polygon = function(context, points) {

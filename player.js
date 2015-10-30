@@ -1,3 +1,4 @@
+var _ = require('lodash')
 var inherits = require('inherits')
 var aabb = require('aabb-2d')
 var math = require('mathjs')
@@ -23,24 +24,40 @@ function Player(opts){
       circle({fill: '#EB8686', stroke: '#EB8686', position: [0.75, -1], scale: 0.5})
     ]
   })
+
 }
 
-Player.prototype.move = function(velocity){
+Player.prototype.move = function(velocity, world){
   var self = this
 
-  var transform = self.geometry.transform
-  self.geometry.move(transform, {invert: true})
+  var t = transform({
+    position: self.geometry.transform.position(),
+    scale: self.geometry.transform.scale(),
+    angle: self.geometry.transform.angle()
+  })
+  self.geometry.move(t, {invert: true})
 
-  var rad = transform.angle() * Math.PI / 180
+  var rad = t.angle() * Math.PI / 180
   var delta = {}
   delta.position = [
     velocity.position[0] * Math.cos(rad) - velocity.position[1] * Math.sin(rad),
     velocity.position[0] * Math.sin(rad) + velocity.position[1] * Math.cos(rad)
   ]
   delta.angle = velocity.angle
-  
+
+  if (!world.contains(t.update(delta).position())) {
+    console.log('outside')
+  }
+
+  //console.log(self.geometry.transform.position())
+  //transform.update(delta)
+  //console.log(self.geometry.transform.position())
+  //if (!world.contains(transform.update(delta))) {
+  //  console.log('we got here')
   self.geometry.transform.update(delta)
   self.geometry.move(self.geometry.transform)
+  //}
+  
 }
 
 Player.prototype.keyboardInput = function(keyboard){

@@ -1,4 +1,4 @@
-module.exports = function(opts) {
+module.exports = function transform(opts) {
 
   opts = opts || {}
   var position = [0, 0]
@@ -11,6 +11,7 @@ module.exports = function(opts) {
     scale = opts.scale ? opts.scale : scale
     angle = opts.angle ? opts.angle : angle
     rotation = rotmat(angle)
+    return this
   }
 
   var update = function (opts) {
@@ -20,6 +21,7 @@ module.exports = function(opts) {
     angle = opts.angle ? angle + opts.angle : angle
     scale = opts.scale ? Math.exp(Math.log(scale) + opts.scale) : scale
     rotation = rotmat(angle)
+    return this
   }
 
   var rotmat = function (angle) {
