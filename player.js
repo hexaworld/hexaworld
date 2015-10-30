@@ -41,7 +41,6 @@ Player.prototype.move = function(velocity){
   
   this.geometry.transform.update(delta)
   this.geometry.move(self.geometry.transform)
-  
 }
 
 Player.prototype.keyboardInput = function(keyboard){
@@ -71,7 +70,7 @@ Player.prototype.keyboardInput = function(keyboard){
 }
 
 Player.prototype.draw = function(context, camera) {
-  this.geometry.draw(context, camera)
+  this.geometry.draw(context, camera, {order: 'bottom'})
 }
 
 Player.prototype.dampen = function() {
