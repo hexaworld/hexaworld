@@ -39,8 +39,8 @@ Player.prototype.move = function(velocity){
   ]
   delta.angle = velocity.angle
   
-  this.geometry.transform.update(delta)
-  this.geometry.move(self.geometry.transform)
+  self.geometry.transform.update(delta)
+  self.geometry.move(self.geometry.transform)
 }
 
 Player.prototype.keyboardInput = function(keyboard){

@@ -6,74 +6,71 @@ var transform = require('./transform.js')
 module.exports = Camera;
 inherits(Camera, Entity);
 
-function Camera(options){
+function Camera(opts){
   var self = this
-  this.position = { 
-    x: options.position.x, 
-    y: options.position.y,
-    z: options.position.z
-  }
-  this.rotation = options.rotation
-  this.speed = options.speed
-  this.friction = options.friction
-  this.yoked = options.yoked
-  this.velocity = {
-    x: options.velocity.x,
-    y: options.velocity.y,
-    z: options.velocity.z
-  }
+  this.speed = opts.speed
+  this.friction = opts.friction
+  this.velocity = opts.velocity
+  this.yoked = opts.yoked
   this.transform = transform({
-    position: [-self.position.x, -self.position.y], 
-    scale: self.position.z,
-    angle: self.rotation
+    position: opts.position, 
+    scale: opts.scale,
+    angle: opts.angle
   })
 }
 
 Camera.prototype.move = function(velocity) {
   var self = this
-  var theta = self.rotation * Math.PI / 180
-  var rotation = [[Math.cos(theta), -Math.sin(theta)], [Math.sin(theta), Math.cos(theta)]]
-  this.position.x += velocity.x * rotation[0][0] + velocity.y * rotation[0][1]
-  this.position.y += velocity.x * rotation[1][0] + velocity.y * rotation[1][1]
-  this.position.z = Math.exp(Math.log(this.position.z) + velocity.z * .05)
-  this.transform.set({
-    position: [self.position.x, self.position.y],
-    scale: self.position.z, 
-    angle: self.rotation})
+
+  var rad = self.transform.angle() * Math.PI / 180
+  var delta = {}
+  delta.position = [
+    velocity.position[0] * Math.cos(rad) - velocity.position[1] * Math.sin(rad),
+    velocity.position[0] * Math.sin(rad) + velocity.position[1] * Math.cos(rad)
+  ]
+  delta.angle = velocity.angle
+  delta.scale = velocity.scale
+
+  self.transform.update(delta)
 }
 
 Camera.prototype.keyboardInput = function(keyboard){
   if ('J' in keyboard.keysDown){
-    this.velocity.x = -this.speed;
+    this.velocity.position[0] = -this.speed
   }
 
   if ('L' in keyboard.keysDown){
-    this.velocity.x = this.speed;
+    this.velocity.position[0] = this.speed
   }
 
   if ('I' in keyboard.keysDown){
-    this.velocity.y = -this.speed;
+    this.velocity.position[1] = -this.speed
   }
 
   if ('K' in keyboard.keysDown){
-    this.velocity.y = this.speed;
-  }
-
-  if ('.' in keyboard.keysDown){
-    this.velocity.z = -this.speed
-  }
-
-  if (',' in keyboard.keysDown){
-    this.velocity.z = this.speed
+    this.velocity.position[1] = this.speed
   }
 
   if ('O' in keyboard.keysDown){
-    this.rotation -= 0.1
-    if (this.rotation < 0) this.rotation = 360
+    this.velocity.angle = -this.speed
   }
 
   if ('U' in keyboard.keysDown){
-    this.rotation += 0.1
-    if (this.rotation > 360) this.rotation = 0
+    this.velocity.angle = this.speed
   }
+
+  if ('.' in keyboard.keysDown){
+    this.velocity.scale = -this.speed / 10
+  }
+
+  if (',' in keyboard.keysDown){
+    this.velocity.scale = this.speed / 10
+  }
+}
+
+Camera.prototype.dampen = function() {
+  this.velocity.position[0] *= this.friction
+  this.velocity.position[1] *= this.friction
+  this.velocity.angle *= this.friction
+  this.velocity.scale *= this.friction
 }

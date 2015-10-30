@@ -17,22 +17,22 @@ var world = new World()
 
 var player = new Player({
   position: [0, 0],
-  velocity: {position: [0, 0], angle: 0},
   angle: 0,
   scale: 1.5,
+  velocity: {position: [0, 0], angle: 0},
   speed: .5,
   friction: 0.9,
   color: '#EB7576'
 });
 
 var camera = new Camera({
-  position: {x: 0, y: 0, z: .6},
-  rotation: 0,
+  position: [0, 0],
+  angle: 0,
+  scale: 0.6,
+  velocity: {position: [0, 0], angle: 0},
   speed: .5,
-  velocity: 0,
   friction: 0.9,
-  velocity: {x: 0, y: 0, z: 0},
-  yoked: true
+  yoked: false
 })
 
 player.addTo(game)
@@ -45,16 +45,15 @@ player.on('update', function(interval) {
 });
 
 camera.on('update', function(interval) {
-  if (camera.yoked){
-    camera.position.x = player.position()[0]
-    camera.position.y = player.position()[1]
-    camera.rotation = player.angle()
+  if (camera.yoked) {
+    camera.transform.set({
+      position: player.position(),
+      angle: player.angle()
+    })
   }
   this.keyboardInput(keyboard)
   this.move(this.velocity)
-  this.velocity.x *= this.friction
-  this.velocity.y *= this.friction
-  this.velocity.z *= this.friction
+  this.dampen()
 })
 
 game.on('draw-background', function(context) {
