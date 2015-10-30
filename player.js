@@ -35,9 +35,9 @@ Player.prototype.move = function(velocity){
     velocity.position[0] * Math.cos(angle) - velocity.position[1] * Math.sin(angle),
     velocity.position[0] * Math.sin(angle) + velocity.position[1] * Math.cos(angle)
   ]
+  this.geometry.update(transform(delta))
   this.position[0] += delta.position[0]
   this.position[1] += delta.position[1]
-  this.geometry.update(transform(delta))
 }
 
 Player.prototype.keyboardInput = function(keyboard){
@@ -67,9 +67,7 @@ Player.prototype.keyboardInput = function(keyboard){
 }
 
 Player.prototype.draw = function(context, camera) {
-
   this.geometry.draw(context, camera)
-
 }
 
 Player.prototype.dampen = function() {
