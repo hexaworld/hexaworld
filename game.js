@@ -45,6 +45,11 @@ player.on('update', function(interval) {
 });
 
 camera.on('update', function(interval) {
+  if (camera.yoked){
+    camera.position.x = player.geometry.transform.position()[0]
+    camera.position.y = player.geometry.transform.position()[1]
+    camera.rotation = 180 * player.geometry.transform.angle() / Math.PI
+  }
   this.keyboardInput(keyboard)
   this.move(this.velocity)
   this.velocity.x *= this.friction
@@ -58,11 +63,6 @@ game.on('draw-background', function(context) {
 })
 
 game.on('update', function(interval){
-  if (camera.yoked){
-    camera.position.x = player.position[0]
-    camera.position.y = player.position[1]
-    camera.rotation = player.angle
-  }
   // get camera coordinates
   // draw world within those coordinates
   // need a function that renders a world given a camera (zoom, position, orientation)
@@ -70,6 +70,7 @@ game.on('update', function(interval){
 
 
 game.on('draw', function(context) {
+  
   world.draw(context, camera)
   player.draw(context, camera)
 })

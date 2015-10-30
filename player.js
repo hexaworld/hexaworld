@@ -9,9 +9,6 @@ module.exports = Player;
 inherits(Player, Entity);
 
 function Player(opts){
-  this.position = opts.position
-  this.scale = opts.scale
-  this.angle = opts.angle
   this.velocity = opts.velocity
   this.speed = opts.speed
   this.friction = opts.friction
@@ -19,6 +16,8 @@ function Player(opts){
     fill: opts.color, 
     stroke: opts.color,
     scale: 2,
+    position: opts.position,
+    angle: opts.angle,
     children: [
       circle({fill: '#EB8686', stroke: '#EB8686', position: [-0.75, -1], scale: 0.5}), 
       circle({fill: '#EB8686', stroke: '#EB8686', position: [0.75, -1], scale: 0.5})
@@ -28,16 +27,38 @@ function Player(opts){
 
 Player.prototype.move = function(velocity){
   var self = this
-  this.angle += velocity.angle
-  var angle = this.angle * Math.PI / 180
+
+  var oldTransform = self.geometry.transform
+  var angle = oldTransform.angle()
+
   var delta = {}
   delta.position = [
     velocity.position[0] * Math.cos(angle) - velocity.position[1] * Math.sin(angle),
     velocity.position[0] * Math.sin(angle) + velocity.position[1] * Math.cos(angle)
   ]
-  this.geometry.update(transform(delta))
-  this.position[0] += delta.position[0]
-  this.position[1] += delta.position[1]
+
+  var newTransform = transform({
+    position: [oldTransform.position()[0] + delta.position[0], oldTransform.position()[1] + delta.position[1]],
+    scale: oldTransform.scale(),
+    angle: 180 * oldTransform.angle() / Math.PI + velocity.angle
+  })
+  this.geometry.update(oldTransform, true)
+  this.geometry.update(newTransform)
+
+  this.geometry.transform = newTransform
+
+  // var self = this
+  // //this.angle += velocity.angle
+  // /var angle = this.angle * Math.PI / 180
+  // var delta = {}
+  // delta.position = [
+  //   velocity.position[0] * Math.cos(angle) - velocity.position[1] * Math.sin(angle),
+  //   velocity.position[0] * Math.sin(angle) + velocity.position[1] * Math.cos(angle)
+  // ]
+  // delta.angle = velocity.angle
+  // this.geometry.update(transform(delta))
+  // //this.position[0] += delta.position[0]
+  // //this.position[1] += delta.position[1]
 }
 
 Player.prototype.keyboardInput = function(keyboard){

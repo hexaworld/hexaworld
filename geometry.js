@@ -15,13 +15,17 @@ function Geometry(data) {
   this.update()
 }
 
-Geometry.prototype.update = function(transform) {
+Geometry.prototype.update = function(transform, invert) {
   var self = this
   transform = transform || self.transform
-  self.points = transform.apply(self.points)
+  if (invert) {
+    self.points = transform.invert(self.points)
+  } else {
+    self.points = transform.apply(self.points)
+  }
   if (self.children.length) {
     _.forEach(self.children, function(child) {
-      child.update(transform)
+      child.update(transform, invert)
     })
   }
 }
