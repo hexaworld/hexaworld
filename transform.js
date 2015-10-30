@@ -14,8 +14,8 @@ module.exports = function(opts) {
     position = opts.position 
       ? [position[0] + opts.position[0], position[1] + opts.position[1]] 
       : position
-    scale = opts.scale ? scale + opts.scale : scale
     angle = opts.angle ? angle + opts.angle : angle
+    scale = opts.scale ? Math.exp(Math.log(scale) + opts.scale) : scale
     rotation = rotmat(angle)
   }
 
