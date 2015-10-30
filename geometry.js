@@ -12,20 +12,18 @@ function Geometry(data) {
     this.children = data.children ? [data.children] : []
   }
   this.transform = data.transform ? transform(data.transform) : transform()  
-  this.update()
+  this.move()
 }
 
-Geometry.prototype.update = function(transform, invert) {
+Geometry.prototype.move = function(transform, opts) {
   var self = this
+  opts = opts || {}
   transform = transform || self.transform
-  if (invert) {
-    self.points = transform.invert(self.points)
-  } else {
-    self.points = transform.apply(self.points)
-  }
+  op = opts.invert ? transform.invert : transform.apply
+  self.points = op(self.points)
   if (self.children.length) {
     _.forEach(self.children, function(child) {
-      child.update(transform, invert)
+      child.move(transform, opts)
     })
   }
 }
@@ -60,7 +58,6 @@ Geometry.prototype.drawBezier = function(context, points) {
 }
 
 Geometry.prototype.draw = function(context, camera) {
-  var self = this
   var points = this.points 
   points = camera.transform.invert(points)
   points = points.map(function (xy) {

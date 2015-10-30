@@ -32,7 +32,7 @@ var camera = new Camera({
   velocity: 0,
   friction: 0.9,
   velocity: {x: 0, y: 0, z: 0},
-  yoked: true
+  yoked: false
 })
 
 player.addTo(game)
@@ -46,9 +46,9 @@ player.on('update', function(interval) {
 
 camera.on('update', function(interval) {
   if (camera.yoked){
-    camera.position.x = player.geometry.transform.position()[0]
-    camera.position.y = player.geometry.transform.position()[1]
-    camera.rotation = 180 * player.geometry.transform.angle() / Math.PI
+    camera.position.x = player.position()[0]
+    camera.position.y = player.position()[1]
+    camera.rotation = player.angle()
   }
   this.keyboardInput(keyboard)
   this.move(this.velocity)

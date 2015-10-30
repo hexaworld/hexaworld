@@ -28,37 +28,20 @@ function Player(opts){
 Player.prototype.move = function(velocity){
   var self = this
 
-  var oldTransform = self.geometry.transform
-  var angle = oldTransform.angle()
+  var transform = self.geometry.transform
+  self.geometry.move(transform, {invert: true})
 
+  var rad = transform.angle() * Math.PI / 180
   var delta = {}
   delta.position = [
-    velocity.position[0] * Math.cos(angle) - velocity.position[1] * Math.sin(angle),
-    velocity.position[0] * Math.sin(angle) + velocity.position[1] * Math.cos(angle)
+    velocity.position[0] * Math.cos(rad) - velocity.position[1] * Math.sin(rad),
+    velocity.position[0] * Math.sin(rad) + velocity.position[1] * Math.cos(rad)
   ]
-
-  var newTransform = transform({
-    position: [oldTransform.position()[0] + delta.position[0], oldTransform.position()[1] + delta.position[1]],
-    scale: oldTransform.scale(),
-    angle: 180 * oldTransform.angle() / Math.PI + velocity.angle
-  })
-  this.geometry.update(oldTransform, true)
-  this.geometry.update(newTransform)
-
-  this.geometry.transform = newTransform
-
-  // var self = this
-  // //this.angle += velocity.angle
-  // /var angle = this.angle * Math.PI / 180
-  // var delta = {}
-  // delta.position = [
-  //   velocity.position[0] * Math.cos(angle) - velocity.position[1] * Math.sin(angle),
-  //   velocity.position[0] * Math.sin(angle) + velocity.position[1] * Math.cos(angle)
-  // ]
-  // delta.angle = velocity.angle
-  // this.geometry.update(transform(delta))
-  // //this.position[0] += delta.position[0]
-  // //this.position[1] += delta.position[1]
+  delta.angle = velocity.angle
+  
+  this.geometry.transform.update(delta)
+  this.geometry.move(self.geometry.transform)
+  
 }
 
 Player.prototype.keyboardInput = function(keyboard){
@@ -96,51 +79,15 @@ Player.prototype.dampen = function() {
   this.velocity.position[1] *= this.friction
   this.velocity.angle *= this.friction
 }
-//   var self = this
-//   var angle = camera.rotation * Math.PI / 180
-//   var scale = 1/camera.transform.scale()
-// //  var position = [self.position.x*scale, self.position.y*scale]
-//   var position = [self.position.x, self.position.y]
-//   var rotation = [[Math.cos(angle), -Math.sin(angle)], [Math.sin(angle), Math.cos(angle)]] 
 
-//   position[0] = position[0] - camera.position.x
-//   position[1] = position[1] - camera.position.y
-//   var position = math.multiply(position, rotation)
+Player.prototype.position = function() {
+  return this.geometry.transform.position()
+}
 
-//   var originX = scale*position[0] + game.width/2
-//   var originY = scale*position[1] + 2*game.height/4
+Player.prototype.angle = function() {
+  return this.geometry.transform.angle()
+}
 
-// //  var originX = position[0] - camera.position.x+game.width/2
-// //  var originY = position[1] - camera.position.y+game.height/2
-  
-//   angle = self.rotation * Math.PI / 180 - angle
-
-//   context.lineWidth = 3
-
-//   // ears
-//   var x = -this.size.x/2
-//   var y = -this.size.y
-//   var dx = x*Math.cos(angle)-y*Math.sin(angle)
-//   var dy = x*Math.sin(angle)+y*Math.cos(angle)
-//   context.beginPath()
-//   context.fillStyle = '#EB8686'
-//   context.ellipse(originX + scale*dx, originY + scale*dy, scale*this.size.x*1.3, scale*this.size.x*.6, angle + 45* Math.PI/180, 0, 2*Math.PI)
-//   context.closePath()
-//   context.fill()
-
-//   var x = this.size.x/2
-//   var y = -this.size.y
-//   var dx = x*Math.cos(angle)-y*Math.sin(angle)
-//   var dy = x*Math.sin(angle)+y*Math.cos(angle)
-//   context.beginPath()
-//   context.fillStyle = '#EB8686'
-//   context.ellipse(originX + scale*dx, originY + scale*dy, scale*this.size.x*1.3, scale*this.size.x*.6, angle - 45 * Math.PI/180, 0, 2*Math.PI)
-//   context.closePath()
-//   context.fill()
-
-//   // body
-//   context.beginPath() 
-//   context.fillStyle = '#EC6A6A'
-//   context.arc(originX, originY, scale*this.size.x*1.5, 0, 2*Math.PI)
-//   context.closePath()
-//   context.fill()
+Player.prototype.scale = function() {
+  return this.geometry.transform.scale()
+}
