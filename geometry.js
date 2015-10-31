@@ -8,6 +8,7 @@ function Geometry(data) {
   if (!data.points) throw new Error('Must provide points')
   this.props = data.props
   this.points = data.points
+  this.obstacle = data.obstacle
   if (_.isArray(data.children)) {
     this.children = data.children
   } else {
@@ -35,11 +36,22 @@ Geometry.prototype.contains = function(point) {
   return inside(point, self.points)
 }
 
-Geometry.prototype.intersects = function(geometry) {
-
+Geometry.prototype.intersects = function(other) {
+  var self = this
+  var response = new sat.Response();
+  var selfPoly = new sat.Polygon(
+    new sat.Vector(), 
+    self.points.map(function (xy) {return new sat.Vector(xy[0], xy[1])})
+  )
+  var otherPoly = new sat.Polygon(
+    new sat.Vector(), 
+    other.points.map(function (xy) {return new sat.Vector(xy[0], xy[1])})
+  )
+  var collision = sat.testPolygonPolygon(selfPoly, otherPoly, response)
+  if (collision) return {collision: collision, response: response}
 }
 
-Geometry.prototype.polygon = function(context, points) {
+Geometry.prototype.drawPolygon = function(context, points) {
   context.beginPath()
   _.forEach(points, function(xy) {
     context.lineTo(xy[0], xy[1])
@@ -51,7 +63,7 @@ Geometry.prototype.polygon = function(context, points) {
   context.stroke()
 }
 
-Geometry.prototype.bezier = function(context, points) {
+Geometry.prototype.drawBezier = function(context, points) {
   var n = points.length / 3
   context.beginPath()
   context.fillStyle = this.props.fill
@@ -82,8 +94,8 @@ Geometry.prototype.drawSelf = function(context, camera) {
   points = points.map(function (xy) {
     return [xy[0] + camera.game.width/2, xy[1] + 2*camera.game.height/4]
   })
-  if (this.props.type == 'polygon') this.polygon(context, points)
-  if (this.props.type == 'bezier') this.bezier(context, points)
+  if (this.props.type == 'polygon') this.drawPolygon(context, points)
+  if (this.props.type == 'bezier') this.drawBezier(context, points)
 }
 
 Geometry.prototype.draw = function(context, camera, opts) {
@@ -97,6 +109,17 @@ Geometry.prototype.draw = function(context, camera, opts) {
   } else {
     throw Error('Order ' + opts.order + ' not recognized')
   }
+}
+
+Geometry.prototype.clone = function() {
+  var self = this
+  return new Geometry({
+    props: _.cloneDeep(self.props),
+    points: self.points,
+    obstacle: self.obstacle,
+    children: self.children,
+    transform: self.transform
+  })
 }
 
 module.exports = Geometry

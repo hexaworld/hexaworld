@@ -19,7 +19,7 @@ var player = new Player({
   angle: 0,
   scale: 1.5,
   velocity: {position: [0, 0], angle: 0},
-  speed: .5,
+  speed: .4,
   friction: 0.9,
   color: '#EB7576'
 });
@@ -59,7 +59,7 @@ camera.on('update', function(interval) {
 })
 
 world.on('location', function(msg) {
-  console.log(msg)
+  //console.log(msg)
 })
 
 game.on('draw-background', function(context) {

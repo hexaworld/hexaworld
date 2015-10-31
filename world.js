@@ -3,7 +3,8 @@ var inherits = require('inherits')
 var tile = require('./geo/tile.js')
 var hex = require('./geo/hex.js')
 var circle = require('./geo/circle.js')
-var path = require('./geo/path.js')
+var wedge = require('./geo/wedge.js')
+var block = require('./geo/block.js')
 var Entity = require('crtrdg-entity')
 
 module.exports = World
@@ -17,47 +18,48 @@ function World(opts) {
       position: [0, 0],
       scale: 50,
       children: [
-        circle({scale: 0.25, children: [circle({fill: 'white', stroke: 'white', scale: 0.5})]}),
-        path({angle: 0}), path({angle: 120}), path({angle: 240})
+        circle({fill: 'white', stroke: 'white', scale: 0.1}),
+        block({angle: 0}), block({angle: 120}), block({angle: 240})
       ]
     }),
     tile({
       position: [-1, 0],
       scale: 50,
-      children: [hex({scale: 0.25}), path({angle: 0}), path({angle: 240}), path({angle: 300})]
+      children: [block({angle: 60}), block({angle: 300}), wedge({angle: 0})]
     }),
     tile({
       position: [0, 1],
       scale: 50,
-      children: [hex({scale: 0.25}), path({angle: 120}), path({angle: 180}), path({angle: 240})]
+      children: [block({angle: 180}), block({angle: 240}), block({angle: 300})]
     }),
     tile({
       position: [-1, 1],
       scale: 50,
-      children: [hex({scale: 0.25}), path({angle: 240}), path({angle: 300})]
+      children: [block({angle: 240}), block({angle: 300})]
     }),
     tile({
       position: [1, -1],
       scale: 50,
-      children: [hex({scale: 0.25}), path({angle: 120})]
+      children: [block({angle: 180})]
     }),
     tile({
       position: [1, 0],
       scale: 50,
-      children: [hex({scale: 0.25}), path({angle: 60}), path({angle: 180})]
+      children: [block({angle: 120}), block({angle: 240})]
     }),
     tile({
       position: [0, -1],
       scale: 50,
-      children: [hex({scale: 0.25}), path({angle: 60}), path({angle: 300})]
+      children: [block({angle: 0}), block({angle: 120})]
     })
   ]
 
   this.on('update', function(interval) {
     var self = this
-    var ind = self.location(self.player.position())
-    if (this.tiles[ind].children[0].contains(self.player.position())) {
-      this.emit('location', 'inside tile ' + ind)
+    var point = self.player.position()
+    var ind = self.locate(point)
+    if (self.tiles[ind].children[0].contains(point)) {
+      self.emit('location', 'inside tile ' + ind)
     }
   })
 }
@@ -68,18 +70,27 @@ World.prototype.draw = function(context, camera) {
   })
 }
 
-World.prototype.location = function(point) {
+World.prototype.locate = function(point) {
   var status = this.tiles.map(function (tile) {
     return tile.contains(point)
   })
-  return _.indexOf(status, true)
+  var ind = _.indexOf(status, true)
+  if (ind === -1) throw Error('Cannot find player in a tile')
+  return ind
 }
 
-World.prototype.contains = function(point) {
-  var status = this.tiles.map(function (tile) {
-    return tile.children.map(function (child) {
-      return child.contains(point)
+World.prototype.intersects = function(geometry) {
+  var self = this
+  var results = []
+  var point = geometry.transform.position()
+  var ind = self.locate(point)
+  this.tiles.forEach(function (tile) {
+    tile.children.forEach(function (child) {
+      if (child.obstacle) {
+        var collision = child.intersects(geometry)
+        if (collision) results.push(collision)
+      }
     })
   })
-  return _.any(_.flatten(status))
+  if (results.length) return(results)
 }

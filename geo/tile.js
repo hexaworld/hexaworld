@@ -1,13 +1,18 @@
 var _ = require('lodash')
+var wedge = require('./wedge.js')
 var Geometry = require('../geometry.js')
 
 module.exports = function (opts) {
   opts = opts || {}
+  children = [
+    wedge({angle: 0}), wedge({angle: 60}), wedge({angle: 120}), 
+    wedge({angle: 180}), wedge({angle: 240}), wedge({angle: 300})
+  ]
   
   return new Geometry({
     props: {
-      fill: opts.fill || '#A5A5A5',
-      stroke: opts.stroke || '#A5A5A5',
+      fill: opts.fill || '#DFE0E2',
+      stroke: opts.stroke || '#DFE0E2',
       type: 'polygon'
     },
 
@@ -25,7 +30,7 @@ module.exports = function (opts) {
       scale: opts.scale
     },
 
-    children: opts.children
+    children: opts.children ? children.concat(opts.children) : children
   })
 
 }

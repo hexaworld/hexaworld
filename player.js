@@ -24,10 +24,9 @@ function Player(opts){
       circle({fill: '#EB8686', stroke: '#EB8686', position: [0.75, -1], scale: 0.5})
     ]
   })
-
 }
 
-Player.prototype.move = function(velocity, world){
+Player.prototype.move = function(velocity, world) {
   var self = this
 
   var t = transform({
@@ -45,19 +44,18 @@ Player.prototype.move = function(velocity, world){
   ]
   delta.angle = velocity.angle
 
-  if (!world.contains(t.update(delta).position())) {
-    console.log('outside')
-  }
-
-  //console.log(self.geometry.transform.position())
-  //transform.update(delta)
-  //console.log(self.geometry.transform.position())
-  //if (!world.contains(transform.update(delta))) {
-  //  console.log('we got here')
   self.geometry.transform.update(delta)
   self.geometry.move(self.geometry.transform)
-  //}
-  
+
+  var collisions = world.intersects(self.geometry)
+  if (collisions) {
+    // find colliding object with largest overlap vector
+    var ind = _.indexOf(collisions, _.max(collisions, function (i) {return i.response.overlap}))
+    // adjust using overlap vector
+    self.velocity.position[0] = 2 * collisions[ind].response.overlapV.x
+    self.velocity.position[1] = 2 * collisions[ind].response.overlapV.y
+  }
+
 }
 
 Player.prototype.keyboardInput = function(keyboard){

@@ -7,16 +7,16 @@ module.exports = function (opts) {
   
   return new Geometry({
     props: {
-      fill: opts.fill || '#DFE0E2',
-      stroke: opts.stroke || '#DFE0E2',
+      fill: opts.fill || '#A5A5A5',
+      stroke: opts.stroke || '#A5A5A5',
       type: 'polygon'
     },
 
     points: [
       [-1/2, Math.sqrt(3)/2],
       [-1/2, Math.sqrt(3)/2/width],
-      [1/2, Math.sqrt(3)/2/width],
-      [1/2, Math.sqrt(3)/2]
+      [1/4 - Math.sin(Math.PI/3) * Math.sqrt(3)/2/width, 1/2 * Math.sin(Math.PI/3) + 1/2 * Math.sqrt(3)/2/width],
+      [1/4 - Math.sin(Math.PI/3) * Math.sqrt(3)/2, 1/2 * Math.sin(Math.PI/3) + 1/2 * Math.sqrt(3)/2],
     ],
 
     transform: {
@@ -24,7 +24,9 @@ module.exports = function (opts) {
       angle: opts.angle || 0
     },
 
-    children: opts.children
+    children: opts.children,
+
+    obstacle: true
   })
 
 }
