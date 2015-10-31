@@ -49,11 +49,21 @@ Player.prototype.move = function(velocity, world) {
 
   var collisions = world.intersects(self.geometry)
   if (collisions) {
-    // find colliding object with largest overlap vector
     var ind = _.indexOf(collisions, _.max(collisions, function (i) {return i.response.overlap}))
-    // adjust using overlap vector
-    self.velocity.position[0] -= self.velocity.position[0]
-    self.velocity.position[1] -= self.velocity.position[1]
+    var t = transform({
+      position: self.geometry.transform.position(),
+      scale: self.geometry.transform.scale(),
+      angle: self.geometry.transform.angle()
+    })
+    self.geometry.stage(t, {invert: true})
+    var correction = {
+      position: [
+        -delta.position[0] + collisions[ind].response.overlapV.x, 
+        -delta.position[1] + collisions[ind].response.overlapV.y, 
+      ]
+    }
+    self.geometry.transform.update(correction)
+    self.geometry.stage(self.geometry.transform)
   }
 
 }
