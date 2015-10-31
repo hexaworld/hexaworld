@@ -17,38 +17,38 @@ function World(opts) {
     tile({
       position: [0, 0],
       scale: 50,
-      paths: [0, 2, 4],
+      paths: [0, 1, 2, 3, 4, 5],
       children: [circle({fill: 'white', stroke: 'white', scale: 0.1})]
     }),
     tile({
       position: [-1, 0],
       scale: 50,
-      paths: [0, 4, 5]
+      paths: [0, 1, 2, 3, 4, 5]
     }),
     tile({
       position: [0, 1],
       scale: 50,
-      paths: [2, 3, 4]
+      paths: [0, 1, 2, 3, 4, 5]
     }),
     tile({
       position: [-1, 1],
       scale: 50,
-      paths: [4, 5]
+      paths: [0, 1, 2, 3, 4, 5]
     }),
     tile({
       position: [1, -1],
       scale: 50,
-      paths: [2]
+      paths: [0, 1, 2, 3, 4, 5]
     }),
     tile({
       position: [1, 0],
       scale: 50,
-      paths: [1, 3]
+      paths: [0, 1, 2, 3, 4, 5]
     }),
     tile({
       position: [0, -1],
       scale: 50,
-      paths: [1, 5]
+      paths: [0, 1, 2, 3, 4, 5]
     })
   ]
 

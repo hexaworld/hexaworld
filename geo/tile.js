@@ -5,10 +5,9 @@ var Geometry = require('../geometry.js')
 
 module.exports = function (opts) {
   opts = opts || {}
-  var wedges = [
-    wedge({angle: 0}), wedge({angle: 60}), wedge({angle: 120}), 
-    wedge({angle: 180}), wedge({angle: 240}), wedge({angle: 300})
-  ]
+  var wedges = _.range(6).map(function (i) {
+    return wedge({angle: i * 60})
+  })
   var blocks = _.range(6).map(function (i) {
     if (!_.includes(opts.paths, i)) return block({angle: i * 60})
   })

@@ -31,7 +31,7 @@ var camera = new Camera({
   velocity: {position: [0, 0], angle: 0},
   speed: .5,
   friction: 0.9,
-  yoked: true
+  yoked: false
 })
 
 var world = new World({player: player})
