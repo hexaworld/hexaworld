@@ -75,6 +75,6 @@ game.on('draw', function(context) {
   player.draw(context, camera)
 })
 
-game.on('pause', function(){});
+game.on('pause', function(){})
 
-game.on('resume', function(){});
+game.on('resume', function(){})
