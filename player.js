@@ -44,7 +44,7 @@ Player.prototype.move = function(velocity, world) {
   ]
   delta.angle = velocity.angle
 
-  self.geometry.transform.update(delta)
+  self.geometry.transform.add(delta)
   self.geometry.stage(self.geometry.transform)
 
   var collisions = world.intersects(self.geometry)
@@ -62,7 +62,7 @@ Player.prototype.move = function(velocity, world) {
         -0.2 * delta.position[1] + 0.5 * collisions[ind].response.overlapV.y, 
       ]
     }
-    self.geometry.transform.update(correction)
+    self.geometry.transform.add(correction)
     self.geometry.stage(self.geometry.transform)
   }
 
