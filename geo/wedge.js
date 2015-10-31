@@ -8,7 +8,8 @@ module.exports = function (opts) {
   return new Geometry({
     props: {
       fill: opts.fill || '#A5A5A5',
-      stroke: opts.stroke || 'red',
+      stroke: opts.stroke || '#A5A5A5',
+      thickness: 2,
       type: 'polygon'
     },
 

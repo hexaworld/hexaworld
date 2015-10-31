@@ -67,6 +67,7 @@ Geometry.prototype.drawPolygon = function(context, points) {
     context.lineTo(xy[0], xy[1])
   })
   context.closePath()
+  context.lineWidth = this.props.thickness || 1
   context.fillStyle = this.props.fill
   context.strokeStyle = this.props.stroke
   context.fill()
@@ -76,6 +77,7 @@ Geometry.prototype.drawPolygon = function(context, points) {
 Geometry.prototype.drawBezier = function(context, points) {
   var n = points.length / 3
   context.beginPath()
+  context.lineWidth = this.props.thickness || 1
   context.fillStyle = this.props.fill
   context.strokeStyle = this.props.stroke
   context.moveTo(points[0][0], points[0][1])

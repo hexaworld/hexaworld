@@ -53,7 +53,7 @@ world.on('location', function(msg) {
 })
 
 game.on('draw-background', function(context) {
-  context.fillStyle = '#F7F7F7'
+  context.fillStyle = '#A5A5A5',
   context.fillRect(0, 0, game.width, game.height)
 })
 

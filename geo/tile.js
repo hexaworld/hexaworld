@@ -18,6 +18,7 @@ module.exports = function (opts) {
     props: {
       fill: opts.fill || '#DFE0E2',
       stroke: opts.stroke || '#DFE0E2',
+      thickness: 0,
       type: 'polygon'
     },
 
