@@ -15,18 +15,15 @@ var keyboard = new Keyboard(game)
 var mouse = new Mouse(game)
 
 var player = new Player({
-  position: [0, 0],
-  angle: 0,
-  scale: 1.5,
-  velocity: {position: [0, 0], angle: 0},
-  speed: .4,
+  scale: 2,
+  speed: .1,
   friction: 0.9,
   color: '#EB7576'
 });
 
 var camera = new Camera({
   scale: 0.1,
-  speed: .5,
+  speed: .1,
   friction: 0.9,
   yoked: true
 })
@@ -38,9 +35,7 @@ camera.addTo(game)
 world.addTo(game)
 
 player.on('update', function(interval) {
-  this.keyboardInput(keyboard)
-  this.move(this.velocity, world)
-  this.dampen()
+  this.move(keyboard, world)
 });
 
 camera.on('update', function(interval) {

@@ -18,13 +18,12 @@ function Camera(opts){
   this.movement = new Movement({
     speed: opts.speed,
     friction: opts.friction,
-    keymap: {position: [['J','L'],['K','I']], angle: ['U','O'], scale: [',','.']}
+    keymap: {position: [['L','J'],['K','I']], angle: ['O','U'], scale: [',','.']}
   })
 }
 
 Camera.prototype.move = function(keyboard) {
   var self = this
-  console.log(keyboard.keysDown)
-  self.movement.update(keyboard.keysDown)
-  self.movement.apply(self.transform)
+  var delta = self.movement.compute(keyboard.keysDown, self.transform.angle())
+  self.transform.compose(delta)
 }

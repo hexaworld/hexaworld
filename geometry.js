@@ -31,6 +31,16 @@ Geometry.prototype.stage = function(transform, opts) {
   }
 }
 
+Geometry.prototype.unstage = function() {
+  var self = this
+  var t = transform({
+    position: self.transform.position(),
+    scale: self.transform.scale(),
+    angle: self.transform.angle()
+  })
+  self.stage(t, {invert: true})
+}
+
 Geometry.prototype.contains = function(point) {
   var self = this
   return inside(point, self.points)
