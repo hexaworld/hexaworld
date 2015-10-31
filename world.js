@@ -17,40 +17,38 @@ function World(opts) {
     tile({
       position: [0, 0],
       scale: 50,
-      children: [
-        circle({fill: 'white', stroke: 'white', scale: 0.1}),
-        block({angle: 0}), block({angle: 120}), block({angle: 240})
-      ]
+      paths: [0, 2, 4],
+      children: [circle({fill: 'white', stroke: 'white', scale: 0.1})]
     }),
     tile({
       position: [-1, 0],
       scale: 50,
-      children: [block({angle: 60}), block({angle: 300}), wedge({angle: 0})]
+      paths: [0, 4, 5]
     }),
     tile({
       position: [0, 1],
       scale: 50,
-      children: [block({angle: 180}), block({angle: 240}), block({angle: 300})]
+      paths: [2, 3, 4]
     }),
     tile({
       position: [-1, 1],
       scale: 50,
-      children: [block({angle: 240}), block({angle: 300})]
+      paths: [4, 5]
     }),
     tile({
       position: [1, -1],
       scale: 50,
-      children: [block({angle: 180})]
+      paths: [2]
     }),
     tile({
       position: [1, 0],
       scale: 50,
-      children: [block({angle: 120}), block({angle: 240})]
+      paths: [1, 3]
     }),
     tile({
       position: [0, -1],
       scale: 50,
-      children: [block({angle: 0}), block({angle: 120})]
+      paths: [1, 5]
     })
   ]
 

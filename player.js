@@ -50,6 +50,8 @@ Player.prototype.move = function(velocity, world) {
   var collisions = world.intersects(self.geometry)
   if (collisions) {
     var ind = _.indexOf(collisions, _.max(collisions, function (i) {return i.response.overlap}))
+    console.log(collisions)
+    console.log(collisions[ind].response.overlap)
     var t = transform({
       position: self.geometry.transform.position(),
       scale: self.geometry.transform.scale(),
