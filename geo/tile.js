@@ -1,13 +1,23 @@
 var _ = require('lodash')
+var wedge = require('./wedge.js')
+var block = require('./block.js')
 var Geometry = require('../geometry.js')
 
 module.exports = function (opts) {
   opts = opts || {}
-  
+  var wedges = _.range(6).map(function (i) {
+    return wedge({angle: i * 60})
+  })
+  var blocks = _.range(6).map(function (i) {
+    if (!_.includes(opts.paths, i)) return block({angle: i * 60})
+  })
+  _.remove(blocks, _.isUndefined)
+  var children = wedges.concat(blocks)
+
   return new Geometry({
     props: {
-      fill: opts.fill || '#A5A5A5',
-      stroke: opts.stroke || '#A5A5A5',
+      fill: opts.fill || '#DFE0E2',
+      stroke: opts.stroke || '#DFE0E2',
       type: 'polygon'
     },
 
@@ -25,7 +35,7 @@ module.exports = function (opts) {
       scale: opts.scale
     },
 
-    children: opts.children
+    children: opts.children ? children.concat(opts.children) : children
   })
 
 }

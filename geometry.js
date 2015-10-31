@@ -1,4 +1,6 @@
 var _ = require('lodash')
+var inside = require('point-in-polygon')
+var sat = require('sat')
 var transform = require('./transform.js')
 
 function Geometry(data) {
@@ -6,16 +8,17 @@ function Geometry(data) {
   if (!data.points) throw new Error('Must provide points')
   this.props = data.props
   this.points = data.points
+  this.obstacle = data.obstacle
   if (_.isArray(data.children)) {
     this.children = data.children
   } else {
     this.children = data.children ? [data.children] : []
   }
   this.transform = data.transform ? transform(data.transform) : transform()  
-  this.move()
+  this.stage()
 }
 
-Geometry.prototype.move = function(transform, opts) {
+Geometry.prototype.stage = function(transform, opts) {
   var self = this
   opts = opts || {}
   transform = transform || self.transform
@@ -23,12 +26,42 @@ Geometry.prototype.move = function(transform, opts) {
   self.points = op(self.points)
   if (self.children.length) {
     _.forEach(self.children, function(child) {
-      child.move(transform, opts)
+      child.stage(transform, opts)
     })
   }
 }
 
-Geometry.prototype.polygon = function(context, points) {
+Geometry.prototype.unstage = function() {
+  var self = this
+  var t = transform({
+    position: self.transform.position(),
+    scale: self.transform.scale(),
+    angle: self.transform.angle()
+  })
+  self.stage(t, {invert: true})
+}
+
+Geometry.prototype.contains = function(point) {
+  var self = this
+  return inside(point, self.points)
+}
+
+Geometry.prototype.intersects = function(other) {
+  var self = this
+  var response = new sat.Response();
+  var selfPoly = new sat.Polygon(
+    new sat.Vector(), 
+    self.points.map(function (xy) {return new sat.Vector(xy[0], xy[1])})
+  )
+  var otherPoly = new sat.Polygon(
+    new sat.Vector(), 
+    other.points.map(function (xy) {return new sat.Vector(xy[0], xy[1])})
+  )
+  var collision = sat.testPolygonPolygon(selfPoly, otherPoly, response)
+  if (collision) return {collision: collision, response: response}
+}
+
+Geometry.prototype.drawPolygon = function(context, points) {
   context.beginPath()
   _.forEach(points, function(xy) {
     context.lineTo(xy[0], xy[1])
@@ -40,7 +73,7 @@ Geometry.prototype.polygon = function(context, points) {
   context.stroke()
 }
 
-Geometry.prototype.bezier = function(context, points) {
+Geometry.prototype.drawBezier = function(context, points) {
   var n = points.length / 3
   context.beginPath()
   context.fillStyle = this.props.fill
@@ -71,8 +104,8 @@ Geometry.prototype.drawSelf = function(context, camera) {
   points = points.map(function (xy) {
     return [xy[0] + camera.game.width/2, xy[1] + 2*camera.game.height/4]
   })
-  if (this.props.type == 'polygon') this.polygon(context, points)
-  if (this.props.type == 'bezier') this.bezier(context, points)
+  if (this.props.type == 'polygon') this.drawPolygon(context, points)
+  if (this.props.type == 'bezier') this.drawBezier(context, points)
 }
 
 Geometry.prototype.draw = function(context, camera, opts) {

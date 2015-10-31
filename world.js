@@ -1,61 +1,92 @@
+var _ = require('lodash')
+var inherits = require('inherits')
 var tile = require('./geo/tile.js')
 var hex = require('./geo/hex.js')
 var circle = require('./geo/circle.js')
-var path = require('./geo/path.js')
+var wedge = require('./geo/wedge.js')
+var block = require('./geo/block.js')
+var Entity = require('crtrdg-entity')
 
 module.exports = World
+inherits(World, Entity)
 
-function World() {
+function World(opts) {
+  this.player = opts.player
+
   this.tiles = [
-    tile({
-      position: [-1, 0],
-      scale: 50,
-      children: [hex({scale: 0.25}), path({angle: 0}), path({angle: 240}), path({angle: 300})]
-    }),
     tile({
       position: [0, 0],
       scale: 50,
-      children: [
-        path({angle: 0}), path({angle: 120}), path({angle: 240}),
-        circle({scale: 0.25, children: [circle({fill: 'white', stroke: 'white', scale: 0.5})]})
-      ]
+      paths: [0, 2, 4],
+      children: [circle({fill: 'white', stroke: 'white', scale: 0.1})]
+    }),
+    tile({
+      position: [-1, 0],
+      scale: 50,
+      paths: [0, 4, 5]
     }),
     tile({
       position: [0, 1],
       scale: 50,
-      children: [hex({scale: 0.25}), path({angle: 120}), path({angle: 180}), path({angle: 240})]
+      paths: [2, 3, 4]
     }),
     tile({
       position: [-1, 1],
       scale: 50,
-      children: [hex({scale: 0.25}), path({angle: 240}), path({angle: 300})]
+      paths: [4, 5]
     }),
     tile({
       position: [1, -1],
       scale: 50,
-      children: [hex({scale: 0.25}), path({angle: 120})]
+      paths: [2]
     }),
     tile({
       position: [1, 0],
       scale: 50,
-      children: [hex({scale: 0.25}), path({angle: 60}), path({angle: 180})]
+      paths: [1, 3]
     }),
     tile({
       position: [0, -1],
       scale: 50,
-      children: [hex({scale: 0.25}), path({angle: 60}), path({angle: 300})]
+      paths: [1, 5]
     })
   ]
+
+  this.on('update', function(interval) {
+    var self = this
+    var point = self.player.position()
+    var ind = self.locate(point)
+    if (self.tiles[ind].children[0].contains(point)) {
+      self.emit('location', 'inside tile ' + ind)
+    }
+  })
 }
 
 World.prototype.draw = function(context, camera) {
-  // figure out which tiles to show given the camera position
   this.tiles.forEach(function (tile) {
     tile.draw(context, camera)
   })
 }
 
-World.prototype.boundaries = function(camera) {
-  // figure out which tiles to check given the camera position
-  // for those tiles, check whether we're intersecting the bounding boxes of any objects
+World.prototype.locate = function(point) {
+  var status = this.tiles.map(function (tile) {
+    return tile.contains(point)
+  })
+  var ind = _.indexOf(status, true)
+  if (ind === -1) throw Error('Cannot find player in a tile')
+  return ind
+}
+
+World.prototype.intersects = function(geometry) {
+  var self = this
+  var results = []
+  this.tiles.forEach(function (tile) {
+    tile.children.forEach(function (child) {
+      if (child.obstacle) {
+        var collision = child.intersects(geometry)
+        if (collision) results.push(collision)
+      }
+    })
+  })
+  if (results.length) return(results)
 }

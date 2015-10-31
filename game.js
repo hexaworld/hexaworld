@@ -13,35 +13,29 @@ var game = new Game({
 
 var keyboard = new Keyboard(game)
 var mouse = new Mouse(game)
-var world = new World()
 
 var player = new Player({
-  position: [0, 0],
-  angle: 0,
-  scale: 1.5,
-  velocity: {position: [0, 0], angle: 0},
-  speed: .5,
+  scale: 2,
+  speed: .1,
   friction: 0.9,
   color: '#EB7576'
 });
 
 var camera = new Camera({
-  position: [0, 0],
-  angle: 0,
-  scale: 0.6,
-  velocity: {position: [0, 0], angle: 0},
-  speed: .5,
+  scale: 0.1,
+  speed: .1,
   friction: 0.9,
   yoked: true
 })
 
+var world = new World({player: player})
+
 player.addTo(game)
 camera.addTo(game)
+world.addTo(game)
 
 player.on('update', function(interval) {
-  this.keyboardInput(keyboard)
-  this.move(this.velocity)
-  this.dampen()
+  this.move(keyboard, world)
 });
 
 camera.on('update', function(interval) {
@@ -51,9 +45,11 @@ camera.on('update', function(interval) {
       angle: player.angle()
     })
   }
-  this.keyboardInput(keyboard)
-  this.move(this.velocity)
-  this.dampen()
+  this.move(keyboard)
+})
+
+world.on('location', function(msg) {
+  //console.log(msg)
 })
 
 game.on('draw-background', function(context) {
@@ -62,6 +58,7 @@ game.on('draw-background', function(context) {
 })
 
 game.on('update', function(interval){
+  // console.log(world.tiles[1].children[3].contains(player.position()))
   // get camera coordinates
   // draw world within those coordinates
   // need a function that renders a world given a camera (zoom, position, orientation)
@@ -73,6 +70,6 @@ game.on('draw', function(context) {
   player.draw(context, camera)
 })
 
-game.on('pause', function(){});
+game.on('pause', function(){})
 
-game.on('resume', function(){});
+game.on('resume', function(){})

@@ -1,4 +1,6 @@
-module.exports = function(opts) {
+var _ = require('lodash')
+
+module.exports = function transform(opts) {
 
   opts = opts || {}
   var position = [0, 0]
@@ -7,19 +9,20 @@ module.exports = function(opts) {
   var rotation
   
   var set = function (opts) {
-    position = opts.position ? opts.position : position
-    scale = opts.scale ? opts.scale : scale
-    angle = opts.angle ? opts.angle : angle
+    position = _.isArray(opts.position) ? opts.position : position
+    scale = _.isNumber(opts.scale) ? opts.scale : scale
+    angle = _.isNumber(opts.angle) ? opts.angle : angle
     rotation = rotmat(angle)
+    return this
   }
 
-  var update = function (opts) {
-    position = opts.position 
-      ? [position[0] + opts.position[0], position[1] + opts.position[1]] 
-      : position
-    angle = opts.angle ? angle + opts.angle : angle
-    scale = opts.scale ? Math.exp(Math.log(scale) + opts.scale) : scale
+  var compose = function (opts) {
+    position = _.isArray(opts.position)
+      ? [position[0] + opts.position[0], position[1] + opts.position[1]] : position
+    angle = _.isNumber(opts.angle) ? angle + opts.angle : angle
+    scale = _.isNumber(opts.scale) ? scale * opts.scale : scale
     rotation = rotmat(angle)
+    return this
   }
 
   var rotmat = function (angle) {
@@ -64,8 +67,8 @@ module.exports = function(opts) {
   return {
     apply: apply,
     invert: invert,
+    compose: compose,
     set: set,
-    update: update,
     position: function () {return position},
     scale: function () {return scale},
     angle: function () {return angle},
