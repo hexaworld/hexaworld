@@ -19,8 +19,8 @@ function Player(opts){
     position: opts.position,
     angle: opts.angle,
     children: [
-      circle({fill: '#EB8686', stroke: '#EB8686', position: [-0.75, -1], scale: 0.5}), 
-      circle({fill: '#EB8686', stroke: '#EB8686', position: [0.75, -1], scale: 0.5})
+      circle({fill: '#EB8686', stroke: '#EB8686', position: [-0.7, -.9], scale: 0.6, angle: -45, aspect: 0.6}), 
+      circle({fill: '#EB8686', stroke: '#EB8686', position: [0.7, -.9], scale: 0.6, angle: 45, aspect: 0.6})
     ]
   })
 }
