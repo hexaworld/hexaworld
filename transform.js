@@ -21,7 +21,8 @@ module.exports = function transform(opts) {
       ? [position[0] + opts.position[0], position[1] + opts.position[1]] 
       : position
     angle = _.isNumber(opts.angle) ? angle + opts.angle : angle
-    scale = _.isNumber(opts.scale) ? scale + opts.scale : scale
+    //scale = _.isNumber(opts.scale) ? Math.exp(Math.log(scale) + opts.scale) : scale
+    scale = _.isNumber(opts.scale) ? scale*Math.exp(opts.scale) : scale
     rotation = rotmat(angle)
     return this
   }
@@ -31,7 +32,7 @@ module.exports = function transform(opts) {
       ? [position[0] * opts.position[0], position[1] * opts.position[1]] 
       : position
     angle = _.isNumber(opts.angle) ? angle * opts.angle : angle
-    scale = _.isNumber(opts.scale) ? scale * opts.scale : scale
+    scale = _.isNumber(opts.scale) ? scale + opts.scale : scale
     rotation = rotmat(angle)
     return this
   }
