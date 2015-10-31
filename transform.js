@@ -1,3 +1,5 @@
+var _ = require('lodash')
+
 module.exports = function transform(opts) {
 
   opts = opts || {}
@@ -7,19 +9,29 @@ module.exports = function transform(opts) {
   var rotation
   
   var set = function (opts) {
-    position = opts.position ? opts.position : position
-    scale = opts.scale ? opts.scale : scale
-    angle = opts.angle ? opts.angle : angle
+    position = _.isArray(opts.position) ? opts.position : position
+    scale = _.isNumber(opts.scale) ? opts.scale : scale
+    angle = _.isNumber(opts.angle) ? opts.angle : angle
     rotation = rotmat(angle)
     return this
   }
 
-  var update = function (opts) {
-    position = opts.position 
+  var add = function (opts) {
+    position = _.isArray(opts.position)
       ? [position[0] + opts.position[0], position[1] + opts.position[1]] 
       : position
-    angle = opts.angle ? angle + opts.angle : angle
-    scale = opts.scale ? Math.exp(Math.log(scale) + opts.scale) : scale
+    angle = _.isNumber(opts.angle) ? angle + opts.angle : angle
+    scale = _.isNumber(opts.scale) ? scale + opts.scale : scale
+    rotation = rotmat(angle)
+    return this
+  }
+
+  var multiply = function (opts) {
+    position = _.isArray(opts.position)
+      ? [position[0] * opts.position[0], position[1] * opts.position[1]] 
+      : position
+    angle = _.isNumber(opts.angle) ? angle * opts.angle : angle
+    scale = _.isNumber(opts.scale) ? scale * opts.scale : scale
     rotation = rotmat(angle)
     return this
   }
@@ -66,8 +78,9 @@ module.exports = function transform(opts) {
   return {
     apply: apply,
     invert: invert,
+    add: add,
+    multiply: multiply,
     set: set,
-    update: update,
     position: function () {return position},
     scale: function () {return scale},
     angle: function () {return angle},
