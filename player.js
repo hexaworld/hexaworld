@@ -58,8 +58,8 @@ Player.prototype.move = function(velocity, world) {
     self.geometry.stage(t, {invert: true})
     var correction = {
       position: [
-        -delta.position[0] + collisions[ind].response.overlapV.x, 
-        -delta.position[1] + collisions[ind].response.overlapV.y, 
+        -0.2 * delta.position[0] + 0.5 * collisions[ind].response.overlapV.x, 
+        -0.2 * delta.position[1] + 0.5 * collisions[ind].response.overlapV.y, 
       ]
     }
     self.geometry.transform.update(correction)
