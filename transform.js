@@ -16,23 +16,11 @@ module.exports = function transform(opts) {
     return this
   }
 
-  var add = function (opts) {
+  var compose = function (opts) {
     position = _.isArray(opts.position)
-      ? [position[0] + opts.position[0], position[1] + opts.position[1]] 
-      : position
+      ? [position[0] + opts.position[0], position[1] + opts.position[1]] : position
     angle = _.isNumber(opts.angle) ? angle + opts.angle : angle
-    //scale = _.isNumber(opts.scale) ? Math.exp(Math.log(scale) + opts.scale) : scale
-    scale = _.isNumber(opts.scale) ? scale*Math.exp(opts.scale) : scale
-    rotation = rotmat(angle)
-    return this
-  }
-
-  var multiply = function (opts) {
-    position = _.isArray(opts.position)
-      ? [position[0] * opts.position[0], position[1] * opts.position[1]] 
-      : position
-    angle = _.isNumber(opts.angle) ? angle * opts.angle : angle
-    scale = _.isNumber(opts.scale) ? scale + opts.scale : scale
+    scale = _.isNumber(opts.scale) ? scale * opts.scale : scale
     rotation = rotmat(angle)
     return this
   }
@@ -79,8 +67,7 @@ module.exports = function transform(opts) {
   return {
     apply: apply,
     invert: invert,
-    add: add,
-    multiply: multiply,
+    compose: compose,
     set: set,
     position: function () {return position},
     scale: function () {return scale},
