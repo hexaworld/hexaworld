@@ -34,7 +34,7 @@ Player.prototype.move = function(velocity, world) {
     scale: self.geometry.transform.scale(),
     angle: self.geometry.transform.angle()
   })
-  self.geometry.move(t, {invert: true})
+  self.geometry.stage(t, {invert: true})
 
   var rad = t.angle() * Math.PI / 180
   var delta = {}
@@ -45,15 +45,15 @@ Player.prototype.move = function(velocity, world) {
   delta.angle = velocity.angle
 
   self.geometry.transform.update(delta)
-  self.geometry.move(self.geometry.transform)
+  self.geometry.stage(self.geometry.transform)
 
   var collisions = world.intersects(self.geometry)
   if (collisions) {
     // find colliding object with largest overlap vector
     var ind = _.indexOf(collisions, _.max(collisions, function (i) {return i.response.overlap}))
     // adjust using overlap vector
-    self.velocity.position[0] = 2 * collisions[ind].response.overlapV.x
-    self.velocity.position[1] = 2 * collisions[ind].response.overlapV.y
+    self.velocity.position[0] -= self.velocity.position[0]
+    self.velocity.position[1] -= self.velocity.position[1]
   }
 
 }

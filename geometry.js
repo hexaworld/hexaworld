@@ -15,10 +15,10 @@ function Geometry(data) {
     this.children = data.children ? [data.children] : []
   }
   this.transform = data.transform ? transform(data.transform) : transform()  
-  this.move()
+  this.stage()
 }
 
-Geometry.prototype.move = function(transform, opts) {
+Geometry.prototype.stage = function(transform, opts) {
   var self = this
   opts = opts || {}
   transform = transform || self.transform
@@ -26,7 +26,7 @@ Geometry.prototype.move = function(transform, opts) {
   self.points = op(self.points)
   if (self.children.length) {
     _.forEach(self.children, function(child) {
-      child.move(transform, opts)
+      child.stage(transform, opts)
     })
   }
 }
@@ -109,17 +109,6 @@ Geometry.prototype.draw = function(context, camera, opts) {
   } else {
     throw Error('Order ' + opts.order + ' not recognized')
   }
-}
-
-Geometry.prototype.clone = function() {
-  var self = this
-  return new Geometry({
-    props: _.cloneDeep(self.props),
-    points: self.points,
-    obstacle: self.obstacle,
-    children: self.children,
-    transform: self.transform
-  })
 }
 
 module.exports = Geometry
