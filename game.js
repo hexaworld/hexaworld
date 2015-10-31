@@ -25,13 +25,10 @@ var player = new Player({
 });
 
 var camera = new Camera({
-  position: [0, 0],
-  angle: 0,
-  scale: 0.6,
-  velocity: {position: [0, 0], angle: 0},
+  scale: 0.1,
   speed: .5,
   friction: 0.9,
-  yoked: false
+  yoked: true
 })
 
 var world = new World({player: player})
@@ -53,9 +50,7 @@ camera.on('update', function(interval) {
       angle: player.angle()
     })
   }
-  this.keyboardInput(keyboard)
-  this.move(this.velocity)
-  this.dampen()
+  this.move(keyboard)
 })
 
 world.on('location', function(msg) {

@@ -23,7 +23,9 @@ module.exports = function (opts) {
       angle: opts.angle || 0
     },
 
-    children: opts.children
+    children: opts.children,
+
+    trigger: true
   })
 
 } 

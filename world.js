@@ -80,8 +80,6 @@ World.prototype.locate = function(point) {
 World.prototype.intersects = function(geometry) {
   var self = this
   var results = []
-  var point = geometry.transform.position()
-  var ind = self.locate(point)
   this.tiles.forEach(function (tile) {
     tile.children.forEach(function (child) {
       if (child.obstacle) {
