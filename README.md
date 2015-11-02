@@ -4,11 +4,11 @@ a world of hexagons
 
 built with [crtrdg.js](http://crtrdg.com/)
 
-to run with browserify and beefy call
+to run, first install `node` (we recommend [node version manager](https://github.com/creationix/nvm)), then start the game with browserify and beefy by calling
 
 ```
 npm install
 npm start
 ```
 
-then go to `http://localhost:9966/` in your browser
+and visit `http://localhost:9966/` in your browser
