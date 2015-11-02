@@ -18,12 +18,25 @@ function World(opts) {
       position: [0, 0],
       scale: 50,
       paths: [0, 2, 4],
-      children: [circle({fill: 'white', stroke: 'white', scale: 0.1})]
+      children: [circle({
+        fill: '#64FF00', 
+        stroke: '#64FF00', 
+        thickness: 1, 
+        scale: 0.075,
+        shadow: {size: 2, color: '#64FF00'}
+      })]
     }),
     tile({
       position: [-1, 0],
       scale: 50,
-      paths: [0, 4, 5]
+      paths: [0, 4, 5],
+      children: [circle({
+        fill: '#00C3EE', 
+        stroke: '#00C3EE', 
+        thickness: 1, 
+        scale: 0.075,
+        shadow: {size: 2, color: '#00C3EE'}
+      })]
     }),
     tile({
       position: [0, 1],
@@ -33,7 +46,14 @@ function World(opts) {
     tile({
       position: [-1, 1],
       scale: 50,
-      paths: [4, 5]
+      paths: [4, 5],
+      children: [circle({
+        fill: '#FF8900', 
+        stroke: '#FF8900', 
+        thickness: 1, 
+        scale: 0.075,
+        shadow: {size: 2, color: '#FF8900'}
+      })]
     }),
     tile({
       position: [1, -1],
