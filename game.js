@@ -16,9 +16,11 @@ var mouse = new Mouse(game)
 
 var player = new Player({
   scale: 2,
-  speed: .1,
+  speed: .075,
   friction: 0.9,
-  color: '#EB7576'
+  stroke: 'white',
+  fill: 'rgb(75,75,75)',
+  thickness: 0.75
 });
 
 var camera = new Camera({
@@ -53,7 +55,7 @@ world.on('location', function(msg) {
 })
 
 game.on('draw-background', function(context) {
-  context.fillStyle = '#A5A5A5',
+  context.fillStyle = 'rgb(90,90,90)',
   context.fillRect(0, 0, game.width, game.height)
 })
 

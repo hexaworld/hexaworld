@@ -1,6 +1,8 @@
 var _ = require('lodash')
 var wedge = require('./wedge.js')
 var block = require('./block.js')
+var end = require('./end.js')
+var path = require('./path.js')
 var Geometry = require('../geometry.js')
 
 module.exports = function (opts) {
@@ -12,13 +14,19 @@ module.exports = function (opts) {
     if (!_.includes(opts.paths, i)) return block({angle: i * 60})
   })
   _.remove(blocks, _.isUndefined)
-  var children = wedges.concat(blocks)
+  var ends = _.range(6).map(function (i) {
+    if (!_.includes(opts.paths, i)) return end({angle: i * 60})
+  })
+  _.remove(ends, _.isUndefined)
+  var paths = _.range(6).map(function (i) {
+    if (_.includes(opts.paths, i)) return path({angle: i * 60})
+  })
+  _.remove(paths, _.isUndefined)
+  
+  var children = wedges.concat(blocks).concat(ends).concat(paths)
 
   return new Geometry({
     props: {
-      fill: opts.fill || '#DFE0E2',
-      stroke: opts.stroke || '#DFE0E2',
-      thickness: 0,
       type: 'polygon'
     },
 

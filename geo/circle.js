@@ -6,8 +6,10 @@ module.exports = function (opts) {
 
   return new Geometry({
     props: {
-      fill: opts.fill || '#DFE0E2',
-      stroke: opts.stroke || '#DFE0E2',
+      fill: opts.fill || '#7D7D7D',
+      stroke: opts.stroke || '#7D7D7D',
+      thickness: opts.thickness || 1,
+      shadow: opts.shadow || {},
       type: 'bezier'
     },
 

@@ -12,12 +12,13 @@ inherits(Player, Entity);
 
 function Player(opts){
   this.geometry = circle({
-    fill: opts.color, 
-    stroke: opts.color,
+    fill: opts.fill, 
+    stroke: opts.stroke,
     scale: opts.scale,
+    thickness: opts.thickness,
     children: [
-      circle({fill: '#EB8686', stroke: '#EB8686', position: [-0.7, -.9], scale: 0.6, angle: -45, aspect: 0.6}), 
-      circle({fill: '#EB8686', stroke: '#EB8686', position: [0.7, -.9], scale: 0.6, angle: 45, aspect: 0.6})
+      circle({fill: opts.fill, stroke: opts.stroke, thickness: opts.thickness, position: [-0.7, -.9], scale: 0.6, angle: -45, aspect: 0.6}), 
+      circle({fill: opts.fill, stroke: opts.stroke, thickness: opts.thickness, position: [0.7, -.9], scale: 0.6, angle: 45, aspect: 0.6})
     ]
   })
   this.movement = new Movement({
