@@ -4,7 +4,7 @@ a world of hexagons
 
 built with [crtrdg.js](http://crtrdg.com/)
 
-to run, first install `node` (we recommend [node version manager](https://github.com/creationix/nvm)), then start with `browserify` and `beefy` by calling
+to run, install `node` (we recommend [node version manager](https://github.com/creationix/nvm)), then start with `browserify` and `beefy` by calling
 
 ```
 npm install
