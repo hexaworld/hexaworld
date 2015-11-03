@@ -1,3 +1,4 @@
+var _ = require('lodash')
 var Game = require('crtrdg-gameloop');
 var Keyboard = require('crtrdg-keyboard');
 var Mouse = require('crtrdg-mouse');
@@ -7,8 +8,8 @@ var World = require('./world.js')
 
 var game = new Game({
   canvas: 'game',
-  width: 900,
-  height: 500
+  width: 600,
+  height: 600
 });
 
 var keyboard = new Keyboard(game)
@@ -55,21 +56,28 @@ world.on('location', function(msg) {
 })
 
 game.on('draw-background', function(context) {
-  context.fillStyle = 'rgb(90,90,90)',
-  context.fillRect(0, 0, game.width, game.height)
+  context.save()
+  context.beginPath()
+  context.moveTo(0, 0)
+  _.range(7).map(function(i) {
+    var dx =  (Math.cos(i * 2 * Math.PI / 6) + 1) * game.width / 2
+    var dy =  (Math.sin(i * 2 * Math.PI / 6) + 1) * game.height / 2
+    context.lineTo(dx, dy)
+  })
+  context.fillStyle = 'rgb(90,90,90)'
+  context.fill()
+  context.clip()
 })
 
 game.on('update', function(interval){
-  // console.log(world.tiles[1].children[3].contains(player.position()))
-  // get camera coordinates
-  // draw world within those coordinates
-  // need a function that renders a world given a camera (zoom, position, orientation)
-});
+
+})
 
 
 game.on('draw', function(context) {
   world.draw(context, camera)
   player.draw(context, camera)
+  context.restore()
 })
 
 game.on('pause', function(){})
