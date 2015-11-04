@@ -11,6 +11,7 @@
     "crtrdg-keyboard": "0.0.2",
     "crtrdg-mouse": "~0.0.1",
     "crtrdg-player": "0.0.1",
+    "d3-color": "^0.2.7",
     "inherits": "~2.0.0",
     "lodash": "^3.10.1",
     "mathjs": "^2.4.0",

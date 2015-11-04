@@ -146,13 +146,17 @@ Geometry.prototype.drawChildren = function(context, camera) {
 
 Geometry.prototype.drawSelf = function(context, camera) {
   var points = this.points 
-  points = camera.transform.invert(points)
-  points = points.map(function (xy) {
-    return [xy[0] + camera.game.width/2, xy[1] + 2*camera.game.height/4]
-  })
-  if (this.props.type == 'polygon') this.drawPolygon(context, points, camera.transform.scale())
-  if (this.props.type == 'bezier') this.drawBezier(context, points, camera.transform.scale())
-  if (this.props.type == 'line') this.drawLines(context, points, camera.transform.scale())
+  var scale = 1
+  if (camera) {
+    points = camera.transform.invert(points)
+    points = points.map(function (xy) {
+      return [xy[0] + camera.game.width/2, xy[1] + 2*camera.game.height/4]
+    })
+    scale = camera.transform.scale()
+  }
+  if (this.props.type == 'polygon') this.drawPolygon(context, points, scale)
+  if (this.props.type == 'bezier') this.drawBezier(context, points, scale)
+  if (this.props.type == 'line') this.drawLines(context, points, scale)
 }
 
 Geometry.prototype.draw = function(context, camera, opts) {
