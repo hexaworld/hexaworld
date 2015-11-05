@@ -35,10 +35,10 @@ var camera = new Camera({
 })
 
 var ring = new Ring({
-  count: 30,
   size: 0.82 * game.width/2,
+  position: [game.width/2, game.width/2],
   extent: 0.1 * game.width/2,
-  position: [game.width/2, game.width/2]
+  count: 30
 })
 
 var mask = new Mask({
