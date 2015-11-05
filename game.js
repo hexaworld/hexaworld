@@ -1,15 +1,18 @@
 var _ = require('lodash')
+var color = require('d3-color')
 var Game = require('crtrdg-gameloop');
 var Keyboard = require('crtrdg-keyboard');
 var Mouse = require('crtrdg-mouse');
 var Player = require('./player.js')
 var Camera = require('./camera.js')
 var World = require('./world.js')
+var Ring = require('./ring.js')
+var Mask = require('./mask.js')
 
 var game = new Game({
   canvas: 'game',
-  width: 600,
-  height: 600
+  width: 650,
+  height: 650
 });
 
 var keyboard = new Keyboard(game)
@@ -31,11 +34,24 @@ var camera = new Camera({
   yoked: true
 })
 
+var ring = new Ring({
+  size: 0.82 * game.width/2,
+  position: [game.width/2, game.width/2],
+  extent: 0.1 * game.width/2,
+  count: 30
+})
+
+var mask = new Mask({
+  size: 0.8 * game.width/2,
+  position: [game.width/2, game.width/2]
+})
+
 var world = new World({player: player})
 
 player.addTo(game)
 camera.addTo(game)
 world.addTo(game)
+ring.addTo(game)
 
 player.on('update', function(interval) {
   this.move(keyboard, world)
@@ -51,33 +67,29 @@ camera.on('update', function(interval) {
   this.move(keyboard)
 })
 
-world.on('location', function(msg) {
-  //console.log(msg)
+ring.on('update', function(interval) {
+  var colors = _.range(30).map(function (i) {
+    var h = Math.ceil(Math.random() * 360)
+    var c = color.hsl(h, 0.5, 0.5)
+    return c.toString()
+  })
+  this.update(colors)
 })
 
-game.on('draw-background', function(context) {
-  context.save()
-  context.beginPath()
-  context.moveTo(0, 0)
-  _.range(7).map(function(i) {
-    var dx =  (Math.cos(i * 2 * Math.PI / 6) + 1) * game.width / 2
-    var dy =  (Math.sin(i * 2 * Math.PI / 6) + 1) * game.height / 2
-    context.lineTo(dx, dy)
-  })
-  context.fillStyle = 'rgb(90,90,90)'
-  context.fill()
-  context.clip()
+world.on('location', function(msg) {
+  //console.log(msg)
 })
 
 game.on('update', function(interval){
 
 })
 
-
 game.on('draw', function(context) {
+  mask.set(context)
   world.draw(context, camera)
   player.draw(context, camera)
-  context.restore()
+  mask.unset(context)
+  ring.draw(context)
 })
 
 game.on('pause', function(){})
