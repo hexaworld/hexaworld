@@ -16,8 +16,9 @@ module.exports = function (opts) {
   
   return new Geometry({
     props: {
-      fill: 'red',
-      thickness: 0,
+      fill: 'rgb(50,50,50)',
+      stroke: 'white',
+      thickness: 4,
       type: 'polygon'
     },
 

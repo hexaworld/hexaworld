@@ -8,7 +8,7 @@ module.exports = function (opts) {
   return new Geometry({
     props: {
       stroke: 'white',
-      thickness: 0.5,
+      thickness: 0.25,
       type: 'line'
     },
 

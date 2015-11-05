@@ -24,7 +24,7 @@ var player = new Player({
   friction: 0.9,
   stroke: 'white',
   fill: 'rgb(75,75,75)',
-  thickness: 0.75
+  thickness: 0.5
 });
 
 var camera = new Camera({
@@ -38,7 +38,8 @@ var ring = new Ring({
   size: 0.82 * game.width/2,
   position: [game.width/2, game.width/2],
   extent: 0.1 * game.width/2,
-  count: 30
+  count: 30,
+  offset: 3
 })
 
 var mask = new Mask({
@@ -68,13 +69,7 @@ camera.on('update', function(interval) {
 })
 
 ring.on('update', function(interval) {
-  var colors = _.range(30).map(function (i) {
-    var r = Math.sqrt(Math.pow(player.position()[0], 2) + Math.pow(player.position()[1], 2)) / 50
-    var h = 100
-    var c = color.hsl(h, 0.5, Math.min(1 - r, 0.5))
-    return c.toString()
-  })
-  this.update(colors)
+  //this.update(colors)
 })
 
 world.on('location', function(msg) {
