@@ -69,8 +69,9 @@ camera.on('update', function(interval) {
 
 ring.on('update', function(interval) {
   var colors = _.range(30).map(function (i) {
-    var h = Math.ceil(Math.random() * 360)
-    var c = color.hsl(h, 0.5, 0.5)
+    var r = Math.sqrt(Math.pow(player.position()[0], 2) + Math.pow(player.position()[1], 2)) / 50
+    var h = 100
+    var c = color.hsl(h, 0.5, Math.min(1 - r, 0.5))
     return c.toString()
   })
   this.update(colors)
