@@ -7,11 +7,12 @@ var Player = require('./player.js')
 var Camera = require('./camera.js')
 var World = require('./world.js')
 var Ring = require('./ring.js')
+var Mask = require('./mask.js')
 
 var game = new Game({
   canvas: 'game',
-  width: 680,
-  height: 680
+  width: 650,
+  height: 650
 });
 
 var keyboard = new Keyboard(game)
@@ -40,6 +41,11 @@ var ring = new Ring({
   position: [game.width/2, game.width/2]
 })
 
+var mask = new Mask({
+  size: 0.8 * game.width/2,
+  position: [game.width/2, game.width/2]
+})
+
 var world = new World({player: player})
 
 player.addTo(game)
@@ -63,8 +69,8 @@ camera.on('update', function(interval) {
 
 ring.on('update', function(interval) {
   var colors = _.range(30).map(function (i) {
-    var r = Math.sqrt(Math.pow(player.position()[0], 2) + Math.pow(player.position()[1], 2)) / 100
-    var c = color.hsl(player.angle(), 0.5, Math.max(1 - Math.max(r - 0.25, 0) - 0.35, 0))
+    var h = Math.ceil(Math.random() * 360)
+    var c = color.hsl(h, 0.5, 0.5)
     return c.toString()
   })
   this.update(colors)
@@ -74,29 +80,15 @@ world.on('location', function(msg) {
   //console.log(msg)
 })
 
-game.on('draw-background', function(context) {
-  context.save()
-  context.beginPath()
-  context.moveTo(0, 0)
-  _.range(7).map(function(i) {
-    var dx =  (Math.cos(i * 2 * Math.PI / 6)) * 0.8 * game.width/2
-    var dy =  (Math.sin(i * 2 * Math.PI / 6)) * 0.8 * game.width/2
-    context.lineTo(dx + game.width/2, dy + game.height/2)
-  })
-  context.fillStyle = 'rgb(90,90,90)'
-  context.fill()
-  context.clip()
-})
-
 game.on('update', function(interval){
 
 })
 
-
 game.on('draw', function(context) {
+  mask.set(context)
   world.draw(context, camera)
   player.draw(context, camera)
-  context.restore()
+  mask.unset(context)
   ring.draw(context)
 })
 
