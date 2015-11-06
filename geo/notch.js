@@ -31,7 +31,7 @@ module.exports = function (opts) {
 
     transform: {
       scale: 1,
-      angle: Math.floor(opts.ind / (opts.count / 6)) * 60,
+      angle: (Math.floor(opts.ind / (opts.count / 6)) * 60) + 30,
       position: opts.position
     },
   })
