@@ -9,14 +9,14 @@ inherits(Ring, Entity);
 function Ring(opts){
 
   var fill = opts.fill
-  var gap = opts.gap || 0
+  var offset = opts.offset || 0
   var count = opts.count || 30
   var extent = opts.extent || 20
   var size = opts.size || 50
   var position = opts.position || [size/2, size/2]
 
   this.notches = _.range(count).map(function (ind) {
-    return notch({size: size, extent: extent, ind: ind, count: count, gap: gap, position: position})
+    return notch({size: size, extent: extent, ind: ind, count: count, offset: offset, position: position})
   })
 
 }

@@ -5,7 +5,7 @@ module.exports = Mask
 function Mask(opts) {
   this.size = opts.size
   this.position = opts.position
-  this.fill = opts.fill || 'rgb(90,90,90)'
+  this.fill = opts.fill || 'rgb(210,210,210)'
 }
 
 Mask.prototype.set = function(context) {

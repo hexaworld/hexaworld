@@ -20,10 +20,9 @@ function World(opts) {
       paths: [0, 2, 4],
       children: [circle({
         fill: '#64FF00', 
-        stroke: '#64FF00', 
-        thickness: 1, 
-        scale: 0.075,
-        shadow: {size: 2, color: '#64FF00'}
+        stroke: 'rgb(50,50,50)', 
+        thickness: 0.5, 
+        scale: 0.075
       })]
     }),
     tile({
@@ -32,10 +31,9 @@ function World(opts) {
       paths: [0, 4, 5],
       children: [circle({
         fill: '#00C3EE', 
-        stroke: '#00C3EE', 
-        thickness: 1, 
-        scale: 0.075,
-        shadow: {size: 2, color: '#00C3EE'}
+        stroke: 'rgb(50,50,50)', 
+        thickness: 0.5, 
+        scale: 0.075
       })]
     }),
     tile({
@@ -49,10 +47,9 @@ function World(opts) {
       paths: [4, 5],
       children: [circle({
         fill: '#FF8900', 
-        stroke: '#FF8900', 
-        thickness: 1, 
-        scale: 0.075,
-        shadow: {size: 2, color: '#FF8900'}
+        stroke: 'rgb(50,50,50)', 
+        thickness: 0.5, 
+        scale: 0.075
       })]
     }),
     tile({
