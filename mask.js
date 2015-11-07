@@ -14,8 +14,8 @@ Mask.prototype.set = function(context) {
   context.beginPath()
   context.moveTo(0, 0)
   _.range(7).map(function(i) {
-    var dx =  (Math.cos(i * 2 * Math.PI / 6)) * self.size
-    var dy =  (Math.sin(i * 2 * Math.PI / 6)) * self.size
+    var dx =  (Math.cos(i * 2 * Math.PI / 6 + Math.PI / 6)) * self.size
+    var dy =  (Math.sin(i * 2 * Math.PI / 6 + Math.PI / 6)) * self.size
     context.lineTo(dx + self.position[0], dy + self.position[1])
   })
   context.fillStyle = self.fill
