@@ -38,7 +38,7 @@ var ring = new Ring({
   size: 0.82 * game.width/2,
   position: [game.width/2, game.width/2],
   extent: 0.1 * game.width/2,
-  count: 30,
+  count: 6,
   offset: 3
 })
 
