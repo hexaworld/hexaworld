@@ -25,15 +25,24 @@ module.exports = function transform(opts) {
     return this
   }
 
-  var distance = function (other) {
-    var dx = _.isArray(other.position) ? position[0] - other.position[0] : 0
-    var dy = _.isArray(other.position) ? position[1] - other.position[1] : 0
-    var da = _.isNumber(other.angle) ? angle - other.angle : 0
-    var ds = _.isNumber(other.scale) ? scale - other.scale : 0
+  var difference = function (other) {
+    var dx = _.isArray(other.position) ? other.position[0] - position[0] : 0
+    var dy = _.isArray(other.position) ? other.position[1] - position[1] : 0
+    var da = _.isNumber(other.angle) ? other.angle - angle : 0
+    var ds = _.isNumber(other.scale) ? other.scale - scale : 0
     return {
-      position: Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2)),
-      angle: Math.abs(da),
-      scale: Math.abs(ds)
+      position: [dx, dy],
+      angle: da,
+      scale: ds
+    }
+  }
+
+  var distance = function (other) {
+    var d = difference(other)
+    return {
+      position: Math.sqrt(Math.pow(d.position[0], 2) + Math.pow(d.position[1], 2)),
+      angle: Math.abs(d.angle),
+      scale: Math.abs(d.scale)
     }
   }
 
@@ -80,6 +89,7 @@ module.exports = function transform(opts) {
     apply: apply,
     invert: invert,
     compose: compose,
+    difference: difference,
     distance: distance,
     set: set,
     position: function () {return position},
