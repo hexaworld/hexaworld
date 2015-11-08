@@ -77,7 +77,7 @@ function World(opts) {
       scale: 50,
       paths: [0, 2],
       children: [circle({
-        fill: '#FF0000', 
+        fill: '#FF5050', 
         stroke: 'white', 
         thickness: 0.5, 
         scale: 0.075
