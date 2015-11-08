@@ -4,7 +4,7 @@ var aabb = require('aabb-2d')
 var math = require('mathjs')
 var transform = require('./transform.js')
 var circle = require('./geo/circle.js')
-var Tracker = require('./tracker.js')
+var Autohead = require('./autohead.js')
 var Movement = require('./movement.js')
 var Entity = require('crtrdg-entity')
 
@@ -24,12 +24,14 @@ function Player(opts){
       circle({fill: opts.fill, stroke: opts.stroke, thickness: opts.thickness, position: [0.7, -.9], scale: 0.6, angle: 45, aspect: 0.6})
     ]
   })
-  this.movement = new Movement({
-    speed: opts.speed,
-    friction: opts.friction,
-    keymap: {position: [['E','Q'],['S','W']], angle: ['D','A']}
-  })
-  this.tracker = new Tracker()
+  // if one option, set movement to movement
+  // if another, set movement to autohead
+  // this.movement = new Movement({
+  //   speed: opts.speed,
+  //   friction: opts.friction,
+  //   keymap: {position: [['E','Q'],['S','W']], angle: ['D','A']}
+  // })
+  this.movement = new Autohead()
 }
 
 Player.prototype.move = function(keyboard, world) {
@@ -39,11 +41,9 @@ Player.prototype.move = function(keyboard, world) {
   var offset = world.tiles[ind].transform
   var container = world.tiles[ind].children[0]
 
-  var delta = self.tracker.compute(keyboard.keysDown, self.geometry.transform, offset, container)
+  var delta = self.movement.compute(keyboard.keysDown, self.geometry.transform, offset, container)
 
-  self.geometry.unstage()
-  self.geometry.transform.compose(delta)
-  self.geometry.stage(self.geometry.transform)
+  self.geometry.update(delta)
 
   var collisions = world.intersects(self.geometry) 
   if (collisions) {
@@ -54,9 +54,7 @@ Player.prototype.move = function(keyboard, world) {
         -0.2 * delta.position[1] + 0.5 * collisions[ind].response.overlapV.y, 
       ]
     }
-    self.geometry.unstage()
-    self.geometry.transform.compose(correction)
-    self.geometry.stage(self.geometry.transform)
+    self.geometry.update(correction)
   }
 
 }

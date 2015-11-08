@@ -41,6 +41,13 @@ Geometry.prototype.unstage = function() {
   self.stage(t, {invert: true})
 }
 
+Geometry.prototype.update = function(transform) {
+  var self = this
+  self.unstage()
+  self.transform.compose(transform)
+  self.stage(self.transform)
+}
+
 Geometry.prototype.contains = function(point) {
   var self = this
   return inside(point, self.points)

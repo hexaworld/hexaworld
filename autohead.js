@@ -1,14 +1,14 @@
 var _ = require('lodash')
 var transform = require('./transform.js')
 
-function Tracker(data) {
+function Autohead(data) {
   if (!data) data = {}
   this.keymap = data.keymap || {angle: ['Q', 'W', 'E', 'A', 'S', 'D']}
   this.on = {angle: [false, false, false, false, false, false]}
   this.end = 0
 }
 
-Tracker.prototype.compute = function(keys, start, offset, container) {
+Autohead.prototype.compute = function(keys, start, offset, container) {
   var self = this
 
   var check = function(i) {
@@ -108,7 +108,7 @@ Tracker.prototype.compute = function(keys, start, offset, container) {
   var forward = {position: [0.75 * Math.sin(rad), 0.75 * -Math.cos(rad)]}
 
   if (self.end) {
-    var distance = self.distance(start, self.end)
+    var distance = start.distance(self.end)
     if (distance.position || distance.angle) {
       return self.delta(start, self.end)
     } else {
@@ -123,28 +123,19 @@ Tracker.prototype.compute = function(keys, start, offset, container) {
 
 }
 
-Tracker.prototype.reset = function() {
+Autohead.prototype.reset = function() {
   var self = this
   _.range(6).forEach(function (i) {
     self.on.angle[i] = false
   })
 }
 
-Tracker.prototype.any = function() {
+Autohead.prototype.any = function() {
   var self = this
   return _.any(self.on.angle)
 }
 
-Tracker.prototype.distance = function(start, end) {
-
-  var x = (end.position[0] - start.position()[0])
-  var y = (end.position[1] - start.position()[1])
-  var s = end.angle - start.angle()
-  return {position: Math.sqrt(Math.pow(x, 2) + Math.pow(x, 2)), angle: Math.abs(s)}
-
-}
-
-Tracker.prototype.delta = function(start, end) {
+Autohead.prototype.delta = function(start, end) {
 
   var x = (end.position[0] - start.position()[0])
   var y = (end.position[1] - start.position()[1])
@@ -152,7 +143,7 @@ Tracker.prototype.delta = function(start, end) {
 
   var speed = {position: 1.0, angle: 10.0}
 
-  var distance = {position: Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)), angle: Math.abs(s)}
+  var distance = start.distance(end)
 
   if (distance.position > speed.position) {
     x = x/distance.position
@@ -174,4 +165,4 @@ Tracker.prototype.delta = function(start, end) {
 
 }
 
-module.exports = Tracker
+module.exports = Autohead
