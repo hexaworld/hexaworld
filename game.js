@@ -54,6 +54,16 @@ camera.addTo(game)
 world.addTo(game)
 ring.addTo(game)
 
+keyboard.on('keydown', function(keyCode){
+  if (keyCode == '<space>'){
+    if (game.ticker.paused == true){
+      game.resume();
+    } else {
+      game.pause();
+    }
+  }
+});
+
 player.on('update', function(interval) {
   this.move(keyboard, world)
 });
