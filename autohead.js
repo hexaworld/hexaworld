@@ -3,6 +3,7 @@ var transform = require('./transform.js')
 
 function Autohead(data) {
   if (!data) data = {}
+  this.speed = data.speed || {position: 1, angle: 10}
   this.keymap = data.keymap || {angle: ['Q', 'W', 'E', 'A', 'S', 'D']}
   this.on = {angle: [false, false, false, false, false, false]}
   this.end = 0
@@ -137,32 +138,31 @@ Autohead.prototype.any = function() {
 
 Autohead.prototype.delta = function(start, end) {
 
-  var x = (end.position[0] - start.position()[0])
-  var y = (end.position[1] - start.position()[1])
-  var s = end.angle - start.angle()
+  var speed = this.speed
+  var scale = {position: 1, angle: 1}
 
-  var speed = {position: 1.0, angle: 10.0}
+  var diff = start.difference(end)
+  var dist = start.distance(end)
 
-  var distance = start.distance(end)
-
-  if (distance.position > speed.position) {
-    x = x/distance.position
-    y = y/distance.position
-    if (distance.angle > speed.angle) {
-      speed.position = speed.angle * distance.position / distance.angle
-    }
-  } else {
-    speed.position = 1
+  if (dist.position > speed.position) {
+    diff.position[0] = diff.position[0] / dist.position
+    diff.position[1] = diff.position[1] / dist.position
+    scale.position = speed.position
+    if (dist.angle > speed.angle) scale.position = speed.angle * dist.position / dist.angle
   }
 
-  if (distance.angle > speed.angle) {
-    s = s/distance.angle
-  } else {
-    speed.angle = 1
+  if (dist.angle > speed.angle) {
+    diff.angle = diff.angle / dist.angle
+    scale.angle = speed.angle
   }
 
-  return {position: [x * speed.position, y * speed.position], angle: s * speed.angle}
-
+  return {
+    position: [
+      diff.position[0] * scale.position, 
+      diff.position[1] * scale.position
+    ], 
+    angle: diff.angle * scale.angle
+  }
 }
 
 module.exports = Autohead
