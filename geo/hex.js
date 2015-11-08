@@ -6,8 +6,6 @@ module.exports = function (opts) {
 
   return new Geometry({
     props: {
-      fill: 'red',
-      stroke: opts.stroke || 'white',
       type: 'polygon'
     },
 
