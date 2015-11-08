@@ -55,7 +55,7 @@ function World(opts) {
     tile({
       position: [1, -1],
       scale: 50,
-      paths: [2]
+      paths: [2, 3]
     }),
     tile({
       position: [1, 0],
@@ -65,7 +65,23 @@ function World(opts) {
     tile({
       position: [0, -1],
       scale: 50,
-      paths: [1, 5]
+      paths: [1, 3, 5]
+    }),
+    tile({
+      position: [0, -2],
+      scale: 50,
+      paths: [0, 5]
+    }),
+    tile({
+      position: [1, -2],
+      scale: 50,
+      paths: [0, 2],
+      children: [circle({
+        fill: '#FF5050', 
+        stroke: 'white', 
+        thickness: 0.5, 
+        scale: 0.075
+      })]      
     })
   ]
 
