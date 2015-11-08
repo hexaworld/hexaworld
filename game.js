@@ -90,7 +90,7 @@ ring.on('update', function(interval) {
   console.log(worldAngle)
 
   var colors = _.range(30).map(function (i) {
-    angle = (-worldAngle + a +  (i*360/30 - 30))
+    angle = (-worldAngle + a +  (i*360/30))
     if (angle > 180) angle = 360 - angle
   
   if (Math.abs(angle) <= w/2 & r > .01 & r < 0.75*5) {
