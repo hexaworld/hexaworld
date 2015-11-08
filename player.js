@@ -4,6 +4,7 @@ var aabb = require('aabb-2d')
 var math = require('mathjs')
 var transform = require('./transform.js')
 var circle = require('./geo/circle.js')
+var Tracker = require('./tracker.js')
 var Movement = require('./movement.js')
 var Entity = require('crtrdg-entity')
 
@@ -12,6 +13,8 @@ inherits(Player, Entity);
 
 function Player(opts){
   this.geometry = circle({
+    position: opts.position,
+    angle: opts.angle,
     fill: opts.fill, 
     stroke: opts.stroke,
     scale: opts.scale,
@@ -26,12 +29,17 @@ function Player(opts){
     friction: opts.friction,
     keymap: {position: [['E','Q'],['S','W']], angle: ['D','A']}
   })
+  this.tracker = new Tracker()
 }
 
 Player.prototype.move = function(keyboard, world) {
   var self = this
 
-  var delta = self.movement.compute(keyboard.keysDown, self.geometry.transform.angle())
+  var ind = world.locate(self.position())
+  var offset = world.tiles[ind].transform
+  var container = world.tiles[ind].children[0]
+
+  var delta = self.tracker.compute(keyboard.keysDown, self.geometry.transform, offset, container)
 
   self.geometry.unstage()
   self.geometry.transform.compose(delta)
@@ -50,6 +58,7 @@ Player.prototype.move = function(keyboard, world) {
     self.geometry.transform.compose(correction)
     self.geometry.stage(self.geometry.transform)
   }
+
 }
 
 Player.prototype.draw = function(context, camera) {

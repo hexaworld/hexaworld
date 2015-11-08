@@ -55,6 +55,7 @@ world.addTo(game)
 ring.addTo(game)
 
 player.on('update', function(interval) {
+  //this.move(keyboard, world)
   this.move(keyboard, world)
 });
 
