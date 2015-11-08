@@ -25,6 +25,18 @@ module.exports = function transform(opts) {
     return this
   }
 
+  var distance = function (other) {
+    var dx = _.isArray(other.position) ? position[0] - other.position[0] : 0
+    var dy = _.isArray(other.position) ? position[1] - other.position[1] : 0
+    var da = _.isNumber(other.angle) ? angle - other.angle : 0
+    var ds = _.isNumber(other.scale) ? scale - other.scale : 0
+    return {
+      position: Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2)),
+      angle: Math.abs(da),
+      scale: Math.abs(ds)
+    }
+  }
+
   var rotmat = function (angle) {
     var rad = angle * Math.PI / 180
     return [[Math.cos(rad), -Math.sin(rad)], [Math.sin(rad), Math.cos(rad)]]
@@ -68,6 +80,7 @@ module.exports = function transform(opts) {
     apply: apply,
     invert: invert,
     compose: compose,
+    distance: distance,
     set: set,
     position: function () {return position},
     scale: function () {return scale},
