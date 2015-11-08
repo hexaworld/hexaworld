@@ -14,6 +14,10 @@ Tracker.prototype.compute = function(keys, start, offset, container) {
   var check = function(i) {
     return self.keymap.angle[i] in keys & !self.any()
   }
+  var pressed = function(i) {
+    return self.keymap.angle[i] in keys
+  }
+ var released = !(pressed(0) || pressed(1) || pressed(2)  || pressed(3) || pressed(4) || pressed(5))
 
   var rad = function(a) {
     return a * Math.PI / 180
@@ -108,12 +112,13 @@ Tracker.prototype.compute = function(keys, start, offset, container) {
     if (distance.position || distance.angle) {
       return self.delta(start, self.end)
     } else {
-      self.reset()
+      if (released) self.reset()
       self.end = 0
       return forward
     }
   } else {
-    return forward
+      if (released) self.reset()
+      return forward
   }
 
 }
