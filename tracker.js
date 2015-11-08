@@ -152,14 +152,14 @@ Tracker.prototype.delta = function(start, end) {
   if (distance.position > speed.position) {
     x = x/distance.position
     y = y/distance.position
+    if (distance.angle > speed.angle) {
+      speed.position = speed.angle * distance.position / distance.angle
+    }
   } else {
     speed.position = 1
   }
 
   if (distance.angle > speed.angle) {
-    if (distance.position > speed.position) {
-      speed.angle = speed.position * distance.angle / distance.position
-    } 
     s = s/distance.angle
   } else {
     speed.angle = 1
