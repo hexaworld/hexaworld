@@ -83,7 +83,7 @@ ring.on('update', function(interval) {
   worldAngle = worldAngle - 90
   if (worldAngle < 0) worldAngle += 360
   var w = Math.min(60/r*(Math.sqrt(3)/2)/2, 360)
-  var c = color.hsl(100, 0.5, Math.max(1 - Math.max(r/5 - 0.25, 0) - 0.35, 0))
+  var c = color.hsl(100, 0.5, Math.max(1 - Math.max(r/1.5 - 0.25, 0) - 0.35, 0))
   //var c = '#64FF00'
 
   console.log(a)
@@ -93,10 +93,10 @@ ring.on('update', function(interval) {
     angle = (-worldAngle + a +  (i*360/30))
     if (angle > 180) angle = 360 - angle
   
-  if (Math.abs(angle) <= w/2 & r > .01 & r < 0.75*5) {
+  if (Math.abs(angle) <= w/2 & r > .01 & r < 0.75*1.5) {
     return c.toString()
   } else if (r <= .01) {
-    c = color.hsl(100, 0.5, Math.max(1 - Math.max(.01/5 - 0.25, 0) - 0.35, 0))
+    c = color.hsl(100, 0.5, Math.max(1 - Math.max(.01/1.5 - 0.25, 0) - 0.35, 0))
     return c.toString()
     } else {
     return 'rgb(55,55,55)'
