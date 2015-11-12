@@ -1,14 +1,14 @@
 var _ = require('lodash')
 var transform = require('./transform.js')
 
-function Movement(data) {
+function Freemove(data) {
   this.velocity = data.velocity || {position: [0, 0], angle: 0, scale: 0}
   this.speed = data.speed || 1
-  this.friction = data.friction || 0
+  this.friction = data.friction || 1
   this.keymap = data.keymap || {position: [['D','A'],['W','S']], angle: ['E','Q'], scale: [',','.']}
 }
 
-Movement.prototype.compute = function(keys, angle) {
+Freemove.prototype.compute = function(keys, angle) {
   var keymap = this.keymap
 
   if (keymap.position) {
@@ -34,7 +34,7 @@ Movement.prototype.compute = function(keys, angle) {
 
 }
 
-Movement.prototype.delta = function(angle) {
+Freemove.prototype.delta = function(angle) {
   var rad = angle * Math.PI / 180 || 0
   return {
     position: [
@@ -46,11 +46,11 @@ Movement.prototype.delta = function(angle) {
   }
 }
 
-Movement.prototype.dampen = function() {
+Freemove.prototype.dampen = function() {
   this.velocity.position[0] *= this.friction
   this.velocity.position[1] *= this.friction
   this.velocity.angle *= this.friction
   this.velocity.scale *= this.friction
 }
 
-module.exports = Movement
+module.exports = Freemove
