@@ -39,10 +39,9 @@ Player.prototype.move = function(keyboard, world) {
 
   var ind = world.locate(self.position())
   var offset = world.tiles[ind].transform
-  var container = world.tiles[ind].children[0]
-  var state = container.contains(self.geometry.transform.position())
+  var allowed =  world.tiles[ind].children[0].contains(self.geometry.transform.position())
 
-  var delta = self.movement.compute(keyboard.keysDown, self.geometry.transform, offset, state)
+  var delta = self.movement.compute(keyboard.keysDown, self.geometry.transform, offset, allowed)
 
   self.geometry.update(delta)
 
