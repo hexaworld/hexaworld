@@ -20,28 +20,38 @@ function Player(opts){
     scale: opts.scale,
     thickness: opts.thickness,
     children: [
-      circle({fill: opts.fill, stroke: opts.stroke, thickness: opts.thickness, position: [-0.7, -.9], scale: 0.6, angle: -45, aspect: 0.6}), 
-      circle({fill: opts.fill, stroke: opts.stroke, thickness: opts.thickness, position: [0.7, -.9], scale: 0.6, angle: 45, aspect: 0.6})
+      circle({fill: opts.fill, stroke: opts.stroke, thickness: opts.thickness, 
+        position: [-0.7, -.9], scale: 0.6, angle: -45, aspect: 0.6}), 
+      circle({fill: opts.fill, stroke: opts.stroke, thickness: opts.thickness, 
+        position: [0.7, -.9], scale: 0.6, angle: 45, aspect: 0.6})
     ]
   })
-  // if one option, set movement to freemove
-  // if another, set movement to automove
-  // this.movement = new Movement({
-  //   speed: opts.speed,
-  //   friction: opts.friction,
-  //   keymap: {position: [['E','Q'],['S','W']], angle: ['D','A']}
-  // })
-  this.movement = new Automove()
+  this.movement = {}
+  this.movement.tile = new Automove({
+    keymap: ['Q', 'W', 'E', 'A', 'S', 'D'],
+    heading: [-60, 0, 60, -120, -180, 120],
+    shift: 8
+  })
+  this.movement.path = new Automove({
+    keymap: ['S'], 
+    heading: [-180], 
+    shift: 0.5
+  })
 }
 
 Player.prototype.move = function(keyboard, world) {
   var self = this
 
+  var current = self.geometry.transform
   var ind = world.locate(self.position())
-  var offset = world.tiles[ind].transform
-  var allowed =  world.tiles[ind].children[0].contains(self.geometry.transform.position())
+  var inside =  world.tiles[ind].children[0].contains(current.position())
 
-  var delta = self.movement.compute(keyboard.keysDown, self.geometry.transform, offset, allowed)
+  var delta
+  if (inside) {
+    delta = self.movement.tile.compute(keyboard.keysDown, current, world.tiles[ind].transform)
+  } else {
+    delta = self.movement.path.compute(keyboard.keysDown, current)
+  }
 
   self.geometry.update(delta)
 

@@ -5,25 +5,21 @@ function Automove(data) {
   if (!data) data = {}
   this.speed = data.speed || {position: 1, angle: 10}
   this.keymap = data.keymap || ['Q', 'W', 'E', 'A', 'S', 'D']
-  this.heading = [-60, 0, 60, -120, -180, 120]
+  this.heading = data.heading || [-60, 0, 60, -120, -180, 120]
+  this.shift = data.shift || 1
   this.active = [false, false, false, false, false, false]
   this.target = 0
 }
 
-Automove.prototype.compute = function(keys, current, offset, allowed) {
+Automove.prototype.compute = function(keys, current, offset) {
   var self = this
 
-      // self.on[4] = true
-      // var rad = (start.angle() - 180) * Math.PI / 180
-      // self.end = {
-      //   position: [start.position()[0] + 0.5 * Math.sin(rad), start.position()[1] - 0.5 * Math.cos(rad)], 
-      //   angle: start.angle() - 180
-      // }
+  if (!offset) offset = current
 
   self.keymap.forEach( function(key, i) {
-    if (key in keys & !(_.any(self.active)) & allowed) {
+    if (key in keys & !(_.any(self.active))) {
       self.active[i] = true
-      self.target = self.seek(current, self.heading[i], offset)
+      self.target = self.totarget(current, self.heading[i], offset)
     }
   })
 
@@ -35,23 +31,22 @@ Automove.prototype.compute = function(keys, current, offset, allowed) {
   var pressed = self.keymap.map(function (k) {return k in keys})
   if (!_.any(pressed)) self.reset()
 
-  if (!self.target) return self.baseline(current)
+  if (!self.target) return self.todefault(current)
 
   return self.delta(current, self.target)
-
 }
 
-Automove.prototype.seek = function (current, heading, offset) {
+Automove.prototype.totarget = function (current, heading, offset) {
   return {
     position: [
-      8 * Math.cos((current.angle() + heading - 90) * Math.PI / 180) + offset.position()[0], 
-      8 * Math.sin((current.angle() + heading - 90) * Math.PI / 180) + offset.position()[1]
+      this.shift * Math.cos((current.angle() + heading - 90) * Math.PI / 180) + offset.position()[0], 
+      this.shift * Math.sin((current.angle() + heading - 90) * Math.PI / 180) + offset.position()[1]
     ], 
     angle: current.angle() + heading
   }
 }
 
-Automove.prototype.baseline = function (current) {
+Automove.prototype.todefault = function (current) {
   return {
     position: [
       0.75 * Math.sin(current.angle() * Math.PI / 180), 
