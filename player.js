@@ -4,6 +4,7 @@ var aabb = require('aabb-2d')
 var math = require('mathjs')
 var transform = require('./transform.js')
 var circle = require('./geo/circle.js')
+var Collision = require('./collision.js')
 var Automove = require('./automove.js')
 var Freemove = require('./freemove.js')
 var Entity = require('crtrdg-entity')
@@ -35,37 +36,27 @@ function Player(opts){
   this.movement.path = new Automove({
     keymap: ['S'], 
     heading: [-180], 
-    shift: 0.5
+    shift: 8
   })
+  this.collision = new Collision()
 }
 
 Player.prototype.move = function(keyboard, world) {
   var self = this
 
   var current = self.geometry.transform
-  var ind = world.locate(self.position())
-  var inside =  world.tiles[ind].children[0].contains(current.position())
+  var tile = world.tiles[world.locate(self.position())]
+  var inside =  tile.children[0].contains(current.position())
 
   var delta
   if (inside) {
-    delta = self.movement.tile.compute(keyboard.keysDown, current, world.tiles[ind].transform)
+    delta = self.movement.tile.compute(keyboard.keysDown, current, tile.transform)
   } else {
     delta = self.movement.path.compute(keyboard.keysDown, current)
   }
 
   self.geometry.update(delta)
-
-  var collisions = world.intersects(self.geometry) 
-  if (collisions) {
-    var ind = _.indexOf(collisions, _.max(collisions, function (i) {return i.response.overlap}))
-    var correction = {
-      position: [
-        -0.2 * delta.position[0] + 0.5 * collisions[ind].response.overlapV.x, 
-        -0.2 * delta.position[1] + 0.5 * collisions[ind].response.overlapV.y, 
-      ]
-    }
-    self.geometry.update(correction)
-  }
+  self.collision.handle(world, self.geometry, delta)
 
 }
 
