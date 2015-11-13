@@ -4,7 +4,10 @@ var aabb = require('aabb-2d')
 var math = require('mathjs')
 var transform = require('./transform.js')
 var circle = require('./geo/circle.js')
-var Movement = require('./movement.js')
+var Collision = require('./collision.js')
+var Fixmove = require('./fixmove.js')
+var Automove = require('./automove.js')
+var Freemove = require('./freemove.js')
 var Entity = require('crtrdg-entity')
 
 module.exports = Player;
@@ -12,44 +15,61 @@ inherits(Player, Entity);
 
 function Player(opts){
   this.geometry = circle({
+    position: opts.position,
+    angle: opts.angle,
     fill: opts.fill, 
     stroke: opts.stroke,
     scale: opts.scale,
     thickness: opts.thickness,
     children: [
-      circle({fill: opts.fill, stroke: opts.stroke, thickness: opts.thickness, position: [-0.7, -.9], scale: 0.6, angle: -45, aspect: 0.6}), 
-      circle({fill: opts.fill, stroke: opts.stroke, thickness: opts.thickness, position: [0.7, -.9], scale: 0.6, angle: 45, aspect: 0.6})
+      circle({fill: opts.fill, stroke: opts.stroke, thickness: opts.thickness, 
+        position: [-0.7, -.9], scale: 0.6, angle: -45, aspect: 0.6}), 
+      circle({fill: opts.fill, stroke: opts.stroke, thickness: opts.thickness, 
+        position: [0.7, -.9], scale: 0.6, angle: 45, aspect: 0.6})
     ]
   })
-  this.movement = new Movement({
-    speed: opts.speed,
-    friction: opts.friction,
-    keymap: {position: [['E','Q'],['S','W']], angle: ['D','A']}
+  this.movement = {}
+  this.movement.center = new Fixmove()
+  this.movement.tile = new Automove({
+    keymap: ['Q', 'W', 'E', 'A', 'S', 'D'],
+    heading: [-60, 0, 60, -120, -180, 120],
+    shift: 8
   })
+  this.movement.path = new Automove({
+    keymap: ['S'], 
+    heading: [-180]
+  })
+  this.collision = new Collision()
+  this.waiting = true
 }
 
 Player.prototype.move = function(keyboard, world) {
   var self = this
 
-  var delta = self.movement.compute(keyboard.keysDown, self.geometry.transform.angle())
+  var current = self.geometry.transform
+  var tile = world.tiles[world.locate(self.position())]
+  var inside =  tile.children[0].contains(current.position())
+  var keys = keyboard.keysDown
 
-  self.geometry.unstage()
-  self.geometry.transform.compose(delta)
-  self.geometry.stage(self.geometry.transform)
-
-  var collisions = world.intersects(self.geometry) 
-  if (collisions) {
-    var ind = _.indexOf(collisions, _.max(collisions, function (i) {return i.response.overlap}))
-    var correction = {
-      position: [
-        -0.2 * delta.position[0] + 0.5 * collisions[ind].response.overlapV.x, 
-        -0.2 * delta.position[1] + 0.5 * collisions[ind].response.overlapV.y, 
-      ]
+  var delta
+  if (inside) {
+    if (self.movement.tile.keypress(keys)) self.waiting = false
+    if (self.waiting) {
+      var center = {
+        position: [tile.transform.position()[0], tile.transform.position()[1]]
+      }
+      delta = self.movement.center.compute(current, center)
+    } else {
+      delta = self.movement.tile.compute(keys, current, tile.transform)
     }
-    self.geometry.unstage()
-    self.geometry.transform.compose(correction)
-    self.geometry.stage(self.geometry.transform)
+  } else {
+    self.waiting = true
+    self.movement.tile.reset()
+    delta = self.movement.path.compute(keys, current)
   }
+
+  self.geometry.update(delta)
+  self.collision.handle(world, self.geometry, delta)
 }
 
 Player.prototype.draw = function(context, camera) {
