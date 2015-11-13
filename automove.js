@@ -14,8 +14,6 @@ function Automove(data) {
 Automove.prototype.compute = function(keys, current, offset) {
   var self = this
 
-  if (!offset) offset = current
-
   self.keymap.forEach( function(key, i) {
     if (key in keys & !(_.any(self.active))) {
       self.active[i] = true
@@ -27,9 +25,9 @@ Automove.prototype.compute = function(keys, current, offset) {
   if (self.tracking) {
     var dist = current.distance(self.target)
     if (!(dist.position || dist.angle)) self.tracking = false
-  } else {
-    self.target = self.seek(current, 0, current)
-  }
+  } 
+
+  if (!self.tracking) self.target = self.seek(current, 0)
 
   var pressed = self.keymap.map(function (k) {return k in keys})
   if (!_.any(pressed)) self.reset()
@@ -38,6 +36,8 @@ Automove.prototype.compute = function(keys, current, offset) {
 }
 
 Automove.prototype.seek = function (current, heading, offset) {
+  if (!offset) offset = current
+
   return {
     position: [
       this.shift * Math.sin((current.angle() + heading) * Math.PI / 180) + offset.position()[0], 
