@@ -27,10 +27,11 @@ Automove.prototype.compute = function(keys, current, offset) {
     if (!(dist.position || dist.angle)) self.tracking = false
   } 
 
-  if (!self.tracking) self.target = self.seek(current, 0)
-
-  var pressed = self.keymap.map(function (k) {return k in keys})
-  if (!_.any(pressed)) self.reset()
+  if (!self.tracking) {
+    self.target = self.seek(current, 0)
+    var pressed = self.keymap.map(function (k) {return k in keys})
+    if (!_.any(pressed)) self.reset()
+  } 
 
   return self.delta(current, self.target)
 }
