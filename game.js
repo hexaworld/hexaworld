@@ -20,7 +20,7 @@ var mouse = new Mouse(game)
 
 var player = new Player({
   scale: 2,
-  speed: .075,
+  speed: {position: .75, angle: 8},
   friction: 0.9,
   stroke: 'white',
   fill: 'rgb(75,75,75)',
@@ -29,7 +29,7 @@ var player = new Player({
 
 var camera = new Camera({
   scale: 0.1,
-  speed: .1,
+  speed: {position: .1, angle: .1},
   friction: 0.9,
   yoked: true
 })
