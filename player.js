@@ -50,7 +50,7 @@ Player.prototype.move = function(keyboard, world) {
   var tile = world.tiles[world.locate(self.position())]
   var inside =  tile.children[0].contains(current.position())
 
-  if (_.any(keyboard.keysDown)) self.waiting = false
+  if (self.movement.tile.keypress(keyboard.keysDown)) self.waiting = false
 
   var delta
   if (inside) {

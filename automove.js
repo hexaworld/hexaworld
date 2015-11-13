@@ -34,11 +34,15 @@ Automove.prototype.compute = function(keys, current, offset) {
 
   if (!self.tracking) {
     self.target = self.seek(current, 0)
-    var pressed = self.keymap.map(function (k) {return k in keys})
-    if (!_.any(pressed)) self.reset()
+    if (!self.keypress(keys)) self.reset()
   } 
 
   return self.delta(current, self.target)
+}
+
+Automove.prototype.keypress = function(keys) {
+  var pressed = this.keymap.map(function (k) {return k in keys})
+  return _.any(pressed)
 }
 
 Automove.prototype.seek = function (current, heading, offset) {
