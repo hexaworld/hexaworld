@@ -22,7 +22,7 @@ function World(opts) {
         fill: '#64FF00', 
         stroke: 'white', 
         thickness: 0.5, 
-        scale: 0.075
+        scale: 0.08
       })]
     }),
     tile({
@@ -33,7 +33,7 @@ function World(opts) {
         fill: '#00C3EE', 
         stroke: 'white', 
         thickness: 0.5, 
-        scale: 0.075
+        scale: 0.08
       })]
     }),
     tile({
@@ -49,7 +49,7 @@ function World(opts) {
         fill: '#FF8900', 
         stroke: 'white', 
         thickness: 0.5, 
-        scale: 0.075
+        scale: 0.08
       })]
     }),
     tile({
@@ -80,7 +80,7 @@ function World(opts) {
         fill: '#FF5050', 
         stroke: 'white', 
         thickness: 0.5, 
-        scale: 0.075
+        scale: 0.08
       })]      
     })
   ]

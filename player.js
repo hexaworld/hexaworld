@@ -5,6 +5,7 @@ var math = require('mathjs')
 var transform = require('./transform.js')
 var circle = require('./geo/circle.js')
 var Collision = require('./collision.js')
+var Fixmove = require('./fixmove.js')
 var Automove = require('./automove.js')
 var Freemove = require('./freemove.js')
 var Entity = require('crtrdg-entity')
@@ -28,6 +29,7 @@ function Player(opts){
     ]
   })
   this.movement = {}
+  this.movement.center = new Fixmove()
   this.movement.tile = new Automove({
     keymap: ['Q', 'W', 'E', 'A', 'S', 'D'],
     heading: [-60, 0, 60, -120, -180, 120],
@@ -38,6 +40,7 @@ function Player(opts){
     heading: [-180]
   })
   this.collision = new Collision()
+  this.waiting = true
 }
 
 Player.prototype.move = function(keyboard, world) {
@@ -47,10 +50,17 @@ Player.prototype.move = function(keyboard, world) {
   var tile = world.tiles[world.locate(self.position())]
   var inside =  tile.children[0].contains(current.position())
 
+  if (_.any(keyboard.keysDown)) self.waiting = false
+
   var delta
   if (inside) {
-    delta = self.movement.tile.compute(keyboard.keysDown, current, tile.transform)
+    if (self.waiting) {
+      delta = self.movement.center.compute(current, {position: [tile.transform.position()[0], tile.transform.position()[1]]})
+    } else {
+      delta = self.movement.tile.compute(keyboard.keysDown, current, tile.transform)
+    }
   } else {
+    self.waiting = true
     delta = self.movement.path.compute(keyboard.keysDown, current)
   }
 
