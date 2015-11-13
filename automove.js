@@ -8,7 +8,7 @@ function Automove(data) {
   this.heading = data.heading || [-60, 0, 60, -120, -180, 120]
   this.shift = data.shift || 1
   this.active = [false, false, false, false, false, false]
-  this.target = 0
+  this.tracking = false
 }
 
 Automove.prototype.compute = function(keys, current, offset) {
@@ -19,24 +19,25 @@ Automove.prototype.compute = function(keys, current, offset) {
   self.keymap.forEach( function(key, i) {
     if (key in keys & !(_.any(self.active))) {
       self.active[i] = true
-      self.target = self.totarget(current, self.heading[i], offset)
+      self.target = self.seek(current, self.heading[i], offset)
+      self.tracking = true
     }
   })
 
-  if (self.target) {
+  if (self.tracking) {
     var dist = current.distance(self.target)
-    if (!(dist.position || dist.angle)) self.target = 0
+    if (!(dist.position || dist.angle)) self.tracking = false
+  } else {
+    self.target = self.seek(current, 0, current)
   }
 
   var pressed = self.keymap.map(function (k) {return k in keys})
   if (!_.any(pressed)) self.reset()
 
-  if (!self.target) return self.delta(current, self.totarget(current, 0, current))
-
   return self.delta(current, self.target)
 }
 
-Automove.prototype.totarget = function (current, heading, offset) {
+Automove.prototype.seek = function (current, heading, offset) {
   return {
     position: [
       this.shift * Math.sin((current.angle() + heading) * Math.PI / 180) + offset.position()[0], 
