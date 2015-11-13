@@ -65,6 +65,7 @@ keyboard.on('keydown', function(keyCode){
 });
 
 player.on('update', function(interval) {
+  //this.move(keyboard, world)
   this.move(keyboard, world)
 });
 
