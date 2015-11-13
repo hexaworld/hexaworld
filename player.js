@@ -50,14 +50,15 @@ Player.prototype.move = function(keyboard, world) {
   var tile = world.tiles[world.locate(self.position())]
   var inside =  tile.children[0].contains(current.position())
 
-  if (self.movement.tile.keypress(keyboard.keysDown)) self.waiting = false
 
   var delta
   if (inside) {
+    var keysDown = keyboard.keysDown
+    if (self.movement.tile.keypress(keysDown)) self.waiting = false
     if (self.waiting) {
       delta = self.movement.center.compute(current, {position: [tile.transform.position()[0], tile.transform.position()[1]]})
     } else {
-      delta = self.movement.tile.compute(keyboard.keysDown, current, tile.transform)
+      delta = self.movement.tile.compute(keysDown, current, tile.transform)
     }
   } else {
     self.waiting = true
