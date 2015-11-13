@@ -1,5 +1,10 @@
 var _ = require('lodash')
+var inherits = require('inherits')
 var transform = require('./transform.js')
+var Fixmove = require('./fixmove.js')
+
+module.exports = Automove
+inherits(Automove, Fixmove)
 
 function Automove(data) {
   if (!data) data = {}
@@ -29,11 +34,15 @@ Automove.prototype.compute = function(keys, current, offset) {
 
   if (!self.tracking) {
     self.target = self.seek(current, 0)
-    var pressed = self.keymap.map(function (k) {return k in keys})
-    if (!_.any(pressed)) self.reset()
+    if (!self.keypress(keys)) self.reset()
   } 
 
   return self.delta(current, self.target)
+}
+
+Automove.prototype.keypress = function(keys) {
+  var pressed = this.keymap.map(function (k) {return k in keys})
+  return _.any(pressed)
 }
 
 Automove.prototype.seek = function (current, heading, offset) {
@@ -54,33 +63,3 @@ Automove.prototype.reset = function() {
     self.active[i] = false
   })
 }
-
-Automove.prototype.delta = function(current, target) {
-  var dist = current.distance(target)
-
-  var speed = this.speed
-  var velocity = {position: 1, angle: 1}
-  var diff = current.difference(target)
-
-  if (dist.position > speed.position) {
-    diff.position[0] = diff.position[0] / dist.position
-    diff.position[1] = diff.position[1] / dist.position
-    velocity.position = speed.position
-    if (dist.angle > speed.angle) velocity.position = speed.angle * dist.position / dist.angle
-  }
-
-  if (dist.angle > speed.angle) {
-    diff.angle = diff.angle / dist.angle
-    velocity.angle = speed.angle
-  }
-
-  return {
-    position: [
-      diff.position[0] * velocity.position, 
-      diff.position[1] * velocity.position
-    ], 
-    angle: diff.angle * velocity.angle
-  }
-}
-
-module.exports = Automove
