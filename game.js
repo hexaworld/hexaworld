@@ -29,7 +29,7 @@ var player = new Player({
 
 var camera = new Camera({
   scale: 0.1,
-  speed: {position: .1, angle: .1},
+  speed: {position: .1, angle: .1, scale: .002},
   friction: 0.9,
   yoked: true
 })

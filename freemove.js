@@ -3,7 +3,7 @@ var transform = require('./transform.js')
 
 function Freemove(data) {
   this.velocity = data.velocity || {position: [0, 0], angle: 0, scale: 0}
-  this.speed = data.speed || {position: 1, angle: 10}
+  this.speed = data.speed || {position: 1, angle: 10, scale: 0}
   this.friction = data.friction || 1
   this.keymap = data.keymap || {position: [['D','A'],['W','S']], angle: ['E','Q'], scale: [',','.']}
 }
@@ -24,8 +24,8 @@ Freemove.prototype.compute = function(keys, angle) {
   }
 
   if (keymap.scale) {
-    if (keymap.scale[0] in keys) this.velocity.scale += this.speed.position*.01
-    if (keymap.scale[1] in keys) this.velocity.scale -= this.speed.position*.01
+    if (keymap.scale[0] in keys) this.velocity.scale += this.speed.scale
+    if (keymap.scale[1] in keys) this.velocity.scale -= this.speed.scale
   }
   
   var delta = this.delta(angle)
