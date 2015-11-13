@@ -35,8 +35,7 @@ function Player(opts){
   })
   this.movement.path = new Automove({
     keymap: ['S'], 
-    heading: [-180], 
-    shift: 8
+    heading: [-180]
   })
   this.collision = new Collision()
 }
