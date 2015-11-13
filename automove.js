@@ -31,7 +31,7 @@ Automove.prototype.compute = function(keys, current, offset) {
   var pressed = self.keymap.map(function (k) {return k in keys})
   if (!_.any(pressed)) self.reset()
 
-  if (!self.target) return self.todefault(current)
+  if (!self.target) return self.delta(current, self.totarget(current, 0, current))
 
   return self.delta(current, self.target)
 }
@@ -39,19 +39,10 @@ Automove.prototype.compute = function(keys, current, offset) {
 Automove.prototype.totarget = function (current, heading, offset) {
   return {
     position: [
-      this.shift * Math.cos((current.angle() + heading - 90) * Math.PI / 180) + offset.position()[0], 
-      this.shift * Math.sin((current.angle() + heading - 90) * Math.PI / 180) + offset.position()[1]
+      this.shift * Math.sin((current.angle() + heading) * Math.PI / 180) + offset.position()[0], 
+      this.shift * -Math.cos((current.angle() + heading) * Math.PI / 180) + offset.position()[1]
     ], 
     angle: current.angle() + heading
-  }
-}
-
-Automove.prototype.todefault = function (current) {
-  return {
-    position: [
-      0.75 * Math.sin(current.angle() * Math.PI / 180), 
-      0.75 * -Math.cos(current.angle() * Math.PI / 180)
-    ]
   }
 }
 
