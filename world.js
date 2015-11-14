@@ -115,7 +115,10 @@ World.prototype.cues = function() {
   var cues = []
   this.tiles.forEach(function (tile) {
     var cue = _.find(tile.children, function(child) {return child.props.cue})
-    if (cue) cues.push({position: tile.transform.position(), color: cue.props.fill})
+    if (cue) cues.push({
+      position: tile.transform.position(), 
+      color: cue.props.fill
+    })
   })
   return cues
 }
