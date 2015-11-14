@@ -79,7 +79,7 @@ Ring.prototype.project = function(origin, targets) {
     angle += offset
 
     var interp = Math.max(1 - radius, 0)
-    var fill = color.interpolateRgb('rgb(55,55,55)', target.color)(interp)
+    var fill = color.interpolateLab('rgb(55,55,55)', target.color)(interp)
 
     return {angle: angle, radius: radius, fill: fill}
   })
