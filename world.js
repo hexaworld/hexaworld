@@ -1,5 +1,6 @@
 var _ = require('lodash')
 var inherits = require('inherits')
+var color = require('d3-color')
 var tile = require('./geo/tile.js')
 var hex = require('./geo/hex.js')
 var circle = require('./geo/circle.js')
@@ -108,6 +109,19 @@ World.prototype.locate = function(point) {
   var ind = _.indexOf(status, true)
   if (ind === -1) throw Error('Cannot find player in a tile')
   return ind
+}
+
+World.prototype.cues = function() {
+  var cues = []
+  this.tiles.forEach(function (tile) {
+    if (tile.children.length > 0) {
+      var cue = {
+        position: tile.transform.position(), 
+        color: tile.children[tile.children.length - 1].props.fill}
+      cues.push(cue)
+    }
+  })
+  return cues
 }
 
 World.prototype.intersects = function(geometry) {

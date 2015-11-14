@@ -41,8 +41,6 @@ function Ring(opts){
     })
   })
 
-  
-//  this.notches = notches.concat(caps)
   this.notches = notches
   this.notches.splice(0, 0, caps[0])
   this.notches.splice(5, 0, caps[1])
@@ -58,8 +56,44 @@ Ring.prototype.draw = function(context) {
   })
 }
 
-Ring.prototype.update = function(colors) {
+Ring.prototype.recolor = function(colors) {
   this.notches.forEach( function(notch, i) {
     notch.props.fill = colors[i]
   })
+}
+
+Ring.prototype.project = function(origin, cues) {
+  return cues.map(function (cue) {
+    var diff = origin.difference(cue)
+    var dist = origin.distance(cue)
+
+    var radius = dist.position / 100
+    var angle = Math.atan2(-diff.position[1], -diff.position[0]) * 180 / Math.PI
+
+    if (angle < 90) angle += 360
+    angle = 90 - angle
+
+    var offset = origin.angle() % 360
+    if (offset < 0) offset += 360
+    angle += offset
+
+    return {angle: angle, radius: radius, color: cue.color}
+  })
+}
+
+Ring.prototype.update = function(player, world) {
+  var projections = this.project(player.geometry.transform, world.cues())
+  var proj = projections[1]
+
+  var colors = this.notches.map( function(notch, i) {
+    var tmp = proj.angle + i * 360/30
+    if (tmp > 180) tmp = 360 - tmp
+
+    if (Math.abs(tmp) <= Math.min(60/proj.radius * (Math.sqrt(3)/2)/2, 360)/2 & proj.radius < 1.125) {
+      return proj.color.toString()
+    } else {
+      return 'rgb(55,55,55)'
+    }
+  })
+  this.recolor(colors)
 }
