@@ -1,5 +1,6 @@
 var _ = require('lodash')
 var inherits = require('inherits')
+var color = require('d3-color')
 var notch = require('./geo/notch.js')
 var cap = require('./geo/cap.js')
 var Entity = require('crtrdg-entity')
@@ -77,23 +78,36 @@ Ring.prototype.project = function(origin, targets) {
     if (offset < 0) offset += 360
     angle += offset
 
-    return {angle: angle, radius: radius, color: target.color}
+    var interp = Math.max(1 - radius, 0)
+    var fill = color.interpolateRgb('rgb(55,55,55)', target.color)(interp)
+
+    return {angle: angle, radius: radius, fill: fill}
   })
 }
 
 Ring.prototype.update = function(player, world) {
   var projections = this.project(player.geometry.transform, world.cues())
 
-  var colors = this.notches.map( function(notch, i) {
-    var proj = _.min(projections, function (p) {return p.radius})
-    var tmp = proj.angle + i * 360/30
+  function threshold(i, p) {
+    tmp = p.angle + i * 360/30
     if (tmp > 180) tmp = 360 - tmp
-
-    if (Math.abs(tmp) <= Math.min(60/proj.radius * (Math.sqrt(3)/2)/2, 360)/2 & proj.radius < 1.125) {
-      return proj.color.toString()
+    if (Math.abs(tmp) <= Math.min(60/p.radius * (Math.sqrt(3)/2)/2, 360)/2 & p.radius < 1) {
+      return color.rgb(p.fill)
     } else {
-      return 'rgb(55,55,55)'
+      return color.rgb('rgb(55,55,55)')
     }
+  }
+
+  var colors = this.notches.map( function(notch, i) {
+    var fills = projections.map( function(p) {return threshold(i, p)})
+    var max = color.rgb('rgb(55,55,55)')
+    fills.forEach( function(f) {
+      max.r = Math.max(max.r, f.r)
+      max.g = Math.max(max.g, f.g)
+      max.b = Math.max(max.b, f.b)
+    })
+    return max.toString()
   })
+
   this.recolor(colors)
 }
