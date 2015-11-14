@@ -62,10 +62,10 @@ Ring.prototype.recolor = function(colors) {
   })
 }
 
-Ring.prototype.project = function(origin, cues) {
-  return cues.map(function (cue) {
-    var diff = origin.difference(cue)
-    var dist = origin.distance(cue)
+Ring.prototype.project = function(origin, targets) {
+  return targets.map(function (target) {
+    var diff = origin.difference(target)
+    var dist = origin.distance(target)
 
     var radius = dist.position / 100
     var angle = Math.atan2(-diff.position[1], -diff.position[0]) * 180 / Math.PI
@@ -77,15 +77,15 @@ Ring.prototype.project = function(origin, cues) {
     if (offset < 0) offset += 360
     angle += offset
 
-    return {angle: angle, radius: radius, color: cue.color}
+    return {angle: angle, radius: radius, color: target.color}
   })
 }
 
 Ring.prototype.update = function(player, world) {
   var projections = this.project(player.geometry.transform, world.cues())
-  var proj = projections[1]
 
   var colors = this.notches.map( function(notch, i) {
+    var proj = _.min(projections, function (p) {return p.radius})
     var tmp = proj.angle + i * 360/30
     if (tmp > 180) tmp = 360 - tmp
 

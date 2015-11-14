@@ -10,7 +10,8 @@ module.exports = function (opts) {
       stroke: opts.stroke || '#7D7D7D',
       thickness: opts.thickness || 1,
       shadow: opts.shadow || {},
-      type: 'bezier'
+      type: 'bezier',
+      cue: true
     },
 
     points: [
@@ -26,9 +27,7 @@ module.exports = function (opts) {
       angle: opts.angle || 0
     },
 
-    children: opts.children,
-
-    trigger: true
+    children: opts.children
   })
 
 } 
