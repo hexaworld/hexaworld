@@ -42,13 +42,11 @@ function Ring(opts){
     })
   })
 
+  _.range(6).forEach(function(i) {
+    notches.splice(i*(opts.count-1), 0, caps[i])
+  })
+
   this.notches = notches
-  this.notches.splice(0, 0, caps[0])
-  this.notches.splice(5, 0, caps[1])
-  this.notches.splice(10, 0, caps[2])
-  this.notches.splice(15, 0, caps[3])
-  this.notches.splice(20, 0, caps[4])
-  this.notches.splice(25, 0, caps[5])
 }
 
 Ring.prototype.draw = function(context) {
@@ -58,7 +56,7 @@ Ring.prototype.draw = function(context) {
 }
 
 Ring.prototype.recolor = function(colors) {
-  this.notches.forEach( function(notch, i) {
+  this.notches.forEach(function(notch, i) {
     notch.props.fill = colors[i]
   })
 }
