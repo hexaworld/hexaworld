@@ -76,8 +76,8 @@ Ring.prototype.project = function(origin, targets) {
     if (offset < 0) offset += 360
     angle += offset
 
-    var interp = Math.max(1 - radius, 0)
-    var fill = color.interpolateHsl('rgb(10,10,10)', target.color)(interp)
+    var interp = Math.max(1 - radius, 0.5)
+    var fill = color.interpolateHsl('rgb(55,55,55)', target.color)(interp)
 
     return {angle: angle, radius: radius, fill: fill}
   })
@@ -86,25 +86,18 @@ Ring.prototype.project = function(origin, targets) {
 Ring.prototype.update = function(player, world) {
   var projections = this.project(player.geometry.transform, world.cues())
 
-  function threshold(i, p) {
+  function discretize(i, p) {
     tmp = p.angle + i * 360/30
     if (tmp > 180) tmp = 360 - tmp
     if (Math.abs(tmp) <= Math.min(60/p.radius * (Math.sqrt(3)/2)/2, 360)/2 & p.radius < 1) {
-      return color.rgb(p.fill)
-    } else {
-      return color.rgb('rgb(55,55,55)')
+      return {radius: p.radius, fill: color.rgb(p.fill)}
     }
   }
 
   var colors = this.notches.map( function(notch, i) {
-    var fills = projections.map( function(p) {return threshold(i, p)})
-    var max = color.rgb('rgb(55,55,55)')
-    fills.forEach( function(f) {
-      max.r = Math.max(max.r, f.r)
-      max.g = Math.max(max.g, f.g)
-      max.b = Math.max(max.b, f.b)
-    })
-    return max.toString()
+    var fills = projections.map( function(p) {return discretize(i, p)})
+    if (!_.any(fills)) return 'rgb(55,55,55)'
+    return _.min(_.remove(fills), function(f) {return f.radius}).fill.toString()
   })
 
   this.recolor(colors)
