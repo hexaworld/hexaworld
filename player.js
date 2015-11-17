@@ -34,15 +34,13 @@ function Player(opts){
     keymap: ['Q', 'E', 'S', 'W'],
     heading: [-60, 60, -180, 0],
     shift: [0, 0, 0, 8],
-    speed: opts.speed,
-    auto: false
+    speed: opts.speed
   })
   this.movement.path = new Automove({
     keymap: ['S'], 
     heading: [-180],
     shift: [8],
-    speed: opts.speed,
-    auto: true
+    speed: opts.speed
   })
   this.collision = new Collision()
   this.waiting = true
@@ -70,7 +68,6 @@ Player.prototype.move = function(keyboard, world) {
   } else {
     self.waiting = true
     self.movement.tile.reset()
-    self.movement.tile.resetlast()
     delta = self.movement.path.compute(keys, current)
   }
 

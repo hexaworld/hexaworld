@@ -12,9 +12,8 @@ function Automove(data) {
   this.keymap = data.keymap || ['Q', 'W', 'E', 'A', 'S', 'D']
   this.heading = data.heading || [-60, 0, 60, -120, -180, 120]
   this.shift = data.shift || [1, 1, 1, 1, 1, 1]
-  this.auto = data.auto
   this.active = _.fill(Array(this.keymap.length), false)
-  this.last = _.fill(Array(this.keymap.length), false)
+  this.pressed = _.fill(Array(this.keymap.length), false)
   this.tracking = false
 }
 
@@ -23,9 +22,10 @@ Automove.prototype.compute = function(keys, current, offset) {
 
   self.keymap.forEach( function(key, i) {
     if (key in keys & !(_.any(self.active))) {
-      self.resetlast()
+      self.reset()
+      self.clear()
       self.active[i] = true
-      self.last[i] = true
+      self.pressed[i] = true
       self.tracking = true
       self.target = self.seek(current, self.heading[i], self.shift[i], offset)
     }
@@ -38,7 +38,7 @@ Automove.prototype.compute = function(keys, current, offset) {
 
   if (!self.tracking) {
     var shift = 1
-    if (!self.auto & _.any(self.last)) shift = self.shift[_.findIndex(self.last)]
+    if (_.any(self.pressed)) shift = self.shift[_.findIndex(self.pressed)]
     self.target = self.seek(current, 0, shift)
     if (!self.keypress(keys)) self.reset()
   } 
@@ -47,8 +47,8 @@ Automove.prototype.compute = function(keys, current, offset) {
 }
 
 Automove.prototype.keypress = function(keys) {
-  var pressed = this.keymap.map(function (k) {return k in keys})
-  return _.any(pressed)
+  var down = this.keymap.map(function (k) {return k in keys})
+  return _.any(down)
 }
 
 Automove.prototype.seek = function (current, heading, shift, offset) {
@@ -64,15 +64,9 @@ Automove.prototype.seek = function (current, heading, shift, offset) {
 }
 
 Automove.prototype.reset = function() {
-  var self = this
-  self.keymap.forEach(function (k, i) {
-    self.active[i] = false
-  })
+  this.active = this.active.map( function() {return false})
 }
 
-Automove.prototype.resetlast = function() {
-  var self = this
-  self.keymap.forEach(function (k, i) {
-    self.last[i] = false
-  })
+Automove.prototype.clear = function() {
+  this.pressed = this.pressed.map( function() {return false})
 }
