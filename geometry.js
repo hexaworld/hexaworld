@@ -8,7 +8,6 @@ function Geometry(data) {
   if (!data.points) throw new Error('Must provide points')
   this.props = data.props
   this.points = data.points
-  this.obstacle = data.obstacle
   if (_.isArray(data.children)) {
     this.children = data.children
   } else {

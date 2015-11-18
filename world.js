@@ -1,5 +1,6 @@
 var _ = require('lodash')
 var inherits = require('inherits')
+var color = require('d3-color')
 var tile = require('./geo/tile.js')
 var hex = require('./geo/hex.js')
 var circle = require('./geo/circle.js')
@@ -110,12 +111,24 @@ World.prototype.locate = function(point) {
   return ind
 }
 
+World.prototype.cues = function() {
+  var cues = []
+  this.tiles.forEach(function (tile) {
+    var cue = _.find(tile.children, function(child) {return child.props.cue})
+    if (cue) cues.push({
+      position: tile.transform.position(), 
+      color: cue.props.fill
+    })
+  })
+  return cues
+}
+
 World.prototype.intersects = function(geometry) {
   var self = this
   var results = []
   this.tiles.forEach(function (tile) {
     tile.children.forEach(function (child) {
-      if (child.obstacle) {
+      if (child.props.obstacle) {
         var collision = child.intersects(geometry)
         if (collision) results.push(collision)
       }

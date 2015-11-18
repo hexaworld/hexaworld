@@ -1,5 +1,4 @@
 var _ = require('lodash')
-var color = require('d3-color')
 var Game = require('crtrdg-gameloop');
 var Keyboard = require('crtrdg-keyboard');
 var Mouse = require('crtrdg-mouse');
@@ -65,7 +64,6 @@ keyboard.on('keydown', function(keyCode){
 });
 
 player.on('update', function(interval) {
-  //this.move(keyboard, world)
   this.move(keyboard, world)
 });
 
@@ -80,7 +78,7 @@ camera.on('update', function(interval) {
 })
 
 ring.on('update', function(interval) {
-  //this.update(colors)
+  this.update(player, world)
 })
 
 world.on('location', function(msg) {
