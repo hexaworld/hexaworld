@@ -16,6 +16,10 @@ function Ring(opts){
   var extent = opts.extent || 20
   var size = opts.size || 50
   var position = opts.position || [size/2, size/2]
+  
+  this.maxangle = opts.maxangle || 110
+  this.maxdistance = opts.maxdistance || 100
+  this.scale = opts.scale || 20
 
   var notches = _.flatten(_.range(6).map(function (side) {
     return _.range(1, count-1).map(function (ind) {
@@ -62,11 +66,13 @@ Ring.prototype.recolor = function(colors) {
 }
 
 Ring.prototype.project = function(origin, targets) {
+  self = this
+
   return targets.map(function (target) {
     var diff = origin.difference(target)
     var dist = origin.distance(target)
 
-    var radius = dist.position / 100
+    var radius = dist.position / self.maxdistance
     var angle = Math.atan2(-diff.position[1], -diff.position[0]) * 180 / Math.PI
 
     if (angle < 0) angle += 360
@@ -93,8 +99,6 @@ Ring.prototype.project = function(origin, targets) {
 Ring.prototype.update = function(player, world) {
   self = this
 
-  var maxangle = 110
-
   var projections = this.project(player.geometry.transform, world.cues())
 
   function discretize(i, p, length) {
@@ -102,7 +106,7 @@ Ring.prototype.update = function(player, world) {
     if (tmp > 180) tmp = 360 - tmp
     if (tmp < -180) tmp = 360 + tmp
     
-    if (Math.abs(tmp) <= Math.min(40/p.radius * (Math.sqrt(3)/2)/2, maxangle)/2 & p.radius < 1) {
+    if (Math.abs(tmp) <= Math.min(self.scale/p.radius, self.maxangle)/2 & p.radius < 1) {
       return {radius: p.radius, fill: color.rgb(p.fill)}
     }
   }
