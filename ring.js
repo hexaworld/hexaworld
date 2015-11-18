@@ -84,12 +84,16 @@ Ring.prototype.project = function(origin, targets) {
     var interp = Math.max(1 - radius, 0.5)
     var fill = color.interpolateHsl('rgb(55,55,55)', target.color)(interp)
     
+    if (radius < .01) angle = 0
+
     return {angle: angle, radius: radius, fill: fill}
   })
 }
 
 Ring.prototype.update = function(player, world) {
   self = this
+
+  var maxangle = 110
 
   var projections = this.project(player.geometry.transform, world.cues())
 
@@ -98,7 +102,7 @@ Ring.prototype.update = function(player, world) {
     if (tmp > 180) tmp = 360 - tmp
     if (tmp < -180) tmp = 360 + tmp
     
-    if (Math.abs(tmp) <= Math.min(60/p.radius * (Math.sqrt(3)/2)/2, 360)/2 & p.radius < 1) {
+    if (Math.abs(tmp) <= Math.min(60/p.radius * (Math.sqrt(3)/2)/2, maxangle)/2 & p.radius < 1) {
       return {radius: p.radius, fill: color.rgb(p.fill)}
     }
   }
