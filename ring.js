@@ -83,12 +83,13 @@ Ring.prototype.project = function(origin, targets) {
 
     var interp = Math.max(1 - radius, 0.5)
     var fill = color.interpolateHsl('rgb(55,55,55)', target.color)(interp)
-
+    
     return {angle: angle, radius: radius, fill: fill}
   })
 }
 
 Ring.prototype.update = function(player, world) {
+  self = this
 
   var projections = this.project(player.geometry.transform, world.cues())
 
@@ -102,9 +103,8 @@ Ring.prototype.update = function(player, world) {
     }
   }
 
-  length = this.notches.length
   var colors = this.notches.map( function(notch, i) {
-    var fills = projections.map( function(p) {return discretize(i, p, 30)})
+    var fills = projections.map( function(p) {return discretize(i, p, self.notches.length)})
     if (!_.any(fills)) return 'rgb(55,55,55)'
     return _.min(_.remove(fills), function(f) {return f.radius}).fill.toString()
   })
