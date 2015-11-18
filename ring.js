@@ -18,7 +18,7 @@ function Ring(opts){
   var position = opts.position || [size/2, size/2]
   
   this.maxangle = opts.maxangle || 360
-  this.minangle = opts.minangle || 20
+  this.minangle = opts.minangle || 30
   this.maxdistance = opts.maxdistance || 100
 
   var notches = _.flatten(_.range(6).map(function (side) {
