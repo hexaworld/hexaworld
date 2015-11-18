@@ -102,7 +102,7 @@ Ring.prototype.update = function(player, world) {
     if (tmp > 180) tmp = 360 - tmp
     if (tmp < -180) tmp = 360 + tmp
     
-    if (Math.abs(tmp) <= Math.min(60/p.radius * (Math.sqrt(3)/2)/2, maxangle)/2 & p.radius < 1) {
+    if (Math.abs(tmp) <= Math.min(40/p.radius * (Math.sqrt(3)/2)/2, maxangle)/2 & p.radius < 1) {
       return {radius: p.radius, fill: color.rgb(p.fill)}
     }
   }
