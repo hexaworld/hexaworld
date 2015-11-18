@@ -18,8 +18,8 @@ function Ring(opts){
   var position = opts.position || [size/2, size/2]
   
   this.maxangle = opts.maxangle || 110
+  this.minangle = opts.minangle || 20
   this.maxdistance = opts.maxdistance || 100
-  this.scale = opts.scale || 20
 
   var notches = _.flatten(_.range(6).map(function (side) {
     return _.range(1, count-1).map(function (ind) {
@@ -106,7 +106,7 @@ Ring.prototype.update = function(player, world) {
     if (tmp > 180) tmp = 360 - tmp
     if (tmp < -180) tmp = 360 + tmp
     
-    if (Math.abs(tmp) <= Math.min(self.scale/p.radius, self.maxangle)/2 & p.radius < 1) {
+    if (Math.abs(tmp) <= Math.min(self.minangle/p.radius, self.maxangle)/2 & p.radius < 1) {
       return {radius: p.radius, fill: color.rgb(p.fill)}
     }
   }
