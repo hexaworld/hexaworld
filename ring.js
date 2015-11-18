@@ -18,7 +18,7 @@ function Ring(opts){
   var position = opts.position || [size/2, size/2]
   
   this.maxangle = opts.maxangle || 360
-  this.minangle = opts.minangle || 30
+  this.minangle = opts.minangle || 20
   this.maxdistance = opts.maxdistance || 100
 
   var notches = _.flatten(_.range(6).map(function (side) {
@@ -88,8 +88,7 @@ Ring.prototype.project = function(origin, targets) {
     if (angle < 0) angle += 360
     if (radius < .01) angle = 0
 
-    var interp = Math.max(1 - radius, 0.5)
-    var fill = color.interpolateHsl('rgb(55,55,55)', target.color)(interp)
+    var fill = color.interpolateHsl('rgb(55,55,55)', target.color)(0.85)
 
     return {angle: angle, radius: radius, fill: fill}
   })

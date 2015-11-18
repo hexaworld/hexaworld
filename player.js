@@ -40,7 +40,7 @@ function Player(opts){
     keymap: ['A', 'D'], 
     heading: [-180, 180],
     shift: [8, 8],
-    speed: opts.speed
+    speed: opts.speed * 1.2
   })
   this.collision = new Collision()
   this.waiting = true
