@@ -88,10 +88,10 @@ Ring.prototype.project = function(origin, targets) {
     if (angle < 0) angle += 360
     if (radius < .01) angle = 0
 
-    //var interp = Math.max(1 - radius, 0.5)
-    //var fill = color.interpolateHsl('rgb(55,55,55)', target.color)(interp)
+    var interp = Math.max(1 - radius, 0.5)
+    var fill = color.interpolateHsl('rgb(55,55,55)', target.color)(interp)
 
-    return {angle: angle, radius: radius, fill: target.color}
+    return {angle: angle, radius: radius, fill: fill}
   })
 }
 
