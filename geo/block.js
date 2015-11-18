@@ -10,7 +10,8 @@ module.exports = function (opts) {
       fill: 'rgb(55,55,55)',
       stroke: 'rgb(55,55,55)',
       thickness: 0,
-      type: 'polygon'
+      type: 'polygon',
+      obstacle: true
     },
 
     points: [
@@ -25,9 +26,7 @@ module.exports = function (opts) {
       angle: opts.angle || 0
     },
 
-    children: opts.children, 
-
-    obstacle: true
+    children: opts.children
   })
 
 }
