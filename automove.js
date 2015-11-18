@@ -37,7 +37,7 @@ Automove.prototype.compute = function(keys, current, offset) {
   } 
 
   if (!self.tracking) {
-    var shift = 1
+    var shift = 2
     if (_.any(self.pressed)) shift = self.shift[_.findIndex(self.pressed)]
     self.target = self.seek(current, 0, shift)
     if (!self.keypress(keys)) self.reset()
