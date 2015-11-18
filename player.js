@@ -31,9 +31,9 @@ function Player(opts){
   this.movement = {}
   this.movement.center = new Fixmove({speed: opts.speed})
   this.movement.tile = new Automove({
-    keymap: ['A', 'D', 'S', 'W'],
-    heading: [-60, 60, -180, 0],
-    shift: [0, 0, 0, 8],
+    keymap: ['A', 'D', 'W'],
+    heading: [-60, 60, 0],
+    shift: [0, 0, 8],
     speed: opts.speed
   })
   this.movement.path = new Automove({
