@@ -31,15 +31,15 @@ function Player(opts){
   this.movement = {}
   this.movement.center = new Fixmove({speed: opts.speed})
   this.movement.tile = new Automove({
-    keymap: ['A', 'D', 'W'],
-    heading: [-60, 60, 0],
-    shift: [0, 0, 8],
+    keymap: ['A', 'D', 'W', '<left>', '<right>', '<up>'],
+    heading: [-60, 60, 0, -60, 60, 0],
+    shift: [0, 0, 8, 0, 0, 8],
     speed: opts.speed
   })
   this.movement.path = new Automove({
-    keymap: ['A', 'D'], 
-    heading: [-180, 180],
-    shift: [8, 8],
+    keymap: ['A', 'D', '<left>', '<right>'], 
+    heading: [-180, 180, -180, 180],
+    shift: [8, 8, 8, 8],
     speed: opts.speed
   })
   this.collision = new Collision()
