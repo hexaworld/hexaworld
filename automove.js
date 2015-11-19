@@ -55,8 +55,8 @@ Automove.prototype.seek = function (current, heading, shift, offset) {
 
   return {
     position: [
-      shift * Math.sin((current.angle() + heading) * Math.PI / 180) + offset.position[0], 
-      shift * -Math.cos((current.angle() + heading) * Math.PI / 180) + offset.position[1]
+      shift * Math.sin((current.angle + heading) * Math.PI / 180) + offset.position[0], 
+      shift * -Math.cos((current.angle + heading) * Math.PI / 180) + offset.position[1]
     ], 
     angle: current.angle + heading
   }
