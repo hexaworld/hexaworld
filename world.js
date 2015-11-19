@@ -12,8 +12,6 @@ module.exports = World
 inherits(World, Entity)
 
 function World(opts) {
-  this.player = opts.player
-
   this.tiles = [
     tile({
       position: [0, 0],
@@ -85,15 +83,6 @@ function World(opts) {
       })]      
     })
   ]
-
-  this.on('update', function(interval) {
-    var self = this
-    var point = self.player.position()
-    var ind = self.locate(point)
-    if (self.tiles[ind].children[0].contains(point)) {
-      self.emit('location', 'inside tile ' + ind)
-    }
-  })
 }
 
 World.prototype.draw = function(context, camera) {
@@ -116,7 +105,7 @@ World.prototype.cues = function() {
   this.tiles.forEach(function (tile) {
     var cue = _.find(tile.children, function(child) {return child.props.cue})
     if (cue) cues.push({
-      position: tile.transform.position(), 
+      position: tile.transform.position, 
       color: cue.props.fill
     })
   })

@@ -79,7 +79,7 @@ Ring.prototype.project = function(origin, targets) {
     angle = angle - 90
     if (angle < 0) angle += 360
 
-    var offset = -origin.angle() % 360
+    var offset = -origin.angle % 360
     if (offset < 0) offset += 360
     offset = 360 - offset
     if (offset == 360) offset = 0
