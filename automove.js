@@ -1,6 +1,5 @@
 var _ = require('lodash')
 var inherits = require('inherits')
-var transform = require('./transform.js')
 var Fixmove = require('./fixmove.js')
 
 module.exports = Automove
@@ -50,10 +49,10 @@ Automove.prototype.seek = function (current, heading, offset) {
 
   return {
     position: [
-      this.shift * Math.sin((current.angle() + heading) * Math.PI / 180) + offset.position()[0], 
-      this.shift * -Math.cos((current.angle() + heading) * Math.PI / 180) + offset.position()[1]
+      this.shift * Math.sin((current.angle + heading) * Math.PI / 180) + offset.position[0], 
+      this.shift * -Math.cos((current.angle + heading) * Math.PI / 180) + offset.position[1]
     ], 
-    angle: current.angle() + heading
+    angle: current.angle + heading
   }
 }
 

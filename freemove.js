@@ -1,5 +1,4 @@
 var _ = require('lodash')
-var transform = require('./transform.js')
 
 function Freemove(data) {
   this.velocity = data.velocity || {position: [0, 0], angle: 0, scale: 0}

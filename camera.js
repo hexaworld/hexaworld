@@ -24,6 +24,6 @@ function Camera(opts){
 
 Camera.prototype.move = function(keyboard) {
   var self = this
-  var delta = self.movement.compute(keyboard.keysDown, self.transform.angle())
+  var delta = self.movement.compute(keyboard.keysDown, self.transform.angle)
   self.transform.compose(delta)
 }
