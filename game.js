@@ -68,21 +68,15 @@ player.on('update', function(interval) {
 });
 
 camera.on('update', function(interval) {
-  if (camera.yoked) {
-    camera.transform.set({
-      position: player.position(),
-      angle: player.angle()
-    })
-  }
+  if (camera.yoked) camera.transform.set({
+    position: player.position,
+    angle: player.angle
+  })
   this.move(keyboard)
 })
 
 ring.on('update', function(interval) {
   this.update(player, world)
-})
-
-world.on('location', function(msg) {
-  //console.log(msg)
 })
 
 game.on('update', function(interval){
@@ -96,7 +90,3 @@ game.on('draw', function(context) {
   mask.unset(context)
   ring.draw(context)
 })
-
-game.on('pause', function(){})
-
-game.on('resume', function(){})

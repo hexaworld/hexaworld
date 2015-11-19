@@ -1,101 +1,93 @@
 var _ = require('lodash')
 
-module.exports = function transform(opts) {
+module.exports = Transform
 
+function Transform(opts) {
+  if (!(this instanceof Transform)) {
+    return new Transform(opts)
+  }
+  var self = this
   opts = opts || {}
-  var position = [0, 0]
-  var scale = 1
-  var angle = 0
-  var rotation
-  
-  var set = function (opts) {
-    position = _.isArray(opts.position) ? opts.position : position
-    scale = _.isNumber(opts.scale) ? opts.scale : scale
-    angle = _.isNumber(opts.angle) ? opts.angle : angle
-    rotation = rotmat(angle)
-    return this
-  }
+  this.position = _.isArray(opts.position) ? opts.position : [0, 0]
+  this.scale = _.isNumber(opts.scale) ? opts.scale : 1
+  this.angle = _.isNumber(opts.angle) ? opts.angle : 0
+  this.rotation = self.rotmat(self.angle)
+}
 
-  var compose = function (opts) {
-    position = _.isArray(opts.position)
-      ? [position[0] + opts.position[0], position[1] + opts.position[1]] : position
-    angle = _.isNumber(opts.angle) ? angle + opts.angle : angle
-    scale = _.isNumber(opts.scale) ? scale * opts.scale : scale
-    rotation = rotmat(angle)
-    return this
-  }
+Transform.prototype.set = function(opts) {
+  var self = this
+  self.position = _.isArray(opts.position) ? opts.position : self.position
+  self.scale = _.isNumber(opts.scale) ? opts.scale : self.scale
+  self.angle = _.isNumber(opts.angle) ? opts.angle : self.angle
+  self.rotation = self.rotmat(self.angle)
+}
 
-  var difference = function (other) {
-    var dx = _.isArray(other.position) ? other.position[0] - position[0] : 0
-    var dy = _.isArray(other.position) ? other.position[1] - position[1] : 0
-    var da = _.isNumber(other.angle) ? other.angle - angle : 0
-    var ds = _.isNumber(other.scale) ? other.scale - scale : 0
-    return {
-      position: [dx, dy],
-      angle: da,
-      scale: ds
-    }
-  }
+Transform.prototype.compose = function(opts) {
+  var self = this
+  self.position = _.isArray(opts.position)
+    ? [self.position[0] + opts.position[0], self.position[1] + opts.position[1]] : self.position
+  self.angle = _.isNumber(opts.angle) ? self.angle + opts.angle : self.angle
+  self.scale = _.isNumber(opts.scale) ? self.scale * opts.scale : self.scale
+  self.rotation = self.rotmat(self.angle)
+}
 
-  var distance = function (other) {
-    var d = difference(other)
-    return {
-      position: Math.sqrt(Math.pow(d.position[0], 2) + Math.pow(d.position[1], 2)),
-      angle: Math.abs(d.angle),
-      scale: Math.abs(d.scale)
-    }
-  }
-
-  var rotmat = function (angle) {
-    var rad = angle * Math.PI / 180
-    return [[Math.cos(rad), -Math.sin(rad)], [Math.sin(rad), Math.cos(rad)]]
-  }
-
-  var apply = function (points) {
-    points = points.map( function(xy) {
-      return [xy[0] * scale, xy[1] * scale]
-    })
-    points = points.map( function(xy) {
-      return [
-        xy[0] * rotation[0][0] + xy[1] * rotation[0][1],
-        xy[0] * rotation[1][0] + xy[1] * rotation[1][1],
-      ]
-    })
-    points = points.map(function(xy) {
-      return [xy[0] + position[0], xy[1] + position[1]]
-    })
-    return points
-  }
-
-  var invert = function (points) {
-    points = points.map(function (xy) {
-      return [xy[0] - position[0], xy[1] - position[1]]
-    })
-    points = points.map(function (xy) {
-      return [
-        xy[0] * rotation[0][0] - xy[1] * rotation[0][1],
-        -xy[0] * rotation[1][0] + xy[1] * rotation[1][1]
-      ]
-    })
-    points = points.map(function (xy) {
-      return [xy[0] / scale, xy[1] / scale]
-    })
-    return points
-  }
-
-  set(opts)
-
+Transform.prototype.difference = function(other) {
+  var self = this
+  var dx = _.isArray(other.position) ? other.position[0] - self.position[0] : 0
+  var dy = _.isArray(other.position) ? other.position[1] - self.position[1] : 0
+  var da = _.isNumber(other.angle) ? other.angle - self.angle : 0
+  var ds = _.isNumber(other.scale) ? other.scale - self.scale : 0
   return {
-    apply: apply,
-    invert: invert,
-    compose: compose,
-    difference: difference,
-    distance: distance,
-    set: set,
-    position: function () {return position},
-    scale: function () {return scale},
-    angle: function () {return angle},
-    rotation: function () {return rotation}
+    position: [dx, dy],
+    angle: da,
+    scale: ds
   }
+}
 
+Transform.prototype.distance = function(other) {
+  var d = this.difference(other)
+  return {
+    position: Math.sqrt(Math.pow(d.position[0], 2) + Math.pow(d.position[1], 2)),
+    angle: Math.abs(d.angle),
+    scale: Math.abs(d.scale)
+  }
+}
+
+Transform.prototype.apply = function(points) {
+  var self = this
+  points = points.map( function(xy) {
+    return [xy[0] * self.scale, xy[1] * self.scale]
+  })
+  points = points.map( function(xy) {
+    return [
+      xy[0] * self.rotation[0][0] + xy[1] * self.rotation[0][1],
+      xy[0] * self.rotation[1][0] + xy[1] * self.rotation[1][1],
+    ]
+  })
+  points = points.map(function(xy) {
+    return [xy[0] + self.position[0], xy[1] + self.position[1]]
+  })
+  return points
+}
+
+Transform.prototype.invert = function(points) {
+  var self = this
+  points = points.map(function (xy) {
+    return [xy[0] - self.position[0], xy[1] - self.position[1]]
+  })
+  points = points.map(function (xy) {
+    return [
+      xy[0] * self.rotation[0][0] - xy[1] * self.rotation[0][1],
+      -xy[0] * self.rotation[1][0] + xy[1] * self.rotation[1][1]
+    ]
+  })
+  points = points.map(function (xy) {
+    return [xy[0] / self.scale, xy[1] / self.scale]
+  })
+  return points
+}
+
+Transform.prototype.rotmat = function(angle) {
+  var rad = angle * Math.PI / 180
+  return [[Math.cos(rad), -Math.sin(rad)], [Math.sin(rad), Math.cos(rad)]]
 }

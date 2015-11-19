@@ -22,7 +22,7 @@ Geometry.prototype.stage = function(transform, opts) {
   opts = opts || {}
   transform = transform || self.transform
   op = opts.invert ? transform.invert : transform.apply
-  self.points = op(self.points)
+  self.points = op.bind(transform)(self.points)
   if (self.children.length) {
     _.forEach(self.children, function(child) {
       child.stage(transform, opts)
@@ -32,12 +32,7 @@ Geometry.prototype.stage = function(transform, opts) {
 
 Geometry.prototype.unstage = function() {
   var self = this
-  var t = transform({
-    position: self.transform.position(),
-    scale: self.transform.scale(),
-    angle: self.transform.angle()
-  })
-  self.stage(t, {invert: true})
+  self.stage(self.transform, {invert: true})
 }
 
 Geometry.prototype.update = function(transform) {
@@ -54,7 +49,7 @@ Geometry.prototype.contains = function(point) {
 
 Geometry.prototype.intersects = function(other) {
   var self = this
-  var response = new sat.Response();
+  var response = new sat.Response()
   var selfPoly = new sat.Polygon(
     new sat.Vector(), 
     self.points.map(function (xy) {return new sat.Vector(xy[0], xy[1])})
@@ -158,7 +153,7 @@ Geometry.prototype.drawSelf = function(context, camera) {
     points = points.map(function (xy) {
       return [xy[0] + camera.game.width/2, xy[1] + 2*camera.game.height/4]
     })
-    scale = camera.transform.scale()
+    scale = camera.transform.scale
   }
   if (this.props.type == 'polygon') this.drawPolygon(context, points, scale)
   if (this.props.type == 'bezier') this.drawBezier(context, points, scale)

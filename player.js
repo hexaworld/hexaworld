@@ -2,7 +2,6 @@ var _ = require('lodash')
 var inherits = require('inherits')
 var aabb = require('aabb-2d')
 var math = require('mathjs')
-var transform = require('./transform.js')
 var circle = require('./geo/circle.js')
 var Collision = require('./collision.js')
 var Fixmove = require('./fixmove.js')
@@ -44,14 +43,15 @@ function Player(opts){
   })
   this.collision = new Collision()
   this.waiting = true
+  this.update()
 }
 
 Player.prototype.move = function(keyboard, world) {
   var self = this
 
   var current = self.geometry.transform
-  var tile = world.tiles[world.locate(self.position())]
-  var inside =  tile.children[0].contains(current.position())
+  var tile = world.tiles[world.locate(self.position)]
+  var inside =  tile.children[0].contains(current.position)
   var keys = keyboard.keysDown
 
   var delta
@@ -59,7 +59,7 @@ Player.prototype.move = function(keyboard, world) {
     if (self.movement.tile.keypress(keys)) self.waiting = false
     if (self.waiting) {
       var center = {
-        position: [tile.transform.position()[0], tile.transform.position()[1]]
+        position: [tile.transform.position[0], tile.transform.position[1]]
       }
       delta = self.movement.center.compute(current, center)
     } else {
@@ -73,20 +73,16 @@ Player.prototype.move = function(keyboard, world) {
 
   self.geometry.update(delta)
   self.collision.handle(world, self.geometry, delta)
+  self.position = self.geometry.transform.position
+  self.update()
 }
 
 Player.prototype.draw = function(context, camera) {
   this.geometry.draw(context, camera, {order: 'bottom'})
 }
 
-Player.prototype.position = function() {
-  return this.geometry.transform.position()
-}
-
-Player.prototype.angle = function() {
-  return this.geometry.transform.angle()
-}
-
-Player.prototype.scale = function() {
-  return this.geometry.transform.scale()
+Player.prototype.update = function() {
+  this.position = this.geometry.transform.position
+  this.angle = this.geometry.transform.angle
+  this.scale = this.geometry.transform.scale
 }
