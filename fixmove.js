@@ -21,12 +21,12 @@ Fixmove.prototype.delta = function(current, target) {
     diff.position[0] = diff.position[0] / dist.position
     diff.position[1] = diff.position[1] / dist.position
     velocity.position = speed.position
-    if (dist.angle > speed.angle) velocity.position = speed.angle * dist.position / dist.angle
   }
 
   if (dist.angle > speed.angle) {
     diff.angle = diff.angle / dist.angle
     velocity.angle = speed.angle
+    if (dist.position > speed.position) velocity.angle = speed.position * dist.angle / dist.position
   }
 
   return {
