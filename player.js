@@ -36,9 +36,9 @@ function Player(opts){
     speed: opts.speed
   })
   this.movement.path = new Automove({
-    keymap: ['A', 'D', '<left>', '<right>'], 
-    heading: [-180, 180, -180, 180],
-    shift: [8, 8, 8, 8],
+    keymap: ['W', 'S', '<up>', '<down>'], 
+    heading: [0, 0, 0, 0],
+    shift: [1, -1, 1, -1],
     speed: opts.speed
   })
   this.collision = new Collision()
@@ -65,6 +65,8 @@ Player.prototype.move = function(keyboard, world) {
     } else {
       delta = self.movement.tile.compute(keys, current, tile.transform)
     }
+    self.movement.path.reset()
+    self.movement.path.clear()
   } else {
     self.waiting = true
     self.movement.tile.reset()
