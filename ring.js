@@ -17,7 +17,7 @@ function Ring(opts){
   var size = opts.size || 50
   var position = opts.position || [size/2, size/2]
   
-  this.maxangle = opts.maxangle || 110
+  this.maxangle = opts.maxangle || 360
   this.minangle = opts.minangle || 20
   this.maxdistance = opts.maxdistance || 100
 
@@ -86,11 +86,9 @@ Ring.prototype.project = function(origin, targets) {
 
     angle -= offset
     if (angle < 0) angle += 360
-
-    var interp = Math.max(1 - radius, 0.5)
-    var fill = color.interpolateHsl('rgb(55,55,55)', target.color)(interp)
-    
     if (radius < .01) angle = 0
+
+    var fill = color.interpolateHsl('rgb(55,55,55)', target.color)(0.85)
 
     return {angle: angle, radius: radius, fill: fill}
   })
@@ -112,9 +110,11 @@ Ring.prototype.update = function(player, world) {
   }
 
   var colors = this.notches.map( function(notch, i) {
-    var fills = projections.map( function(p) {return discretize(i, p, self.notches.length)})
-    if (!_.any(fills)) return 'rgb(55,55,55)'
-    return _.min(_.remove(fills), function(f) {return f.radius}).fill.toString()
+    var fills = _.remove(projections.map( function(p) {return discretize(i, p, self.notches.length)}))
+    if (!fills.length) return 'rgb(55,55,55)'
+    var nonzero = _.filter(fills, function(f) {return f.radius > 0.2})
+    if (nonzero.length) return _.min(nonzero, function(f) {return f.radius}).fill.toString()
+    return fills[0].fill.toString() 
   })
 
   this.recolor(colors)
