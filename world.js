@@ -95,9 +95,7 @@ World.prototype.locate = function(point) {
   var status = this.tiles.map(function (tile) {
     return tile.contains(point)
   })
-  var ind = _.indexOf(status, true)
-  if (ind === -1) throw Error('Cannot find player in a tile')
-  return ind
+  return _.indexOf(status, true)
 }
 
 World.prototype.cues = function() {

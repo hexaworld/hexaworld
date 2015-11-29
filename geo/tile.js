@@ -8,6 +8,8 @@ var Geometry = require('../geometry.js')
 
 module.exports = function (opts) {
   opts = opts || {}
+
+  var thickness = opts.thickness
   
   var center = [hex({scale: 0.25})]
   var wedges = _.range(6).map(function (i) {
@@ -18,11 +20,11 @@ module.exports = function (opts) {
   })
   _.remove(blocks, _.isUndefined)
   var ends = _.range(6).map(function (i) {
-    if (!_.includes(opts.paths, i)) return end({angle: i * 60})
+    if (!_.includes(opts.paths, i)) return end({angle: i * 60, thickness: thickness})
   })
   _.remove(ends, _.isUndefined)
   var paths = _.range(6).map(function (i) {
-    if (_.includes(opts.paths, i)) return path({angle: i * 60})
+    if (_.includes(opts.paths, i)) return path({angle: i * 60, thickness: thickness})
   })
   _.remove(paths, _.isUndefined)
   

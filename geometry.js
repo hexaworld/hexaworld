@@ -151,7 +151,7 @@ Geometry.prototype.drawSelf = function(context, camera) {
   if (camera) {
     points = camera.transform.invert(points)
     points = points.map(function (xy) {
-      return [xy[0] + camera.game.width/2, xy[1] + 2*camera.game.height/4]
+      return [xy[0] + camera.game.width/2, xy[1] + camera.game.height/2]
     })
     scale = camera.transform.scale
   }

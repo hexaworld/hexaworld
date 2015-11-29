@@ -46,7 +46,7 @@ var mask = new Mask({
   position: [game.width/2, game.width/2]
 })
 
-var world = new World({player: player})
+var world = new World()
 
 player.addTo(game)
 camera.addTo(game)
