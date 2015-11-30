@@ -11,78 +11,17 @@ var Entity = require('crtrdg-entity')
 module.exports = World
 inherits(World, Entity)
 
-function World(opts) {
-  this.tiles = [
-    tile({
-      position: [0, 0],
+function World(schema) {
+  this.tiles = _.map(schema, function(t) {
+    return tile({
+      position: t.position,
       scale: 50,
-      paths: [0, 2, 4],
-      children: [circle({
-        fill: '#64FF00', 
-        stroke: 'white', 
-        thickness: 0.5, 
-        scale: 0.08
-      })]
-    }),
-    tile({
-      position: [-1, 0],
-      scale: 50,
-      paths: [0, 4, 5],
-      children: [circle({
-        fill: '#00C3EE', 
-        stroke: 'white', 
-        thickness: 0.5, 
-        scale: 0.08
-      })]
-    }),
-    tile({
-      position: [0, 1],
-      scale: 50,
-      paths: [2, 3, 4]
-    }),
-    tile({
-      position: [-1, 1],
-      scale: 50,
-      paths: [4, 5],
-      children: [circle({
-        fill: '#FF8900', 
-        stroke: 'white', 
-        thickness: 0.5, 
-        scale: 0.08
-      })]
-    }),
-    tile({
-      position: [1, -1],
-      scale: 50,
-      paths: [2, 3]
-    }),
-    tile({
-      position: [1, 0],
-      scale: 50,
-      paths: [1, 3]
-    }),
-    tile({
-      position: [0, -1],
-      scale: 50,
-      paths: [1, 3, 5]
-    }),
-    tile({
-      position: [0, -2],
-      scale: 50,
-      paths: [0, 5]
-    }),
-    tile({
-      position: [1, -2],
-      scale: 50,
-      paths: [0, 2],
-      children: [circle({
-        fill: '#FF5050', 
-        stroke: 'white', 
-        thickness: 0.5, 
-        scale: 0.08
-      })]      
+      paths: t.paths,
+      children: t.cue 
+        ? [circle({fill: t.cue, stroke: 'white', thickness: 0.5, scale: 0.08})] 
+        : []
     })
-  ]
+  })
 }
 
 World.prototype.draw = function(context, camera) {
