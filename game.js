@@ -59,7 +59,7 @@ var schema = [
   {position: [1, -2], paths: [0, 2], cue: '#FF5050'}
 ]
 
-var world = new World(schema)
+var world = new World(schema, {thickness: 0.25})
 
 player.addTo(game)
 camera.addTo(game)

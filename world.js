@@ -11,7 +11,8 @@ var Entity = require('crtrdg-entity')
 module.exports = World
 inherits(World, Entity)
 
-function World(schema) {
+function World(schema, opts) {
+  opts = opts || {}
   this.tiles = _.map(schema, function(t) {
     return tile({
       position: t.position,
@@ -19,7 +20,8 @@ function World(schema) {
       paths: t.paths,
       children: t.cue 
         ? [circle({fill: t.cue, stroke: 'white', thickness: 0.5, scale: 0.08})] 
-        : []
+        : [],
+      thickness: opts.thickness
     })
   })
 }
