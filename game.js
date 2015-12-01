@@ -8,94 +8,101 @@ var World = require('./world.js')
 var Ring = require('./ring.js')
 var Mask = require('./mask.js')
 
-var game = new Game({
-  canvas: 'game',
-  width: 650,
-  height: 650
-});
+module.exports = function(canvas, schema, opts) {
+  opts = opts || {}
 
-var keyboard = new Keyboard(game)
-var mouse = new Mouse(game)
+  var game = new Game({
+    canvas: canvas,
+    width: opts.width,
+    height: opts.height
+  });
 
-var player = new Player({
-  scale: 2,
-  speed: {position: 1, angle: 8},
-  friction: 0.9,
-  stroke: 'white',
-  fill: 'rgb(75,75,75)',
-  thickness: 0.5
-});
+  var keyboard = new Keyboard(game)
+  var mouse = new Mouse(game)
 
-var camera = new Camera({
-  scale: 0.1,
-  speed: {position: .1, angle: .1, scale: .002},
-  friction: 0.9,
-  yoked: true
-})
+  var player = new Player({
+    scale: 2,
+    speed: {position: 1, angle: 8},
+    friction: 0.9,
+    stroke: 'white',
+    fill: 'rgb(75,75,75)',
+    thickness: 0.5
+  });
 
-var ring = new Ring({
-  size: 0.82 * game.width/2,
-  position: [game.width/2, game.width/2],
-  extent: 0.1 * game.width/2,
-  count: 8,
-  offset: 3
-})
+  var camera = new Camera({
+    scale: 0.1,
+    speed: {position: .1, angle: .1, scale: .002},
+    friction: 0.9,
+    yoked: true
+  })
 
-var mask = new Mask({
-  size: 0.8 * game.width/2,
-  position: [game.width/2, game.width/2],
-  fill: 'rgb(90,90,90)'
-})
+  var ring = new Ring({
+    size: 0.82 * game.width/2,
+    position: [game.width/2, game.width/2],
+    extent: 0.1 * game.width/2,
+    count: 8,
+    offset: 3
+  })
 
-var schema = [
-  {position: [0, 0], paths: [0, 2, 4], cue: '#64FF00'},
-  {position: [-1, 0], paths: [0, 4, 5], cue: '#00C3EE'},
-  {position: [0, 1], paths: [2, 3, 4]},
-  {position: [-1, 1], paths: [4, 5], cue: '#FF8900'},
-  {position: [1, -1], paths: [2, 3]},
-  {position: [1, 0], paths: [1, 3]},
-  {position: [0, -1], paths: [1, 3, 5]},
-  {position: [0, -2], paths: [0, 5]},
-  {position: [1, -2], paths: [0, 2], cue: '#FF5050'}
-]
+  var mask = new Mask({
+    size: 0.8 * game.width/2,
+    position: [game.width/2, game.width/2],
+    fill: 'rgb(90,90,90)'
+  })
 
-var world = new World(schema, {thickness: 0.25})
+  var world = new World(schema, {thickness: 0.25})
 
-player.addTo(game)
-camera.addTo(game)
-world.addTo(game)
-ring.addTo(game)
+  player.addTo(game)
+  camera.addTo(game)
+  world.addTo(game)
+  ring.addTo(game)
 
-keyboard.on('keydown', function(keyCode){
-  if (keyCode == '<space>'){
-    if (game.ticker.paused == true){
-      game.resume();
-    } else {
-      game.pause();
+  keyboard.on('keydown', function(keyCode){
+    if (keyCode == '<space>'){
+      if (game.ticker.paused == true){
+        game.resume();
+      } else {
+        game.pause();
+      }
+    }
+  });
+
+  player.on('update', function(interval) {
+    this.move(keyboard, world)
+  });
+
+  camera.on('update', function(interval) {
+    if (camera.yoked) camera.transform.set({
+      position: player.position,
+      angle: player.angle
+    })
+    this.move(keyboard)
+  })
+
+  ring.on('update', function(interval) {
+    this.update(player, world)
+  })
+
+  game.on('draw', function(context) {
+    mask.set(context)
+    world.draw(context, camera)
+    player.draw(context, camera)
+    mask.unset(context)
+    ring.draw(context)
+  })
+
+  return {
+    reload: function(schema) {
+      world = new World(schema, {thickness: 0.25})
+    },
+
+    pause: function() {
+      game.pause()
+    },
+
+    resume: function() {
+      game.resume()
     }
   }
-});
 
-player.on('update', function(interval) {
-  this.move(keyboard, world)
-});
-
-camera.on('update', function(interval) {
-  if (camera.yoked) camera.transform.set({
-    position: player.position,
-    angle: player.angle
-  })
-  this.move(keyboard)
-})
-
-ring.on('update', function(interval) {
-  this.update(player, world)
-})
-
-game.on('draw', function(context) {
-  mask.set(context)
-  world.draw(context, camera)
-  player.draw(context, camera)
-  mask.unset(context)
-  ring.draw(context)
-})
+}

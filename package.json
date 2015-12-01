@@ -2,7 +2,7 @@
   "name": "hexaworld",
   "version": "0.0.0",
   "scripts": {
-    "start": "beefy game.js:bundle.js --live"
+    "start": "beefy index.js:bundle.js --live"
   },
   "dependencies": {
     "aabb-2d": "0.0.0",

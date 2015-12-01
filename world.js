@@ -18,7 +18,7 @@ function World(schema, opts) {
       position: t.position,
       scale: 50,
       paths: t.paths,
-      children: t.cue 
+      children: t.cue && t.cue.length > 0 
         ? [circle({fill: t.cue, stroke: 'white', thickness: 0.5, scale: 0.08})] 
         : [],
       thickness: opts.thickness
