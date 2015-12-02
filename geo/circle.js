@@ -15,10 +15,10 @@ module.exports = function (opts) {
     },
 
     points: [
-      [0, -1], [aspect*0.55, -1], [aspect, -0.55],
-      [aspect, 0], [aspect, 0.55], [aspect*0.55, 1],
-      [0, 1], [-aspect*0.55, 1], [-aspect, 0.55],
-      [-aspect, 0], [-aspect, -0.55], [-aspect*0.55, -1]
+      [0, -1], [aspect * 0.55, -1], [aspect, -0.55],
+      [aspect, 0], [aspect, 0.55], [aspect * 0.55, 1],
+      [0, 1], [-aspect * 0.55, 1], [-aspect, 0.55],
+      [-aspect, 0], [-aspect, -0.55], [-aspect * 0.55, -1]
     ],
 
     transform: {
@@ -29,5 +29,4 @@ module.exports = function (opts) {
 
     children: opts.children
   })
-
-} 
+}

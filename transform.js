@@ -2,7 +2,7 @@ var _ = require('lodash')
 
 module.exports = Transform
 
-function Transform(opts) {
+function Transform (opts) {
   if (!(this instanceof Transform)) {
     return new Transform(opts)
   }
@@ -14,7 +14,7 @@ function Transform(opts) {
   this.rotation = self.rotmat(self.angle)
 }
 
-Transform.prototype.set = function(opts) {
+Transform.prototype.set = function (opts) {
   var self = this
   self.position = _.isArray(opts.position) ? opts.position : self.position
   self.scale = _.isNumber(opts.scale) ? opts.scale : self.scale
@@ -22,7 +22,7 @@ Transform.prototype.set = function(opts) {
   self.rotation = self.rotmat(self.angle)
 }
 
-Transform.prototype.compose = function(opts) {
+Transform.prototype.compose = function (opts) {
   var self = this
   self.position = _.isArray(opts.position)
     ? [self.position[0] + opts.position[0], self.position[1] + opts.position[1]] : self.position
@@ -31,7 +31,7 @@ Transform.prototype.compose = function(opts) {
   self.rotation = self.rotmat(self.angle)
 }
 
-Transform.prototype.difference = function(other) {
+Transform.prototype.difference = function (other) {
   var self = this
   var dx = _.isArray(other.position) ? other.position[0] - self.position[0] : 0
   var dy = _.isArray(other.position) ? other.position[1] - self.position[1] : 0
@@ -44,7 +44,7 @@ Transform.prototype.difference = function(other) {
   }
 }
 
-Transform.prototype.distance = function(other) {
+Transform.prototype.distance = function (other) {
   var d = this.difference(other)
   return {
     position: Math.sqrt(Math.pow(d.position[0], 2) + Math.pow(d.position[1], 2)),
@@ -53,24 +53,24 @@ Transform.prototype.distance = function(other) {
   }
 }
 
-Transform.prototype.apply = function(points) {
+Transform.prototype.apply = function (points) {
   var self = this
-  points = points.map( function(xy) {
+  points = points.map(function (xy) {
     return [xy[0] * self.scale, xy[1] * self.scale]
   })
-  points = points.map( function(xy) {
+  points = points.map(function (xy) {
     return [
       xy[0] * self.rotation[0][0] + xy[1] * self.rotation[0][1],
-      xy[0] * self.rotation[1][0] + xy[1] * self.rotation[1][1],
+      xy[0] * self.rotation[1][0] + xy[1] * self.rotation[1][1]
     ]
   })
-  points = points.map(function(xy) {
+  points = points.map(function (xy) {
     return [xy[0] + self.position[0], xy[1] + self.position[1]]
   })
   return points
 }
 
-Transform.prototype.invert = function(points) {
+Transform.prototype.invert = function (points) {
   var self = this
   points = points.map(function (xy) {
     return [xy[0] - self.position[0], xy[1] - self.position[1]]
@@ -87,7 +87,7 @@ Transform.prototype.invert = function(points) {
   return points
 }
 
-Transform.prototype.rotmat = function(angle) {
+Transform.prototype.rotmat = function (angle) {
   var rad = angle * Math.PI / 180
   return [[Math.cos(rad), -Math.sin(rad)], [Math.sin(rad), Math.cos(rad)]]
 }

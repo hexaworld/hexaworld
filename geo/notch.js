@@ -10,10 +10,10 @@ module.exports = function (opts) {
   var o = opts.offset || 1
   var n = opts.count
   var i = opts.ind
-  
+
   var start = 120 - (60 / n) * i - o / 2
   var end = 120 - (60 / n) * (i + 1) + o / 2
-  
+
   return new Geometry({
     props: {
       fill: 'rgb(50,50,50)',
@@ -33,7 +33,6 @@ module.exports = function (opts) {
       scale: 1,
       angle: opts.angle,
       position: opts.position
-    },
+    }
   })
-
 }

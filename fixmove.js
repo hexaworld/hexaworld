@@ -1,16 +1,13 @@
-var _ = require('lodash')
-var transform = require('./transform.js')
-
-function Fixmove(data) {
+function Fixmove (data) {
   if (!data) data = {}
   this.speed = data.speed || {position: 1, angle: 10}
 }
 
-Fixmove.prototype.compute = function(current, target) {
+Fixmove.prototype.compute = function (current, target) {
   return this.delta(current, target)
 }
 
-Fixmove.prototype.delta = function(current, target) {
+Fixmove.prototype.delta = function (current, target) {
   var dist = current.distance(target)
 
   var speed = this.speed
@@ -31,9 +28,9 @@ Fixmove.prototype.delta = function(current, target) {
 
   return {
     position: [
-      diff.position[0] * velocity.position, 
+      diff.position[0] * velocity.position,
       diff.position[1] * velocity.position
-    ], 
+    ],
     angle: diff.angle * velocity.angle
   }
 }

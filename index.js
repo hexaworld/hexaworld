@@ -10,4 +10,5 @@ var schema = [
   {position: [1, -2], paths: [0, 2], cue: '#FF5050'}
 ]
 
-var game = require('./game.js')('game', schema, {width: 700, height: 700})
+var createGame = require('./game.js')
+createGame('game', schema, { width: 700, height: 700 })

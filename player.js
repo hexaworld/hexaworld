@@ -1,30 +1,30 @@
-var _ = require('lodash')
 var inherits = require('inherits')
-var aabb = require('aabb-2d')
-var math = require('mathjs')
 var circle = require('./geo/circle.js')
 var Collision = require('./collision.js')
 var Fixmove = require('./fixmove.js')
 var Automove = require('./automove.js')
-var Freemove = require('./freemove.js')
 var Entity = require('crtrdg-entity')
 
-module.exports = Player;
-inherits(Player, Entity);
+module.exports = Player
+inherits(Player, Entity)
 
-function Player(opts){
+function Player (opts) {
   this.geometry = circle({
     position: opts.position,
     angle: opts.angle,
-    fill: opts.fill, 
+    fill: opts.fill,
     stroke: opts.stroke,
     scale: opts.scale,
     thickness: opts.thickness,
     children: [
-      circle({fill: opts.fill, stroke: opts.stroke, thickness: opts.thickness, 
-        position: [-0.7, -.9], scale: 0.6, angle: -45, aspect: 0.6}), 
-      circle({fill: opts.fill, stroke: opts.stroke, thickness: opts.thickness, 
-        position: [0.7, -.9], scale: 0.6, angle: 45, aspect: 0.6})
+      circle({
+        fill: opts.fill, stroke: opts.stroke, thickness: opts.thickness,
+        position: [-0.7, -0.9], scale: 0.6, angle: -45, aspect: 0.6
+      }),
+      circle({
+        fill: opts.fill, stroke: opts.stroke, thickness: opts.thickness,
+        position: [0.7, -0.9], scale: 0.6, angle: 45, aspect: 0.6
+      })
     ]
   })
   this.movement = {}
@@ -36,7 +36,7 @@ function Player(opts){
     speed: opts.speed
   })
   this.movement.path = new Automove({
-    keymap: ['W', 'S', '<up>', '<down>'], 
+    keymap: ['W', 'S', '<up>', '<down>'],
     heading: [0, 0, 0, 0],
     shift: [1, -1, 1, -1],
     speed: opts.speed
@@ -46,12 +46,12 @@ function Player(opts){
   this.update()
 }
 
-Player.prototype.move = function(keyboard, world) {
+Player.prototype.move = function (keyboard, world) {
   var self = this
 
   var current = self.geometry.transform
   var tile = world.tiles[world.locate(self.position)]
-  var inside =  tile.children[0].contains(current.position)
+  var inside = tile.children[0].contains(current.position)
   var keys = keyboard.keysDown
 
   var delta
@@ -79,11 +79,11 @@ Player.prototype.move = function(keyboard, world) {
   self.update()
 }
 
-Player.prototype.draw = function(context, camera) {
+Player.prototype.draw = function (context, camera) {
   this.geometry.draw(context, camera, {order: 'bottom'})
 }
 
-Player.prototype.update = function() {
+Player.prototype.update = function () {
   this.position = this.geometry.transform.position
   this.angle = this.geometry.transform.angle
   this.scale = this.geometry.transform.scale

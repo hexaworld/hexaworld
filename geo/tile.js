@@ -10,7 +10,7 @@ module.exports = function (opts) {
   opts = opts || {}
 
   var thickness = opts.thickness
-  
+
   var center = [hex({scale: 0.25})]
   var wedges = _.range(6).map(function (i) {
     return wedge({angle: i * 60})
@@ -27,7 +27,7 @@ module.exports = function (opts) {
     if (_.includes(opts.paths, i)) return path({angle: i * 60, thickness: thickness})
   })
   _.remove(paths, _.isUndefined)
-  
+
   var children = center.concat(wedges).concat(blocks).concat(ends).concat(paths)
 
   return new Geometry({
@@ -43,13 +43,12 @@ module.exports = function (opts) {
 
     transform: {
       position: [
-        opts.scale * 3/2 * opts.position[0], 
-        opts.scale * Math.sqrt(3) * (opts.position[1] + opts.position[0]/2)
+        opts.scale * 3 / 2 * opts.position[0],
+        opts.scale * Math.sqrt(3) * (opts.position[1] + opts.position[0] / 2)
       ],
       scale: opts.scale
     },
 
     children: opts.children ? children.concat(opts.children) : children
   })
-
 }
