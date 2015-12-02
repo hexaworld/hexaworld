@@ -1,13 +1,11 @@
-var _ = require('lodash')
-
-function Freemove(data) {
+function Freemove (data) {
   this.velocity = data.velocity || {position: [0, 0], angle: 0, scale: 0}
   this.speed = data.speed || {position: 1, angle: 10, scale: 0}
   this.friction = data.friction || 1
-  this.keymap = data.keymap || {position: [['D','A'],['W','S']], angle: ['E','Q'], scale: [',','.']}
+  this.keymap = data.keymap || {position: [['D', 'A'], ['W', 'S']], angle: ['E', 'Q'], scale: [',', '.']}
 }
 
-Freemove.prototype.compute = function(keys, angle) {
+Freemove.prototype.compute = function (keys, angle) {
   var keymap = this.keymap
 
   if (keymap.position) {
@@ -26,14 +24,13 @@ Freemove.prototype.compute = function(keys, angle) {
     if (keymap.scale[0] in keys) this.velocity.scale += this.speed.scale
     if (keymap.scale[1] in keys) this.velocity.scale -= this.speed.scale
   }
-  
+
   var delta = this.delta(angle)
   this.dampen()
   return delta
-
 }
 
-Freemove.prototype.delta = function(angle) {
+Freemove.prototype.delta = function (angle) {
   var rad = angle * Math.PI / 180 || 0
   return {
     position: [
@@ -45,7 +42,7 @@ Freemove.prototype.delta = function(angle) {
   }
 }
 
-Freemove.prototype.dampen = function() {
+Freemove.prototype.dampen = function () {
   this.velocity.position[0] *= this.friction
   this.velocity.position[1] *= this.friction
   this.velocity.angle *= this.friction

@@ -10,11 +10,11 @@ module.exports = function (opts) {
 
   var o = opts.offset || 1
   var n = opts.count
-  var t = transform({angle: -(2 * (60 / n)  - o)})
+  var t = transform({angle: -(2 * (60 / n) - o)})
 
   var start = 120
   var end = 120 - (60 / n) + o / 2
-  
+
   return new Geometry({
     props: {
       fill: 'rgb(50,50,50)',
@@ -36,7 +36,6 @@ module.exports = function (opts) {
       scale: 1,
       angle: opts.angle,
       position: opts.position
-    },
+    }
   })
-
 }
