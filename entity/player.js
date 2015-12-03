@@ -1,5 +1,5 @@
 var inherits = require('inherits')
-var circle = require('../geometry/circle.js')
+var mouse = require('../geometry/mouse.js')
 var Collision = require('../util/collision.js')
 var Fixmove = require('../movement/fixmove.js')
 var Automove = require('../movement/automove.js')
@@ -9,23 +9,13 @@ module.exports = Player
 inherits(Player, Entity)
 
 function Player (opts) {
-  this.geometry = circle({
+  this.geometry = mouse({
     translation: opts.translation,
     rotation: opts.rotation,
     fill: opts.fill,
     stroke: opts.stroke,
     scale: opts.scale,
-    thickness: opts.thickness,
-    children: [
-      circle({
-        fill: opts.fill, stroke: opts.stroke, thickness: opts.thickness,
-        translation: [-0.7, -0.9], scale: 0.6, rotation: -45, aspect: 0.6
-      }),
-      circle({
-        fill: opts.fill, stroke: opts.stroke, thickness: opts.thickness,
-        translation: [0.7, -0.9], scale: 0.6, rotation: 45, aspect: 0.6
-      })
-    ]
+    thickness: opts.thickness
   })
   this.movement = {}
   this.movement.center = new Fixmove({speed: opts.speed})
