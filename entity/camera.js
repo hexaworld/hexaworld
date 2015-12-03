@@ -24,4 +24,6 @@ Camera.prototype.move = function (keyboard) {
   var self = this
   var delta = self.movement.compute(keyboard.keysDown, self.transform.rotation)
   self.transform.compose(delta)
+
+  this.emit('move', self.transform)
 }

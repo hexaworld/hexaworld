@@ -69,6 +69,8 @@ Player.prototype.move = function (keyboard, world) {
 
   self.geometry.update(delta)
   self.collision.handle(world, self.geometry, delta)
+
+  self.emit('move', self.geometry.transform)
 }
 
 Player.prototype.draw = function (context, camera) {

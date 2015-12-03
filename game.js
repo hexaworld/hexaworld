@@ -1,3 +1,5 @@
+var _ = require('lodash')
+var EventEmitter = require('eventemitter2').EventEmitter2
 var Game = require('crtrdg-gameloop')
 var Keyboard = require('crtrdg-keyboard')
 var Player = require('./entity/player.js')
@@ -51,6 +53,18 @@ module.exports = function (canvas, schema, opts) {
 
   var world = new World(schema.tiles, {thickness: 0.25})
 
+  var events = new EventEmitter({
+    wildcard: true
+  })
+  function relay (emitter, name, tag) {
+    emitter.on(tag, function (value) {
+      // emit namespaced events
+      events.emit([name, tag], value)
+    })
+  }
+  relay(player, 'player', 'move')
+  relay(camera, 'camera', 'move')
+
   player.addTo(game)
   camera.addTo(game)
   world.addTo(game)
@@ -101,6 +115,8 @@ module.exports = function (canvas, schema, opts) {
 
     resume: function () {
       game.resume()
-    }
+    },
+
+    events: events
   }
 }
