@@ -6,6 +6,8 @@ come chat with us in the `#hexaworld` channel on [freednode](https://webchat.fre
 
 built with [crtrdg.js](http://crtrdg.com/)
 
+[![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
+
 to run, install `node` (we recommend [nvm](https://github.com/creationix/nvm)), then start with `browserify` and `beefy` by calling
 
 ```
