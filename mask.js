@@ -4,7 +4,7 @@ module.exports = Mask
 
 function Mask (opts) {
   this.size = opts.size
-  this.position = opts.position
+  this.translation = opts.translation
   this.fill = opts.fill
   this.stroke = opts.stroke
   this.thickness = opts.thickness || 1
@@ -20,7 +20,7 @@ Mask.prototype.set = function (context) {
   _.range(7).map(function (i) {
     var dx = (Math.cos(i * 2 * Math.PI / 6 + offset)) * self.size
     var dy = (Math.sin(i * 2 * Math.PI / 6 + offset)) * self.size
-    context.lineTo(dx + self.position[0], dy + self.position[1])
+    context.lineTo(dx + self.translation[0], dy + self.translation[1])
   })
   context.fillStyle = self.fill
   context.strokeStyle = self.stroke

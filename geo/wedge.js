@@ -22,7 +22,7 @@ module.exports = function (opts) {
 
     transform: {
       scale: width,
-      angle: opts.angle || 0
+      rotation: opts.rotation || 0
     },
 
     children: opts.children

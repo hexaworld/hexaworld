@@ -31,8 +31,8 @@ module.exports = function (opts) {
 
     transform: {
       scale: 1,
-      angle: opts.angle,
-      position: opts.position
+      rotation: opts.rotation,
+      translation: opts.translation
     }
   })
 }

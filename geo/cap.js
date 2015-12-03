@@ -1,4 +1,4 @@
-var transform = require('../transform.js')
+var transform = require('transformist')
 var Geometry = require('../geometry.js')
 
 module.exports = function (opts) {
@@ -10,7 +10,7 @@ module.exports = function (opts) {
 
   var o = opts.offset || 1
   var n = opts.count
-  var t = transform({angle: -(2 * (60 / n) - o)})
+  var t = transform({rotation: -(2 * (60 / n) - o)})
 
   var start = 120
   var end = 120 - (60 / n) + o / 2
@@ -34,8 +34,8 @@ module.exports = function (opts) {
 
     transform: {
       scale: 1,
-      angle: opts.angle,
-      position: opts.position
+      rotation: opts.rotation,
+      translation: opts.translation
     }
   })
 }

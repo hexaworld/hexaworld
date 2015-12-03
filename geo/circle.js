@@ -23,8 +23,8 @@ module.exports = function (opts) {
 
     transform: {
       scale: opts.scale || 1,
-      position: opts.position || [0, 0],
-      angle: opts.angle || 0
+      translation: opts.translation || [0, 0],
+      rotation: opts.rotation || 0
     },
 
     children: opts.children

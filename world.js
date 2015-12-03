@@ -11,8 +11,8 @@ function World (schema, opts) {
   opts = opts || {}
   this.tiles = _.map(schema, function (t) {
     return tile({
-      position: t.position,
       scale: 50,
+      translation: t.translation,
       paths: t.paths,
       children: t.cue && t.cue.length > 0
         ? [circle({ fill: t.cue, stroke: 'white', thickness: 0.5, scale: 0.08 })]
@@ -41,7 +41,7 @@ World.prototype.cues = function () {
     var cue = _.find(tile.children, function (child) { return child.props.cue })
     if (cue) {
       cues.push({
-        position: tile.transform.position,
+        translation: tile.transform.translation,
         color: cue.props.fill
       })
     }

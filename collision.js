@@ -20,9 +20,9 @@ Collision.prototype.handle = function (a, b, delta) {
 
 Collision.prototype.correct = function (delta, overlap) {
   return {
-    position: [
-      -0.2 * delta.position[0] + 0.5 * overlap[0],
-      -0.2 * delta.position[1] + 0.5 * overlap[1]
+    translation: [
+      -0.2 * delta.translation[0] + 0.5 * overlap[0],
+      -0.2 * delta.translation[1] + 0.5 * overlap[1]
     ]
   }
 }

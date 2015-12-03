@@ -1,7 +1,7 @@
 var _ = require('lodash')
 var inside = require('point-in-polygon')
+var transform = require('transformist')
 var sat = require('sat')
-var transform = require('./transform.js')
 
 function Geometry (data) {
   if (!data.props) throw new Error('Must provide properties')

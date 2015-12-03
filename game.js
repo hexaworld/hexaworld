@@ -19,7 +19,7 @@ module.exports = function (canvas, schema, opts) {
 
   var player = new Player({
     scale: 2,
-    speed: {position: 1, angle: 8},
+    speed: {translation: 1, rotation: 8},
     friction: 0.9,
     stroke: 'white',
     fill: 'rgb(75,75,75)',
@@ -28,14 +28,14 @@ module.exports = function (canvas, schema, opts) {
 
   var camera = new Camera({
     scale: 0.1,
-    speed: { position: 0.1, angle: 0.1, scale: 0.002 },
+    speed: { translation: 0.1, rotation: 0.1, scale: 0.002 },
     friction: 0.9,
     yoked: true
   })
 
   var ring = new Ring({
     size: 0.82 * game.width / 2,
-    position: [game.width / 2, game.width / 2],
+    translation: [game.width / 2, game.width / 2],
     extent: 0.1 * game.width / 2,
     count: 8,
     offset: 3
@@ -43,7 +43,7 @@ module.exports = function (canvas, schema, opts) {
 
   var mask = new Mask({
     size: 0.8 * game.width / 2,
-    position: [game.width / 2, game.width / 2],
+    translation: [game.width / 2, game.width / 2],
     fill: 'rgb(90,90,90)'
   })
 
@@ -70,10 +70,8 @@ module.exports = function (canvas, schema, opts) {
 
   camera.on('update', function (interval) {
     if (camera.yoked) {
-      camera.transform.set({
-        position: player.position,
-        angle: player.angle
-      })
+      camera.transform.translation = player.geometry.transform.translation
+      camera.transform.rotation = player.geometry.transform.rotation
     }
     this.move(keyboard)
   })

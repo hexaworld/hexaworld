@@ -7,7 +7,7 @@ inherits(Automove, Fixmove)
 
 function Automove (data) {
   if (!data) data = {}
-  this.speed = data.speed || {position: 1, angle: 10}
+  this.speed = data.speed || {translation: 1, rotation: 10}
   this.keymap = data.keymap || ['Q', 'W', 'E', 'A', 'S', 'D']
   this.heading = data.heading || [-60, 0, 60, -120, -180, 120]
   this.shift = data.shift || [1, 1, 1, 1, 1, 1]
@@ -32,7 +32,7 @@ Automove.prototype.compute = function (keys, current, offset) {
 
   if (self.tracking) {
     var dist = current.distance(self.target)
-    if (!(dist.position || dist.angle)) self.tracking = false
+    if (!(dist.translation || dist.rotation)) self.tracking = false
   }
 
   if (!self.tracking) {
@@ -41,7 +41,6 @@ Automove.prototype.compute = function (keys, current, offset) {
     self.target = self.seek(current, 0, shift)
     if (!self.keypress(keys)) self.reset()
   }
-
   return self.delta(current, self.target)
 }
 
@@ -54,11 +53,11 @@ Automove.prototype.seek = function (current, heading, shift, offset) {
   if (!offset) offset = current
 
   return {
-    position: [
-      shift * Math.sin((current.angle + heading) * Math.PI / 180) + offset.position[0],
-      shift * -Math.cos((current.angle + heading) * Math.PI / 180) + offset.position[1]
+    translation: [
+      shift * Math.sin((current.rotation + heading) * Math.PI / 180) + offset.translation[0],
+      shift * -Math.cos((current.rotation + heading) * Math.PI / 180) + offset.translation[1]
     ],
-    angle: current.angle + heading
+    rotation: current.rotation + heading
   }
 }
 
