@@ -70,8 +70,8 @@ module.exports = function (canvas, schema, opts) {
 
   camera.on('update', function (interval) {
     if (camera.yoked) {
-      camera.transform.translation = player.position
-      camera.transform.rotation = player.angle
+      camera.transform.translation = player.geometry.transform.translation
+      camera.transform.rotation = player.geometry.transform.rotation
     }
     this.move(keyboard)
   })

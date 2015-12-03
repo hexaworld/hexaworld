@@ -43,14 +43,13 @@ function Player (opts) {
   })
   this.collision = new Collision()
   this.waiting = true
-  this.update()
 }
 
 Player.prototype.move = function (keyboard, world) {
   var self = this
 
   var current = self.geometry.transform
-  var tile = world.tiles[world.locate(self.position)]
+  var tile = world.tiles[world.locate(current.translation)]
   var inside = tile.children[0].contains(current.translation)
   var keys = keyboard.keysDown
 
@@ -75,15 +74,8 @@ Player.prototype.move = function (keyboard, world) {
 
   self.geometry.update(delta)
   self.collision.handle(world, self.geometry, delta)
-  self.update()
 }
 
 Player.prototype.draw = function (context, camera) {
   this.geometry.draw(context, camera, {order: 'bottom'})
-}
-
-Player.prototype.update = function () {
-  this.position = this.geometry.transform.translation
-  this.angle = this.geometry.transform.rotation
-  this.scale = this.geometry.transform.scale
 }
