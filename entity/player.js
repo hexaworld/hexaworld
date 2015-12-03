@@ -13,7 +13,7 @@ function Player (opts) {
     50 * 3 / 2 * opts.translation[0],
     50 * Math.sqrt(3) * (opts.translation[1] + opts.translation[0] / 2)
   ]
-  if (opts.character == 'mouse') {
+  if (opts.character === 'mouse') {
     this.geometry = mouse({
       translation: translation,
       fill: opts.fill,
