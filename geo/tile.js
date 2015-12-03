@@ -43,8 +43,8 @@ module.exports = function (opts) {
 
     transform: {
       translation: [
-        opts.scale * 3 / 2 * opts.position[0],
-        opts.scale * Math.sqrt(3) * (opts.position[1] + opts.position[0] / 2)
+        opts.scale * 3 / 2 * opts.translation[0],
+        opts.scale * Math.sqrt(3) * (opts.translation[1] + opts.translation[0] / 2)
       ],
       scale: opts.scale
     },
