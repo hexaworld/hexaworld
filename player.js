@@ -10,8 +10,8 @@ inherits(Player, Entity)
 
 function Player (opts) {
   this.geometry = circle({
-    position: opts.position,
-    angle: opts.angle,
+    translation: opts.translation,
+    rotation: opts.rotation,
     fill: opts.fill,
     stroke: opts.stroke,
     scale: opts.scale,
@@ -19,11 +19,11 @@ function Player (opts) {
     children: [
       circle({
         fill: opts.fill, stroke: opts.stroke, thickness: opts.thickness,
-        position: [-0.7, -0.9], scale: 0.6, angle: -45, aspect: 0.6
+        translation: [-0.7, -0.9], scale: 0.6, rotation: -45, aspect: 0.6
       }),
       circle({
         fill: opts.fill, stroke: opts.stroke, thickness: opts.thickness,
-        position: [0.7, -0.9], scale: 0.6, angle: 45, aspect: 0.6
+        translation: [0.7, -0.9], scale: 0.6, rotation: 45, aspect: 0.6
       })
     ]
   })
@@ -51,7 +51,7 @@ Player.prototype.move = function (keyboard, world) {
 
   var current = self.geometry.transform
   var tile = world.tiles[world.locate(self.position)]
-  var inside = tile.children[0].contains(current.position)
+  var inside = tile.children[0].contains(current.translation)
   var keys = keyboard.keysDown
 
   var delta
@@ -59,7 +59,7 @@ Player.prototype.move = function (keyboard, world) {
     if (self.movement.tile.keypress(keys)) self.waiting = false
     if (self.waiting) {
       var center = {
-        position: [tile.transform.position[0], tile.transform.position[1]]
+        translation: [tile.transform.translation[0], tile.transform.translation[1]]
       }
       delta = self.movement.center.compute(current, center)
     } else {
@@ -75,7 +75,6 @@ Player.prototype.move = function (keyboard, world) {
 
   self.geometry.update(delta)
   self.collision.handle(world, self.geometry, delta)
-  self.position = self.geometry.transform.position
   self.update()
 }
 
@@ -84,7 +83,7 @@ Player.prototype.draw = function (context, camera) {
 }
 
 Player.prototype.update = function () {
-  this.position = this.geometry.transform.position
-  this.angle = this.geometry.transform.angle
+  this.position = this.geometry.transform.translation
+  this.angle = this.geometry.transform.rotation
   this.scale = this.geometry.transform.scale
 }

@@ -1,6 +1,6 @@
 function Fixmove (data) {
   if (!data) data = {}
-  this.speed = data.speed || {position: 1, angle: 10}
+  this.speed = data.speed || {translation: 1, rotation: 10}
 }
 
 Fixmove.prototype.compute = function (current, target) {
@@ -11,27 +11,27 @@ Fixmove.prototype.delta = function (current, target) {
   var dist = current.distance(target)
 
   var speed = this.speed
-  var velocity = {position: 1, angle: 1}
+  var velocity = {translation: 1, rotation: 1}
   var diff = current.difference(target)
 
-  if (dist.position > speed.position) {
-    diff.position[0] = diff.position[0] / dist.position
-    diff.position[1] = diff.position[1] / dist.position
-    velocity.position = speed.position
+  if (dist.translation > speed.translation) {
+    diff.translation[0] = diff.translation[0] / dist.translation
+    diff.translation[1] = diff.translation[1] / dist.translation
+    velocity.translation = speed.translation
   }
 
-  if (dist.angle > speed.angle) {
-    diff.angle = diff.angle / dist.angle
-    velocity.angle = speed.angle
-    if (dist.position > speed.position) velocity.angle = speed.position * dist.angle / dist.position
+  if (dist.rotation > speed.rotation) {
+    diff.rotation = diff.rotation / dist.rotation
+    velocity.rotation = speed.rotation
+    if (dist.translation > speed.translation) velocity.rotation = speed.translation * dist.rotation / dist.translation
   }
 
   return {
-    position: [
-      diff.position[0] * velocity.position,
-      diff.position[1] * velocity.position
+    translation: [
+      diff.translation[0] * velocity.translation,
+      diff.translation[1] * velocity.translation
     ],
-    angle: diff.angle * velocity.angle
+    rotation: diff.rotation * velocity.rotation
   }
 }
 

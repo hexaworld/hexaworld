@@ -13,18 +13,18 @@ module.exports = function (opts) {
 
   var center = [hex({scale: 0.25})]
   var wedges = _.range(6).map(function (i) {
-    return wedge({angle: i * 60})
+    return wedge({rotation: i * 60})
   })
   var blocks = _.range(6).map(function (i) {
-    if (!_.includes(opts.paths, i)) return block({angle: i * 60})
+    if (!_.includes(opts.paths, i)) return block({rotation: i * 60})
   })
   _.remove(blocks, _.isUndefined)
   var ends = _.range(6).map(function (i) {
-    if (!_.includes(opts.paths, i)) return end({angle: i * 60, thickness: thickness})
+    if (!_.includes(opts.paths, i)) return end({rotation: i * 60, thickness: thickness})
   })
   _.remove(ends, _.isUndefined)
   var paths = _.range(6).map(function (i) {
-    if (_.includes(opts.paths, i)) return path({angle: i * 60, thickness: thickness})
+    if (_.includes(opts.paths, i)) return path({rotation: i * 60, thickness: thickness})
   })
   _.remove(paths, _.isUndefined)
 
@@ -42,7 +42,7 @@ module.exports = function (opts) {
     }),
 
     transform: {
-      position: [
+      translation: [
         opts.scale * 3 / 2 * opts.position[0],
         opts.scale * Math.sqrt(3) * (opts.position[1] + opts.position[0] / 2)
       ],

@@ -13,11 +13,11 @@ function Ring (opts) {
   var count = opts.count || 6
   var extent = opts.extent || 20
   var size = opts.size || 50
-  var position = opts.position || [size / 2, size / 2]
+  var translation = opts.translation || [size / 2, size / 2]
 
   this.maxangle = opts.maxangle || 360
   this.minangle = opts.minangle || 20
-  this.maxdistance = opts.maxdistance || 300
+  this.maxdistance = opts.maxdistance || 150
 
   var notches = _.flatten(_.range(6).map(function (side) {
     return _.range(1, count - 1).map(function (ind) {
@@ -27,8 +27,8 @@ function Ring (opts) {
         ind: ind,
         count: count,
         offset: offset,
-        angle: (side * 60) + 30,
-        position: position
+        rotation: (side * 60) + 30,
+        translation: translation
       })
     })
   }))
@@ -39,8 +39,8 @@ function Ring (opts) {
       extent: extent,
       count: count,
       offset: offset,
-      angle: (side * 60) + 30,
-      position: position
+      rotation: (side * 60) + 30,
+      translation: translation
     })
   })
 
@@ -69,14 +69,14 @@ Ring.prototype.project = function (origin, targets) {
     var diff = origin.difference(target)
     var dist = origin.distance(target)
 
-    var radius = dist.position / self.maxdistance
-    var angle = Math.atan2(-diff.position[1], -diff.position[0]) * 180 / Math.PI
+    var radius = dist.translation / self.maxdistance
+    var angle = Math.atan2(-diff.translation[1], -diff.translation[0]) * 180 / Math.PI
 
     if (angle < 0) angle += 360
     angle = angle - 90
     if (angle < 0) angle += 360
 
-    var offset = -origin.angle % 360
+    var offset = -origin.rotation % 360
     if (offset < 0) offset += 360
     offset = 360 - offset
     if (offset === 360) offset = 0

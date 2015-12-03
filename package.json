@@ -18,7 +18,8 @@
     "mathjs": "^2.4.0",
     "point-in-polygon": "^1.0.0",
     "polygon-aabb": "^1.0.0",
-    "sat": "^0.5.0"
+    "sat": "^0.5.0",
+    "transformist": "^1.0.0"
   },
   "devDependencies": {
     "beefy": "~0.4.0",

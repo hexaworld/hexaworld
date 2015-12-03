@@ -1,7 +1,7 @@
 var inherits = require('inherits')
-var transform = require('./transform.js')
-var Freemove = require('./freemove.js')
+var transform = require('transformist')
 var Entity = require('crtrdg-entity')
+var Freemove = require('./freemove.js')
 
 module.exports = Camera
 inherits(Camera, Entity)
@@ -9,19 +9,19 @@ inherits(Camera, Entity)
 function Camera (opts) {
   this.yoked = opts.yoked
   this.transform = transform({
-    position: opts.position,
+    translation: opts.translation,
     scale: opts.scale,
-    angle: opts.angle
+    rotation: opts.rotation
   })
   this.movement = new Freemove({
     speed: opts.speed,
     friction: opts.friction,
-    keymap: { position: [['L', 'J'], ['K', 'I']], angle: ['O', 'U'], scale: [',', '.'] }
+    keymap: { translation: [['L', 'J'], ['K', 'I']], rotation: ['O', 'U'], scale: [',', '.'] }
   })
 }
 
 Camera.prototype.move = function (keyboard) {
   var self = this
-  var delta = self.movement.compute(keyboard.keysDown, self.transform.angle)
+  var delta = self.movement.compute(keyboard.keysDown, self.transform.rotation)
   self.transform.compose(delta)
 }

@@ -41,7 +41,7 @@ World.prototype.cues = function () {
     var cue = _.find(tile.children, function (child) { return child.props.cue })
     if (cue) {
       cues.push({
-        position: tile.transform.position,
+        translation: tile.transform.translation,
         color: cue.props.fill
       })
     }
