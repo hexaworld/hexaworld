@@ -1,4 +1,3 @@
-var Geometry = require('./geometry.js')
 var circle = require('./circle.js')
 
 module.exports = function (opts) {
@@ -23,5 +22,3 @@ module.exports = function (opts) {
     ]
   })
 }
-
-

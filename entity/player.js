@@ -15,7 +15,7 @@ function Player (opts) {
     fill: opts.fill,
     stroke: opts.stroke,
     scale: opts.scale,
-    thickness: opts.thickness,
+    thickness: opts.thickness
   })
   this.movement = {}
   this.movement.center = new Fixmove({speed: opts.speed})
