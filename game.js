@@ -92,7 +92,7 @@ module.exports = function (canvas, schema, opts) {
 
   return {
     reload: function (schema) {
-      world = new World(schema, {thickness: 0.25})
+      world = new World(schema.tiles, {thickness: 0.25})
     },
 
     pause: function () {
