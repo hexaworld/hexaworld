@@ -5,7 +5,6 @@ module.exports = function (opts) {
 
   return circle({
     translation: opts.translation,
-    rotation: opts.rotation,
     fill: opts.fill,
     stroke: opts.stroke,
     scale: opts.scale,
@@ -21,4 +20,5 @@ module.exports = function (opts) {
       })
     ]
   })
+
 }

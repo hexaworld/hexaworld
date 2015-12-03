@@ -9,14 +9,19 @@ module.exports = Player
 inherits(Player, Entity)
 
 function Player (opts) {
-  this.geometry = mouse({
-    translation: opts.translation,
-    rotation: opts.rotation,
-    fill: opts.fill,
-    stroke: opts.stroke,
-    scale: opts.scale,
-    thickness: opts.thickness
-  })
+  var translation = [
+    50 * 3 / 2 * opts.translation[0],
+    50 * Math.sqrt(3) * (opts.translation[1] + opts.translation[0] / 2)
+  ]
+  if (opts.character == 'mouse') {
+    this.geometry = mouse({
+      translation: translation,
+      fill: opts.fill,
+      stroke: opts.stroke,
+      scale: opts.scale,
+      thickness: opts.thickness
+    })
+  }
   this.movement = {}
   this.movement.center = new Fixmove({speed: opts.speed})
   this.movement.tile = new Automove({
