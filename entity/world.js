@@ -1,7 +1,7 @@
 var _ = require('lodash')
 var inherits = require('inherits')
-var tile = require('./geo/tile.js')
-var circle = require('./geo/circle.js')
+var tile = require('../geometry/tile.js')
+var circle = require('../geometry/circle.js')
 var Entity = require('crtrdg-entity')
 
 module.exports = World

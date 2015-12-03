@@ -1,10 +1,10 @@
 var Game = require('crtrdg-gameloop')
 var Keyboard = require('crtrdg-keyboard')
-var Player = require('./player.js')
-var Camera = require('./camera.js')
-var World = require('./world.js')
-var Ring = require('./ring.js')
-var Mask = require('./mask.js')
+var Player = require('./entity/player.js')
+var Camera = require('./entity/camera.js')
+var World = require('./entity/world.js')
+var Ring = require('./entity/ring.js')
+var Mask = require('./util/mask.js')
 
 module.exports = function (canvas, schema, opts) {
   opts = opts || {}

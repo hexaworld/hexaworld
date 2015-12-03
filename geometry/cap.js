@@ -1,4 +1,5 @@
-var Geometry = require('../geometry.js')
+var transform = require('transformist')
+var Geometry = require('./geometry.js')
 
 module.exports = function (opts) {
   opts = opts || {}
@@ -9,10 +10,10 @@ module.exports = function (opts) {
 
   var o = opts.offset || 1
   var n = opts.count
-  var i = opts.ind
+  var t = transform({rotation: -(2 * (60 / n) - o)})
 
-  var start = 120 - (60 / n) * i - o / 2
-  var end = 120 - (60 / n) * (i + 1) + o / 2
+  var start = 120
+  var end = 120 - (60 / n) + o / 2
 
   return new Geometry({
     props: {
@@ -23,10 +24,12 @@ module.exports = function (opts) {
     },
 
     points: [
-      [inner / Math.tan(start * Math.PI / 180), -inner],
+      t.apply([[outer / Math.tan(end * Math.PI / 180), -outer]])[0],
       [outer / Math.tan(start * Math.PI / 180), -outer],
       [outer / Math.tan(end * Math.PI / 180), -outer],
-      [inner / Math.tan(end * Math.PI / 180), -inner]
+      [inner / Math.tan(end * Math.PI / 180), -inner],
+      [inner / Math.tan(start * Math.PI / 180), -inner],
+      t.apply([[inner / Math.tan(end * Math.PI / 180), -inner]])[0]
     ],
 
     transform: {

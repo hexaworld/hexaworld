@@ -1,8 +1,8 @@
 var inherits = require('inherits')
-var circle = require('./geo/circle.js')
-var Collision = require('./collision.js')
-var Fixmove = require('./fixmove.js')
-var Automove = require('./automove.js')
+var circle = require('../geometry/circle.js')
+var Collision = require('../util/collision.js')
+var Fixmove = require('../movement/fixmove.js')
+var Automove = require('../movement/automove.js')
 var Entity = require('crtrdg-entity')
 
 module.exports = Player

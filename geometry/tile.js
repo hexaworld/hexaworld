@@ -4,7 +4,7 @@ var wedge = require('./wedge.js')
 var block = require('./block.js')
 var end = require('./end.js')
 var path = require('./path.js')
-var Geometry = require('../geometry.js')
+var Geometry = require('./geometry.js')
 
 module.exports = function (opts) {
   opts = opts || {}

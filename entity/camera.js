@@ -1,7 +1,7 @@
 var inherits = require('inherits')
 var transform = require('transformist')
 var Entity = require('crtrdg-entity')
-var Freemove = require('./freemove.js')
+var Freemove = require('../movement/freemove.js')
 
 module.exports = Camera
 inherits(Camera, Entity)

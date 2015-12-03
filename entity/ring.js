@@ -1,8 +1,8 @@
 var _ = require('lodash')
 var inherits = require('inherits')
 var color = require('d3-color')
-var notch = require('./geo/notch.js')
-var cap = require('./geo/cap.js')
+var notch = require('../geometry/notch.js')
+var cap = require('../geometry/cap.js')
 var Entity = require('crtrdg-entity')
 
 module.exports = Ring

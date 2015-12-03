@@ -1,4 +1,4 @@
-var Geometry = require('../geometry.js')
+var Geometry = require('./geometry.js')
 
 module.exports = function (opts) {
   opts = opts || {}
