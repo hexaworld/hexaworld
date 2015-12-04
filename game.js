@@ -95,6 +95,7 @@ module.exports = function (canvas, schema, opts) {
   game.on('update', function (interval) {
     if (targets[0].contains(player.position())) {
       console.log('win!')
+      console.log(schema.gameplay.timeout - time.seconds())
     }
   })
 
