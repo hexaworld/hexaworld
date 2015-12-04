@@ -93,7 +93,9 @@ module.exports = function (canvas, schema, opts) {
   })
 
   game.on('update', function (interval) {
-    //console.log(targets[0].contains(player.position()))
+    if (targets[0].contains(player.position())) {
+      console.log('win!')
+    }
   })
 
   return {
