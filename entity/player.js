@@ -9,7 +9,7 @@ module.exports = Player
 inherits(Player, Entity)
 
 function Player (schema, opts) {
-  this.opts = opts
+  this.opts = opts || {}
   this.load(schema)
   this.movement = {}
   this.movement.center = new Fixmove({speed: opts.speed})
