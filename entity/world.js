@@ -16,22 +16,22 @@ function World (schema, opts) {
 World.prototype.load = function (schema) {
   var self = this
   self.tiles = _.map(schema, function (t) {
-    var children  = []
+    var children = []
     if (t.cue) {
       children.push(circle({
-        fill: t.cue, 
-        stroke: 'white', 
-        thickness: 0.5, 
-        scale: 0.08, 
+        fill: t.cue,
+        stroke: 'white',
+        thickness: 0.5,
+        scale: 0.08,
         cue: true
       }))
     }
     if (t.target) {
       children.push(hex({
-        fill: t.target, 
-        stroke: 'white', 
+        fill: t.target,
+        stroke: 'white',
         thickness: 0.5,
-        scale: 0.1, 
+        scale: 0.1,
         target: true
       }))
     }
@@ -61,7 +61,7 @@ World.prototype.locate = function (point) {
 World.prototype.targets = function () {
   var targets = []
   this.tiles.forEach(function (tile) {
-    var target = _.find(tile.children, function (child) {return child.props.target})
+    var target = _.find(tile.children, function (child) { return child.props.target })
     if (target) targets.push(target)
   })
   return targets
@@ -70,7 +70,7 @@ World.prototype.targets = function () {
 World.prototype.cues = function () {
   var cues = []
   this.tiles.forEach(function (tile) {
-    var cue = _.find(tile.children, function (child) { return child.props.cue})
+    var cue = _.find(tile.children, function (child) { return child.props.cue })
     if (cue) {
       cues.push({
         translation: tile.transform.translation,

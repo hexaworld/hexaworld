@@ -81,10 +81,10 @@ Player.prototype.draw = function (context, camera) {
   this.geometry.draw(context, camera, {order: 'bottom'})
 }
 
-Player.prototype.position = function() {
+Player.prototype.position = function () {
   return this.geometry.transform.translation
 }
 
-Player.prototype.angle = function() {
+Player.prototype.angle = function () {
   return this.geometry.transform.rotation
 }
