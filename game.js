@@ -57,10 +57,11 @@ module.exports = function (canvas, schema, opts) {
     wildcard: true
   })
   function relay (emitter, name, tag) {
-    emitter.on(tag, function (value) {
+		var wait = opts.eventWait || 0
+    emitter.on(tag, _.throttle(function (value) {
       // emit namespaced events
       events.emit([name, tag], value)
-    })
+    }, wait))
   }
   relay(player, 'player', 'move')
   relay(camera, 'camera', 'move')
