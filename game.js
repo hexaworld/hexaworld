@@ -1,5 +1,6 @@
 var Game = require('crtrdg-gameloop')
 var Keyboard = require('crtrdg-keyboard')
+var Time = require('crtrdg-time')
 var Player = require('./entity/player.js')
 var Camera = require('./entity/camera.js')
 var World = require('./entity/world.js')
@@ -48,6 +49,7 @@ module.exports = function (canvas, schema, opts) {
   })
 
   var world = new World(schema.tiles, {thickness: 0.25})
+  var time = new Time(game)
 
   player.addTo(game)
   camera.addTo(game)
