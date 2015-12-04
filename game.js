@@ -49,6 +49,8 @@ module.exports = function (canvas, schema, opts) {
   })
 
   var world = new World(schema.tiles, {thickness: 0.25})
+  var targets = world.targets()
+
   var time = new Time(game)
 
   player.addTo(game)
@@ -88,6 +90,10 @@ module.exports = function (canvas, schema, opts) {
     player.draw(context, camera)
     mask.unset(context)
     ring.draw(context)
+  })
+
+  game.on('update', function (interval) {
+    console.log(targets[0].contains(player.geometry.transform.translation))
   })
 
   return {
