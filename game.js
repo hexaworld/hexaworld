@@ -74,8 +74,8 @@ module.exports = function (canvas, schema, opts) {
 
   camera.on('update', function (interval) {
     if (camera.yoked) {
-      camera.transform.translation = player.geometry.transform.translation
-      camera.transform.rotation = player.geometry.transform.rotation
+      camera.transform.translation = player.position()
+      camera.transform.rotation = player.angle()
     }
     this.move(keyboard)
   })
@@ -93,7 +93,7 @@ module.exports = function (canvas, schema, opts) {
   })
 
   game.on('update', function (interval) {
-    console.log(targets[0].contains(player.geometry.transform.translation))
+    //console.log(targets[0].contains(player.position()))
   })
 
   return {
