@@ -8,8 +8,13 @@ module.exports = World
 inherits(World, Entity)
 
 function World (schema, opts) {
-  opts = opts || {}
-  this.tiles = _.map(schema, function (t) {
+  this.opts = opts || {}
+  this.load(schema)
+}
+
+World.prototype.load = function (schema) {
+  var self = this
+  self.tiles = _.map(schema, function (t) {
     return tile({
       scale: 50,
       translation: t.translation,
@@ -17,7 +22,7 @@ function World (schema, opts) {
       children: t.cue && t.cue.length > 0
         ? [circle({ fill: t.cue, stroke: 'white', thickness: 0.5, scale: 0.08 })]
         : [],
-      thickness: opts.thickness
+      thickness: self.opts.thickness
     })
   })
 }

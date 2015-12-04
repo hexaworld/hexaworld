@@ -17,9 +17,7 @@ module.exports = function (canvas, schema, opts) {
 
   var keyboard = new Keyboard(game)
 
-  var player = new Player({
-    character: schema.players[0].character,
-    translation: schema.players[0].translation,
+  var player = new Player(schema.players[0], {
     scale: 2,
     speed: {translation: 1, rotation: 8},
     friction: 0.9,
@@ -92,7 +90,8 @@ module.exports = function (canvas, schema, opts) {
 
   return {
     reload: function (schema) {
-      world = new World(schema.tiles, {thickness: 0.25})
+      world.load(schema.tiles)
+      player.load(schema.players[0])
     },
 
     pause: function () {

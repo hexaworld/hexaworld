@@ -8,20 +8,9 @@ var Entity = require('crtrdg-entity')
 module.exports = Player
 inherits(Player, Entity)
 
-function Player (opts) {
-  var translation = [
-    50 * 3 / 2 * opts.translation[0],
-    50 * Math.sqrt(3) * (opts.translation[1] + opts.translation[0] / 2)
-  ]
-  if (opts.character === 'mouse') {
-    this.geometry = mouse({
-      translation: translation,
-      fill: opts.fill,
-      stroke: opts.stroke,
-      scale: opts.scale,
-      thickness: opts.thickness
-    })
-  }
+function Player (schema, opts) {
+  this.opts = opts
+  this.load(schema)
   this.movement = {}
   this.movement.center = new Fixmove({speed: opts.speed})
   this.movement.tile = new Automove({
@@ -38,6 +27,23 @@ function Player (opts) {
   })
   this.collision = new Collision()
   this.waiting = true
+}
+
+Player.prototype.load = function (schema) {
+  var self = this
+  var translation = [
+    50 * 3 / 2 * schema.translation[0],
+    50 * Math.sqrt(3) * (schema.translation[1] + schema.translation[0] / 2)
+  ]
+  if (schema.character === 'mouse') {
+    self.geometry = mouse({
+      translation: translation,
+      fill: self.opts.fill,
+      stroke: self.opts.stroke,
+      scale: self.opts.scale,
+      thickness: self.opts.thickness
+    })
+  }
 }
 
 Player.prototype.move = function (keyboard, world) {
