@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "crtrdg-entity": "^0.2.2",
-    "crtrdg-gameloop": "^0.2.2",
+    "crtrdg-gameloop": "^1.0.0",
     "crtrdg-keyboard": "0.0.2",
     "crtrdg-mouse": "~0.0.1",
     "crtrdg-player": "0.0.1",
