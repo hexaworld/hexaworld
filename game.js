@@ -96,6 +96,7 @@ module.exports = function (canvas, schema, opts) {
     if (targets.length > 0 && targets[0].contains(player.position())) {
       console.log('win!')
       console.log(schema.gameplay.timeout - time.seconds())
+      ring.flash()
     }
   })
 
