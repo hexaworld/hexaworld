@@ -12,7 +12,8 @@ module.exports = function (opts) {
       shadow: opts.shadow || {},
       type: 'bezier',
       cue: opts.cue || false,
-      target: opts.target || false
+      target: opts.target || false,
+      consumable: opts.consumable || false
     },
 
     points: [
