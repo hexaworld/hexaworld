@@ -7,13 +7,17 @@ var World = require('./entity/world.js')
 var Ring = require('./entity/ring.js')
 var Mask = require('./util/mask.js')
 
-module.exports = function (canvas, schema, opts) {
-  opts = opts || {}
+module.exports = function (element, schema) {
+  var container = document.getElementById(element)
+  var canvas = document.createElement('canvas')
+  var width = container.clientWidth * 0.75
+  var height = container.clientHeight * 0.75
+  container.appendChild(canvas)
 
   var game = new Game({
     canvas: canvas,
-    width: opts.width,
-    height: opts.height
+    width: width,
+    height: width
   })
 
   var keyboard = new Keyboard(game)
