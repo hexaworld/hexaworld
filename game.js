@@ -100,6 +100,8 @@ module.exports = function (canvas, schema, opts) {
     }
   })
 
+  game.start()
+
   return {
     reload: function (schema) {
       world.load(schema.tiles)
