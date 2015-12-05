@@ -17,7 +17,7 @@ Collision.prototype.handle = function (a, b, delta) {
     b.update(correction)
     return results[0].collision
   }
-  
+
   return false
 }
 

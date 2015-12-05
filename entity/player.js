@@ -23,7 +23,7 @@ function Player (schema, opts) {
     keymap: ['W', 'S', 'A', 'D', '<up>', '<down>', '<left>', '<right>'],
     heading: [0, 0, -180, 180, 0, 0, -180, 180],
     shift: [1, -1, 2, 2, 1, -1, 2, 2],
-    speed: {translation: opts.speed.translation, rotation: opts.speed.rotation*.8}
+    speed: {translation: opts.speed.translation, rotation: opts.speed.rotation * 0.8}
   })
   this.collision = new Collision()
   this.waiting = true
@@ -75,11 +75,11 @@ Player.prototype.move = function (keyboard, world) {
 
   self.geometry.update(delta)
   var collide = self.collision.handle(world, self.geometry, delta)
-  
+
   if (collide & inside) {
     self.waiting = true
-    var current = self.geometry.transform
-    var center = {
+    current = self.geometry.transform
+    center = {
       position: [tile.transform.translation[0], tile.transform.translation[1]]
     }
     delta = self.movement.center.compute(current, center)
