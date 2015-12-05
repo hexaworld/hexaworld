@@ -101,21 +101,16 @@ module.exports = function (canvas, schema, opts) {
 
     var position = player.position()
     var tile = world.tiles[world.locate(position)]
-    
+
     tile.children.forEach(function (child, i) {
       child.children.forEach(function (bit, j) {
-        if (bit.props.consumable){
+        if (bit.props.consumable) {
           if (bit.contains(position)) {
-          console.log('hit')
-          console.log(tile.children[i])
-          console.log(j)
-          tile.children[i].children.splice(j, 1)
-          console.log(tile.children[i])
+            tile.children[i].children.splice(j, 1)
           }
         }
       })
     })
-
   })
 
   game.on('start', function () {})
