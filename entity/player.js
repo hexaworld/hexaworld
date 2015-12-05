@@ -20,10 +20,10 @@ function Player (schema, opts) {
     speed: opts.speed
   })
   this.movement.path = new Automove({
-    keymap: ['W', 'S', '<up>', '<down>'],
-    heading: [0, 0, 0, 0],
-    shift: [1, -1, 1, -1],
-    speed: opts.speed
+    keymap: ['W', 'S', 'A', 'D', '<up>', '<down>', '<left>', '<right>'],
+    heading: [0, 0, -180, 180, 0, 0, -180, 180],
+    shift: [1, -1, 2, 2, 1, -1, 2, 2],
+    speed: {translation: opts.speed.translation, rotation: opts.speed.rotation*.8}
   })
   this.collision = new Collision()
   this.waiting = true
