@@ -57,20 +57,30 @@ module.exports = function (canvas, schema, opts) {
   var events = new EventEmitter({
     wildcard: true
   })
+
   function relay (emitter, name, tag) {
-    emitter.on(tag, function (value) {
-      // emit namespaced events
+    var emit = function (tag, value) {
       var ret = value
       if (typeof ret === 'string') {
         ret = { value: ret }
       }
       events.emit([name, tag], _.merge(ret, { time: (new Date()).toISOString() }))
-    })
+    }
+    if (!tag) {
+      emitter.onAny(function (value) {
+        emit(this.event, value)
+      })
+    } else {
+      emitter.on(tag, function (value) {
+        emit(tag, value)
+      })
+    }
   }
-  relay(player, 'player', 'enter')
-  relay(player, 'player', 'exit')
-  relay(keyboard, 'keyboard', 'keydown')
-  relay(keyboard, 'keyboard', 'keyup')
+
+  relay(player, 'player')
+  relay(keyboard, 'keyboard')
+  relay(game, 'game', 'start')
+  relay(game, 'game', 'end')
 
   player.addTo(game)
   camera.addTo(game)
