@@ -96,7 +96,7 @@ module.exports = function (canvas, schema, opts) {
     if (targets.length > 0 && targets[0].contains(player.position())) {
       console.log('win!')
       console.log(schema.gameplay.timeout - time.seconds())
-      ring.flash()
+      ring.startFlashing()
     }
   })
 
@@ -110,6 +110,7 @@ module.exports = function (canvas, schema, opts) {
     reload: function (schema) {
       world.load(schema.tiles)
       player.load(schema.players[0])
+      ring.reload()
     },
 
     pause: function () {
