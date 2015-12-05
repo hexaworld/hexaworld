@@ -1,4 +1,4 @@
- var _ = require('lodash')
+var _ = require('lodash')
 var hex = require('./hex.js')
 var wedge = require('./wedge.js')
 var block = require('./block.js')
