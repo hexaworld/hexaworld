@@ -49,7 +49,6 @@ module.exports = function (canvas, schema, opts) {
   })
 
   var world = new World(schema.tiles, {thickness: 0.25})
-  var targets = world.targets()
 
   var time = new Time(game)
 
@@ -93,6 +92,7 @@ module.exports = function (canvas, schema, opts) {
   })
 
   game.on('update', function (interval) {
+    var targets = world.targets()
     if (targets.length > 0 && targets[0].contains(player.position())) {
       console.log('win!')
       console.log(schema.gameplay.timeout - time.seconds())
