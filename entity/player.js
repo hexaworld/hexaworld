@@ -8,20 +8,9 @@ var Entity = require('crtrdg-entity')
 module.exports = Player
 inherits(Player, Entity)
 
-function Player (opts) {
-  var translation = [
-    50 * 3 / 2 * opts.translation[0],
-    50 * Math.sqrt(3) * (opts.translation[1] + opts.translation[0] / 2)
-  ]
-  if (opts.character === 'mouse') {
-    this.geometry = mouse({
-      translation: translation,
-      fill: opts.fill,
-      stroke: opts.stroke,
-      scale: opts.scale,
-      thickness: opts.thickness
-    })
-  }
+function Player (schema, opts) {
+  this.opts = opts || {}
+  this.load(schema)
   this.movement = {}
   this.movement.center = new Fixmove({speed: opts.speed})
   this.movement.tile = new Automove({
@@ -31,16 +20,33 @@ function Player (opts) {
     speed: opts.speed
   })
   this.movement.path = new Automove({
-    keymap: ['W', 'S', '<up>', '<down>'],
-    heading: [0, 0, 0, 0],
-    shift: [1, -1, 1, -1],
-    speed: opts.speed
+    keymap: ['W', 'S', 'A', 'D', '<up>', '<down>', '<left>', '<right>'],
+    heading: [0, 0, -180, 180, 0, 0, -180, 180],
+    shift: [1, -1, 2, 2, 1, -1, 2, 2],
+    speed: {translation: opts.speed.translation, rotation: opts.speed.rotation * 0.8}
   })
   this.collision = new Collision()
   this.waiting = true
 
   // this will usually cause an 'enter' event to be emitted at the start of a game
   this.inside = false
+}
+
+Player.prototype.load = function (schema) {
+  var self = this
+  var translation = [
+    50 * 3 / 2 * schema.translation[0],
+    50 * Math.sqrt(3) * (schema.translation[1] + schema.translation[0] / 2)
+  ]
+  if (schema.character === 'mouse') {
+    self.geometry = mouse({
+      translation: translation,
+      fill: self.opts.fill,
+      stroke: self.opts.stroke,
+      scale: self.opts.scale,
+      thickness: self.opts.thickness
+    })
+  }
 }
 
 Player.prototype.move = function (keyboard, world) {
@@ -80,9 +86,28 @@ Player.prototype.move = function (keyboard, world) {
   }
 
   self.geometry.update(delta)
-  self.collision.handle(world, self.geometry, delta)
+  var collide = self.collision.handle(world, self.geometry, delta)
+
+  if (collide & inside) {
+    self.waiting = true
+    current = self.geometry.transform
+    center = {
+      position: [tile.transform.translation[0], tile.transform.translation[1]]
+    }
+    delta = self.movement.center.compute(current, center)
+    self.geometry.update(delta)
+    self.movement.tile.reset()
+  }
 }
 
 Player.prototype.draw = function (context, camera) {
   this.geometry.draw(context, camera, {order: 'bottom'})
+}
+
+Player.prototype.position = function () {
+  return this.geometry.transform.translation
+}
+
+Player.prototype.angle = function () {
+  return this.geometry.transform.rotation
 }

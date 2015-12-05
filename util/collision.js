@@ -15,7 +15,10 @@ Collision.prototype.handle = function (a, b, delta) {
     overlap = [overlap.x, overlap.y]
     var correction = self.correct(delta, overlap)
     b.update(correction)
+    return results[0].collision
   }
+
+  return false
 }
 
 Collision.prototype.correct = function (delta, overlap) {

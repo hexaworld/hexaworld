@@ -2,6 +2,7 @@ var _ = require('lodash')
 var EventEmitter = require('eventemitter2').EventEmitter2
 var Game = require('crtrdg-gameloop')
 var Keyboard = require('crtrdg-keyboard')
+var Time = require('crtrdg-time')
 var Player = require('./entity/player.js')
 var Camera = require('./entity/camera.js')
 var World = require('./entity/world.js')
@@ -19,11 +20,9 @@ module.exports = function (canvas, schema, opts) {
 
   var keyboard = new Keyboard(game)
 
-  var player = new Player({
-    character: schema.players[0].character,
-    translation: schema.players[0].translation,
+  var player = new Player(schema.players[0], {
     scale: 2,
-    speed: {translation: 1, rotation: 8},
+    speed: {translation: 1.0, rotation: 8.0},
     friction: 0.9,
     stroke: 'white',
     fill: 'rgb(75,75,75)',
@@ -31,7 +30,7 @@ module.exports = function (canvas, schema, opts) {
   })
 
   var camera = new Camera({
-    scale: 0.1,
+    scale: 0.125,
     speed: {translation: 0.1, rotation: 0.1, scale: 0.002},
     friction: 0.9,
     yoked: true
@@ -51,7 +50,9 @@ module.exports = function (canvas, schema, opts) {
     fill: 'rgb(90,90,90)'
   })
 
-  var world = new World(schema.tiles, {thickness: 0.25})
+  var world = new World(schema.tiles, {thickness: 0.4})
+
+  var time = new Time(game)
 
   var events = new EventEmitter({
     wildcard: true
@@ -92,8 +93,8 @@ module.exports = function (canvas, schema, opts) {
 
   camera.on('update', function (interval) {
     if (camera.yoked) {
-      camera.transform.translation = player.geometry.transform.translation
-      camera.transform.rotation = player.geometry.transform.rotation
+      camera.transform.translation = player.position()
+      camera.transform.rotation = player.angle()
     }
     this.move(keyboard)
   })
@@ -110,9 +111,25 @@ module.exports = function (canvas, schema, opts) {
     ring.draw(context)
   })
 
+  game.on('update', function (interval) {
+    var targets = world.targets()
+    if (targets.length > 0 && targets[0].contains(player.position())) {
+      console.log('win!')
+      console.log(schema.gameplay.timeout - time.seconds())
+      ring.flash()
+    }
+  })
+
+  game.on('start', function () {})
+
+  game.on('end', function () {})
+
+  game.start()
+
   return {
     reload: function (schema) {
-      world = new World(schema, {thickness: 0.25})
+      world.load(schema.tiles)
+      player.load(schema.players[0])
     },
 
     pause: function () {

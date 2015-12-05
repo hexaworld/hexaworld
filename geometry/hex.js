@@ -6,7 +6,12 @@ module.exports = function (opts) {
 
   return new Geometry({
     props: {
-      type: 'polygon'
+      type: 'polygon',
+      fill: opts.fill,
+      stroke: opts.stroke,
+      thickness: opts.thickness,
+      target: opts.target || false,
+      cue: opts.cue || false
     },
 
     points: _.range(7).map(function (i) {
@@ -16,7 +21,8 @@ module.exports = function (opts) {
     }),
 
     transform: {
-      scale: opts.scale
+      scale: opts.scale,
+      rotation: opts.rotation
     },
 
     children: opts.children

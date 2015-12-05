@@ -2,22 +2,44 @@ var _ = require('lodash')
 var inherits = require('inherits')
 var tile = require('../geometry/tile.js')
 var circle = require('../geometry/circle.js')
+var hex = require('../geometry/hex.js')
 var Entity = require('crtrdg-entity')
 
 module.exports = World
 inherits(World, Entity)
 
 function World (schema, opts) {
-  opts = opts || {}
-  this.tiles = _.map(schema, function (t) {
+  this.opts = opts || {}
+  this.load(schema)
+}
+
+World.prototype.load = function (schema) {
+  var self = this
+  self.tiles = _.map(schema, function (t) {
+    var children = []
+    if (t.cue && t.target) t.target.fill = t.cue.fill
+    if (t.cue) {
+      children.push(hex({
+        fill: t.cue.fill,
+        scale: 0.25,
+        cue: true
+      }))
+    }
+    if (t.target) {
+      children.push(circle({
+        fill: t.target.fill,
+        stroke: 'white',
+        thickness: 0.75,
+        scale: 0.1,
+        target: true
+      }))
+    }
     return tile({
       scale: 50,
       translation: t.translation,
       paths: t.paths,
-      children: t.cue && t.cue.length > 0
-        ? [circle({ fill: t.cue, stroke: 'white', thickness: 0.5, scale: 0.08 })]
-        : [],
-      thickness: opts.thickness
+      children: children,
+      thickness: self.opts.thickness
     })
   })
 }
@@ -33,6 +55,15 @@ World.prototype.locate = function (point) {
     return tile.contains(point)
   })
   return _.indexOf(status, true)
+}
+
+World.prototype.targets = function () {
+  var targets = []
+  this.tiles.forEach(function (tile) {
+    var target = _.find(tile.children, function (child) { return child.props.target })
+    if (target) targets.push(target)
+  })
+  return targets
 }
 
 World.prototype.cues = function () {
