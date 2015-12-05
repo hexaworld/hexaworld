@@ -74,7 +74,18 @@ Player.prototype.move = function (keyboard, world) {
   }
 
   self.geometry.update(delta)
-  self.collision.handle(world, self.geometry, delta)
+  var collide = self.collision.handle(world, self.geometry, delta)
+  
+  if (collide & inside) {
+    self.waiting = true
+    var current = self.geometry.transform
+    var center = {
+      position: [tile.transform.translation[0], tile.transform.translation[1]]
+    }
+    delta = self.movement.center.compute(current, center)
+    self.geometry.update(delta)
+    self.movement.tile.reset()
+  }
 }
 
 Player.prototype.draw = function (context, camera) {
