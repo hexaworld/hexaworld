@@ -28,7 +28,7 @@ module.exports = function (canvas, schema, opts) {
   })
 
   var camera = new Camera({
-    scale: 0.1,
+    scale: 0.125,
     speed: {translation: 0.1, rotation: 0.1, scale: 0.002},
     friction: 0.9,
     yoked: true
@@ -48,7 +48,7 @@ module.exports = function (canvas, schema, opts) {
     fill: 'rgb(90,90,90)'
   })
 
-  var world = new World(schema.tiles, {thickness: 0.25})
+  var world = new World(schema.tiles, {thickness: 0.4})
 
   var time = new Time(game)
 

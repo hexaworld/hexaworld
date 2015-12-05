@@ -19,19 +19,17 @@ World.prototype.load = function (schema) {
     var children = []
     if (t.cue && t.target) t.target.fill = t.cue.fill
     if (t.cue) {
-      children.push(circle({
+      children.push(hex({
         fill: t.cue.fill,
-        stroke: 'white',
-        thickness: 0.5,
-        scale: 0.08,
+        scale: 0.25,
         cue: true
       }))
     }
     if (t.target) {
-      children.push(hex({
+      children.push(circle({
         fill: t.target.fill,
         stroke: 'white',
-        thickness: 0.5,
+        thickness: 0.75,
         scale: 0.1,
         target: true
       }))

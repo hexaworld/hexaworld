@@ -10,7 +10,8 @@ module.exports = function (opts) {
       fill: opts.fill,
       stroke: opts.stroke,
       thickness: opts.thickness,
-      target: opts.target || false
+      target: opts.target || false,
+      cue: opts.cue || false
     },
 
     points: _.range(7).map(function (i) {

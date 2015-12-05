@@ -1,4 +1,4 @@
-var _ = require('lodash')
+ var _ = require('lodash')
 var hex = require('./hex.js')
 var wedge = require('./wedge.js')
 var block = require('./block.js')
@@ -49,6 +49,6 @@ module.exports = function (opts) {
       scale: opts.scale
     },
 
-    children: opts.children ? children.concat(opts.children) : children
+    children: opts.children ? opts.children.concat(children) : children
   })
 }
