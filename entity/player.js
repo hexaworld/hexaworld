@@ -20,10 +20,16 @@ function Player (schema, opts) {
     speed: opts.speed
   })
   this.movement.path = new Automove({
-    keymap: ['W', 'S', 'A', 'D', '<up>', '<down>', '<left>', '<right>'],
-    heading: [0, 0, -180, 180, 0, 0, -180, 180],
-    shift: [1, -1, 2, 2, 1, -1, 2, 2],
-    speed: {translation: opts.speed.translation, rotation: opts.speed.rotation * 0.8}
+    keymap: [],
+    heading: [],
+    shift: [],
+    speed: opts.speed
+  })
+  this.movement.deadend = new Automove({
+    keymap: ['A', 'D', '<left>', '<right>'],
+    heading: [-180, 180, -180, 180],
+    shift: [0, 0, 0, 0],
+    speed: {translation: -2, rotation: opts.speed.rotation}
   })
   this.collision = new Collision()
   this.waiting = true
@@ -55,35 +61,42 @@ Player.prototype.move = function (keyboard, world) {
   var keys = keyboard.keysDown
 
   var delta
+  
   if (inside) {
     if (self.movement.tile.keypress(keys)) self.waiting = false
     if (self.waiting) {
       var center = {
-        translation: [tile.transform.translation[0], tile.transform.translation[1]]
+        translation: tile.transform.translation
       }
       delta = self.movement.center.compute(current, center)
     } else {
       delta = self.movement.tile.compute(keys, current, tile.transform)
     }
-    self.movement.path.reset()
-    self.movement.path.clear()
-  } else {
-    self.waiting = true
-    self.movement.tile.reset()
-    delta = self.movement.path.compute(keys, current)
-  }
-
-  self.geometry.update(delta)
-  var collide = self.collision.handle(world, self.geometry, delta)
-
-  if (collide & inside) {
-    self.waiting = true
-    current = self.geometry.transform
-    center = {
-      translation: [tile.transform.translation[0], tile.transform.translation[1]]
-    }
-    delta = self.movement.center.compute(current, center)
+    
     self.geometry.update(delta)
+    var correction = self.collision.handle(world, self.geometry, delta)
+
+    if (correction) {
+      self.geometry.update(correction)
+      self.waiting = true
+      self.movement.tile.reset()
+    } 
+    self.movement.deadend.reset()
+
+  } else {
+    delta = self.movement.path.compute(keys, current) 
+    var correction = self.collision.handle(world, self.geometry, delta)
+    
+    if (correction) {
+      console.log('deadend')
+      delta = self.movement.deadend.compute(keys, current) 
+      self.geometry.update(delta)
+    } else {
+      console.log('free')
+      self.waiting = true
+      self.geometry.update(delta)
+    }
+
     self.movement.tile.reset()
   }
 }
