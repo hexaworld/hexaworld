@@ -114,6 +114,19 @@ module.exports = function (element, schema, opts) {
       console.log(schema.gameplay.timeout - time.seconds())
       ring.startFlashing()
     }
+
+    var position = player.position()
+    var tile = world.tiles[world.locate(position)]
+
+    tile.children.forEach(function (child, i) {
+      child.children.forEach(function (bit, j) {
+        if (bit.props.consumable) {
+          if (bit.contains(position)) {
+            tile.children[i].children.splice(j, 1)
+          }
+        }
+      })
+    })
   })
 
   game.on('start', function () {})
