@@ -1,3 +1,4 @@
+var _ = require('lodash')
 var inherits = require('inherits')
 var mouse = require('../geometry/mouse.js')
 var Collision = require('../util/collision.js')
@@ -30,6 +31,7 @@ function Player (schema, opts) {
 
   // this will usually cause an 'enter' event to be emitted at the start of a game
   this.inside = false
+  this.moving = true
 }
 
 Player.prototype.load = function (schema) {
@@ -52,22 +54,23 @@ Player.prototype.load = function (schema) {
 Player.prototype.move = function (keyboard, world) {
   var self = this
 
+  var tile = world.getTileAtCoordinates(this.coordinates())
   var current = self.geometry.transform
-  var index = world.locate(current.translation)
-  var tile = world.tiles[index]
-  var inside = tile.children[0].contains(current.translation)
+  var trigger = _.find(tile.children, function (child) { return child.props.trigger })
+  var inside = trigger.contains(current.translation)
   var keys = keyboard.keysDown
 
   if (inside && !self.inside) {
-    self.emit('enter', { tile: index, position: current })
+    self.emit('enter', { tile: tile.geometry.transform, position: self.geometry.transform })
     self.inside = true
   } else if (!inside && self.inside) {
-    self.emit('exit', { tile: index, position: current })
+    self.emit('exit', { tile: tile.geometry.transform, position: self.geometry.transform })
     self.inside = false
   }
 
   var delta
   if (inside) {
+    self.moving = false
     if (self.movement.tile.keypress(keys)) self.waiting = false
     if (self.waiting) {
       var center = {
@@ -80,6 +83,7 @@ Player.prototype.move = function (keyboard, world) {
     self.movement.path.reset()
     self.movement.path.clear()
   } else {
+    self.moving = true
     self.waiting = true
     self.movement.tile.reset()
     delta = self.movement.path.compute(keys, current)
@@ -106,6 +110,17 @@ Player.prototype.draw = function (context, camera) {
 
 Player.prototype.position = function () {
   return this.geometry.transform.translation
+}
+
+Player.prototype.coordinates = function () {
+  var position = this.position()
+
+  var tileScale = 50
+
+  var x = position[0] / 3 / tileScale * 2
+  var y = (position[1] - tileScale * Math.sqrt(3) * x / 2) / (tileScale * Math.sqrt(3))
+
+  return [Math.round(x), Math.round(y)]
 }
 
 Player.prototype.angle = function () {

@@ -14,7 +14,7 @@ module.exports = function (element, schema, opts) {
   var container = document.getElementById(element)
   var canvas = document.createElement('canvas')
   var height = container.clientHeight || opts.size
-  console.log(height)
+
   container.style.width = height * 0.7 + 'px'
   container.style.height = height + 'px'
   container.style.position = 'relative'
@@ -29,9 +29,13 @@ module.exports = function (element, schema, opts) {
   var energy = require('./ui/energy.js')(container)
   var lives = require('./ui/lives.js')(container)
 
+  var scoreVal = 0
+  var energyMax = 100
+  var energyVal = energyMax
+
   level.update(1, 2)
-  score.update(100)
-  energy.update(90)
+  score.update(scoreVal)
+  energy.update(10)
   lives.update(2)
 
   var game = new Game({
@@ -52,7 +56,7 @@ module.exports = function (element, schema, opts) {
   })
 
   var camera = new Camera({
-    scale: 100 * 1/height,
+    scale: 100 * 1 / height,
     speed: {translation: 0.1, rotation: 0.1, scale: 0.002},
     friction: 0.9,
     yoked: true
@@ -114,7 +118,7 @@ module.exports = function (element, schema, opts) {
 
   keyboard.on('keydown', function (keyCode) {
     if (keyCode === '<space>') {
-      if (game.ticker.paused === true) {
+      if (game.paused === true) {
         game.resume()
       } else {
         game.pause()
@@ -147,22 +151,27 @@ module.exports = function (element, schema, opts) {
   })
 
   game.on('update', function (interval) {
-    var targets = world.targets()
-    if (targets.length > 0 && targets[0].contains(player.position())) {
+    var playerCoordinates = player.coordinates()
+    var tile = world.getTileAtCoordinates(playerCoordinates)
+    if (player.moving) energyVal -= 0.1
+    energy.update(energyVal)
+
+    var target
+    if (tile) {
+      target = tile.target()
+    }
+    if (target && target.contains(player.position())) {
       console.log('win!')
       console.log(schema.gameplay.timeout - time.seconds())
       ring.startFlashing()
     }
 
-    var position = player.position()
-    var tile = world.tiles[world.locate(position)]
-
-    tile.children.forEach(function (child, i) {
-      child.children.forEach(function (bit, j) {
-        if (bit.props.consumable) {
-          if (bit.contains(position)) {
-            tile.children[i].children.splice(j, 1)
-          }
+    tile.children.some(function (child, i) {
+      return child.children.some(function (bit, j) {
+        if (bit.props.consumable && bit.contains(player.position())) {
+          scoreVal += 10
+          score.update(scoreVal)
+          return tile.children[i].children.splice(j, 1)
         }
       })
     })
@@ -170,7 +179,18 @@ module.exports = function (element, schema, opts) {
 
   game.on('start', function () {})
 
-  game.on('end', function () {})
+  var done = false
+
+  game.on('end', function () {
+    ring.startFlashing()
+    if (!done) {
+      console.log('win!')
+      console.log(schema.gameplay.timeout - time.seconds())
+      scoreVal = scoreVal + 1000
+      score.update(scoreVal)
+      done = true
+    }
+  })
 
   game.start()
 
@@ -179,6 +199,8 @@ module.exports = function (element, schema, opts) {
       world.load(schema.tiles)
       player.load(schema.players[0])
       ring.reload()
+      scoreVal = 0
+      energyVal = energyMax
     },
 
     pause: function () {
