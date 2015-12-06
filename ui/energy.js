@@ -1,5 +1,3 @@
-var _ = require('lodash')
-
 module.exports = function (container) {
   var width = container.clientWidth
   var height = container.clientHeight
@@ -74,7 +72,7 @@ module.exports = function (container) {
   function update (count, value) {
     count = Math.max(count, 0)
     value = Math.max(value, 0)
-    number.innerHTML = (count < 10) ? ("0" + count) : count
+    number.innerHTML = (count < 10) ? ('0' + count) : count
     fill.setAttribute('width', barWidth * value)
   }
 
