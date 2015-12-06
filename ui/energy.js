@@ -19,9 +19,11 @@ module.exports = function (container) {
   style.width = width * 0.2
   style.height = width * 0.05
   style.position = 'absolute'
-  style.borderRight = 'solid rgb(200,200,200) 8px'
-  style.borderBottom = 'solid rgb(200,200,200) 5px'
+  style.borderRight = 'solid rgb(150,150,150) 8px'
+  style.borderBottom = 'solid rgb(150,150,150) 5px'
   style.transform = 'skew(-45deg)'
+  style.msTransform = 'skew(-45deg)'
+  style.webkitTransform = 'skew(-45deg)'
   label.appendChild(edge)
 
   var text = document.createElement('div')
