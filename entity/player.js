@@ -50,8 +50,8 @@ Player.prototype.load = function (schema) {
 Player.prototype.move = function (keyboard, world) {
   var self = this
 
+  var tile = world.getTileAtCoordinates(this.coordinates())
   var current = self.geometry.transform
-  var tile = world.tiles[world.locate(current.translation)]
   var trigger = _.find(tile.children, function (child) { return child.props.trigger })
   var inside = trigger.contains(current.translation)
   var keys = keyboard.keysDown
@@ -96,6 +96,17 @@ Player.prototype.draw = function (context, camera) {
 
 Player.prototype.position = function () {
   return this.geometry.transform.translation
+}
+
+Player.prototype.coordinates = function () {
+  var position = this.position()
+
+  var tileScale = 50
+
+  var x = position[0] / 3 / tileScale * 2
+  var y = (position[1] - tileScale * Math.sqrt(3) * x / 2) / (tileScale * Math.sqrt(3))
+
+  return [Math.round(x), Math.round(y)]
 }
 
 Player.prototype.angle = function () {

@@ -116,22 +116,28 @@ module.exports = function (element, schema, opts) {
   })
 
   game.on('update', function (interval) {
-    var targets = world.targets()
-    if (targets.length > 0 && targets[0].contains(player.position())) {
-      game.end()
+    var playerCoordinates = player.coordinates()
+    var tile = world.getTileAtCoordinates(playerCoordinates)
+
+    var target
+    if (tile) {
+      target = tile.target()
+    }
+    if (target && target.contains(player.position())) {
+      console.log('win!')
+      console.log(schema.gameplay.timeout - time.seconds())
+      ring.startFlashing()
     }
 
-    var position = player.position()
-    var tile = world.tiles[world.locate(position)]
+    // will never be on two consumable bits at once,
+    // use `some` to short circuit.
+    tile.children.some(function (child, i) {
+      return child.children.some(function (bit, j) {
+        if (bit.props.consumable && bit.contains(player.position())) {
+          scoreVal = scoreVal + 10
+          score.update(scoreVal)
 
-    tile.children.forEach(function (child, i) {
-      child.children.forEach(function (bit, j) {
-        if (bit.props.consumable) {
-          if (bit.contains(position)) {
-            tile.children[i].children.splice(j, 1)
-            scoreVal = scoreVal + 10
-            score.update(scoreVal)
-          }
+          return tile.children[i].children.splice(j, 1)
         }
       })
     })

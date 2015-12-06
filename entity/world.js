@@ -15,6 +15,8 @@ function World (schema, opts) {
 
 World.prototype.load = function (schema) {
   var self = this
+
+  self._tileCache = {}
   self.tiles = _.map(schema, function (t) {
     var children = []
     if (t.cue) {
@@ -33,13 +35,23 @@ World.prototype.load = function (schema) {
         target: true
       }))
     }
-    return tile({
+
+    var tileObj = tile({
       scale: 50,
       translation: t.translation,
       paths: t.paths,
       children: children,
       thickness: self.opts.thickness
     })
+
+    var x = t.translation[0]
+    var y = t.translation[1]
+
+    var rowCache = self._tileCache[x] || {}
+    rowCache[y] = tileObj
+    self._tileCache[x] = rowCache
+
+    return tileObj
   })
 }
 
@@ -54,6 +66,10 @@ World.prototype.locate = function (point) {
     return tile.contains(point)
   })
   return _.indexOf(status, true)
+}
+
+World.prototype.getTileAtCoordinates = function (point) {
+  return this._tileCache[point[0]][point[1]]
 }
 
 World.prototype.targets = function () {
