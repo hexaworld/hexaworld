@@ -7,13 +7,29 @@ var World = require('./entity/world.js')
 var Ring = require('./entity/ring.js')
 var Mask = require('./util/mask.js')
 
-module.exports = function (canvas, schema, opts) {
-  opts = opts || {}
+module.exports = function (element, schema, opts) {
+  opts = opts || {width: 0.75, height: 0.75}
+  var container = document.getElementById(element)
+  var canvas = document.createElement('canvas')
+  var width = container.clientWidth * opts.width
+
+  canvas.id = 'game'
+  container.appendChild(canvas)
+
+  var score = require('./ui/score.js')(container)
+  var level = require('./ui/level.js')(container, {name: 'playpen'})
+  var energy = require('./ui/energy.js')(container)
+  var lives = require('./ui/lives.js')(container)
+
+  level.update(1, 2)
+  score.update(100)
+  energy.update(90)
+  lives.update(2)
 
   var game = new Game({
     canvas: canvas,
-    width: opts.width,
-    height: opts.height
+    width: width,
+    height: width
   })
 
   var keyboard = new Keyboard(game)

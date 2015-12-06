@@ -20,7 +20,7 @@ World.prototype.load = function (schema) {
     if (t.cue) {
       children.push(hex({
         fill: t.cue.fill,
-        scale: 0.25,
+        scale: 0.2,
         cue: true
       }))
     }
