@@ -112,9 +112,7 @@ module.exports = function (element, schema, opts) {
   game.on('update', function (interval) {
     var targets = world.targets()
     if (targets.length > 0 && targets[0].contains(player.position())) {
-      console.log('win!')
-      console.log(schema.gameplay.timeout - time.seconds())
-      ring.startFlashing()
+      game.end()
     }
 
     var position = player.position()
@@ -135,7 +133,18 @@ module.exports = function (element, schema, opts) {
 
   game.on('start', function () {})
 
-  game.on('end', function () {})
+  var done = false
+  
+  game.on('end', function () {
+      ring.startFlashing()
+      if (!done) {
+        console.log('win!')
+        console.log(schema.gameplay.timeout - time.seconds())
+        scoreVal = scoreVal + 1000
+        score.update(scoreVal)
+        done = true
+      }
+  })
 
   game.start()
 
