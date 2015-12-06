@@ -28,6 +28,9 @@ function Player (schema, opts) {
   })
   this.collision = new Collision()
   this.waiting = true
+
+  // this will usually cause an 'enter' event to be emitted at the start of a game
+  this.inside = false
   this.moving = true
 }
 
@@ -56,6 +59,14 @@ Player.prototype.move = function (keyboard, world) {
   var trigger = _.find(tile.children, function (child) { return child.props.trigger })
   var inside = trigger.contains(current.translation)
   var keys = keyboard.keysDown
+
+  if (inside && !self.inside) {
+    self.emit('enter', { tile: tile.transform.translation, position: self.geometry.transform })
+    self.inside = true
+  } else if (!inside && self.inside) {
+    self.emit('exit', { tile: tile.transform.translation, position: self.geometry.transform })
+    self.inside = false
+  }
 
   var delta
   if (inside) {

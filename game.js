@@ -1,3 +1,5 @@
+var _ = require('lodash')
+var EventEmitter = require('eventemitter2').EventEmitter2
 var Game = require('crtrdg-gameloop')
 var Keyboard = require('crtrdg-keyboard')
 var Time = require('crtrdg-time')
@@ -78,6 +80,37 @@ module.exports = function (element, schema, opts) {
   var world = new World(schema.tiles, {thickness: 0.4})
 
   var time = new Time(game)
+
+  var events = new EventEmitter({
+    wildcard: true
+  })
+
+  function relay (emitter, name, tag) {
+    var emit = function (tag, value) {
+      value = value || {}
+      var ret = value
+      if (typeof ret === 'string') {
+        ret = { value: ret }
+      }
+      events.emit([name, tag], _.merge(ret, { time: (new Date()).toISOString() }))
+    }
+    if (!tag) {
+      emitter.onAny(function (value) {
+        emit(this.event, value)
+      })
+    } else {
+      emitter.on(tag, function (value) {
+        emit(tag, value)
+      })
+    }
+  }
+
+  relay(player, 'player', 'enter')
+  relay(player, 'player', 'exit')
+  relay(keyboard, 'keyboard', 'keyup')
+  relay(keyboard, 'keyboard', 'keydown')
+  relay(game, 'game', 'start')
+  relay(game, 'game', 'end')
 
   player.addTo(game)
   camera.addTo(game)
@@ -177,6 +210,8 @@ module.exports = function (element, schema, opts) {
 
     resume: function () {
       game.resume()
-    }
+    },
+
+    events: events
   }
 }
