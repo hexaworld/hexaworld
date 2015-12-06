@@ -40,9 +40,11 @@ Player.prototype.load = function (schema) {
     50 * 3 / 2 * schema.translation[0],
     50 * Math.sqrt(3) * (schema.translation[1] + schema.translation[0] / 2)
   ]
+  var rotation = schema.rotation
   if (schema.character === 'mouse') {
     self.geometry = mouse({
       translation: translation,
+      rotation: rotation,
       fill: self.opts.fill,
       stroke: self.opts.stroke,
       scale: self.opts.scale,
