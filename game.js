@@ -162,9 +162,12 @@ module.exports = function (element, schema, opts) {
       target = tile.target()
     }
     if (target && target.contains(player.position())) {
-      console.log('win!')
-      console.log(schema.gameplay.timeout - time.seconds())
-      ring.startFlashing()
+      var cue = tile.cue()
+      if (cue && cue.props.fill) {
+        ring.startFlashing(['#FFFFFF', '#999999', cue.props.fill, cue.props.fill])
+      } else {
+        ring.startFlashing(['#FF5050', '#FF8900', '#00C3EE', '#64FF00'])
+      }
     }
 
     tile.children.some(function (child, i) {
