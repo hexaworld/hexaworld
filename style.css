@@ -19,3 +19,8 @@ canvas#game {
   display: block;
   margin: 0px auto;
 }
+
+#game-container {
+  height: 100%;
+  margin: 0 auto;
+}

@@ -16,5 +16,5 @@ var schema = {
   gameplay: {timeout: 60}
 }
 
-var createGame = require('./game.js')
-createGame('game', schema, {width: 600, height: 600})
+var game = require('./game.js')
+game('game-container', schema)

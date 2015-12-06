@@ -17,11 +17,10 @@ World.prototype.load = function (schema) {
   var self = this
   self.tiles = _.map(schema, function (t) {
     var children = []
-    if (t.cue && t.target) t.target.fill = t.cue.fill
     if (t.cue) {
       children.push(hex({
         fill: t.cue.fill,
-        scale: 0.25,
+        scale: 0.2,
         cue: true
       }))
     }

@@ -4,6 +4,7 @@ var wedge = require('./wedge.js')
 var block = require('./block.js')
 var end = require('./end.js')
 var path = require('./path.js')
+var circle = require('./circle.js')
 var Geometry = require('./geometry.js')
 
 module.exports = function (opts) {
@@ -24,7 +25,28 @@ module.exports = function (opts) {
   })
   _.remove(ends, _.isUndefined)
   var paths = _.range(6).map(function (i) {
-    if (_.includes(opts.paths, i)) return path({rotation: i * 60, thickness: thickness})
+    if (_.includes(opts.paths, i)) {
+      return path({
+        rotation: i * 60,
+        thickness: thickness,
+        children: [circle({
+          fill: 'white', stroke: 'white', thickness: opts.thickness,
+          translation: [0, 0], scale: 0.075, consumable: true
+        }),
+        circle({
+          fill: 'white', stroke: 'white', thickness: opts.thickness,
+          translation: [0, 1], scale: 0.075, consumable: true
+        }),
+        circle({
+          fill: 'white', stroke: 'white', thickness: opts.thickness,
+          translation: [0, 2], scale: 0.075, consumable: true
+        }),
+        circle({
+          fill: 'white', stroke: 'white', thickness: opts.thickness,
+          translation: [0, 3], scale: 0.075, consumable: true
+        })]
+      })
+    }
   })
   _.remove(paths, _.isUndefined)
 

@@ -9,13 +9,35 @@ var World = require('./entity/world.js')
 var Ring = require('./entity/ring.js')
 var Mask = require('./util/mask.js')
 
-module.exports = function (canvas, schema, opts) {
-  opts = opts || {}
+module.exports = function (element, schema, opts) {
+  opts = opts || {size: 700}
+  var container = document.getElementById(element)
+  var canvas = document.createElement('canvas')
+  var height = container.clientHeight || opts.size
+  console.log(height)
+  container.style.width = height * 0.7 + 'px'
+  container.style.height = height + 'px'
+  container.style.position = 'relative'
+
+  canvas.id = 'game'
+  canvas.style.marginTop = height * 0.15
+  canvas.style.position = 'absolute'
+  container.appendChild(canvas)
+
+  var score = require('./ui/score.js')(container)
+  var level = require('./ui/level.js')(container, {name: 'playpen'})
+  var energy = require('./ui/energy.js')(container)
+  var lives = require('./ui/lives.js')(container)
+
+  level.update(1, 2)
+  score.update(100)
+  energy.update(90)
+  lives.update(2)
 
   var game = new Game({
     canvas: canvas,
-    width: opts.width,
-    height: opts.height
+    width: height * 0.7,
+    height: height * 0.7
   })
 
   var keyboard = new Keyboard(game)
@@ -129,8 +151,21 @@ module.exports = function (canvas, schema, opts) {
     if (targets.length > 0 && targets[0].contains(player.position())) {
       console.log('win!')
       console.log(schema.gameplay.timeout - time.seconds())
-      ring.flash()
+      ring.startFlashing()
     }
+
+    var position = player.position()
+    var tile = world.tiles[world.locate(position)]
+
+    tile.children.forEach(function (child, i) {
+      child.children.forEach(function (bit, j) {
+        if (bit.props.consumable) {
+          if (bit.contains(position)) {
+            tile.children[i].children.splice(j, 1)
+          }
+        }
+      })
+    })
   })
 
   game.on('start', function () {})
@@ -143,6 +178,7 @@ module.exports = function (canvas, schema, opts) {
     reload: function (schema) {
       world.load(schema.tiles)
       player.load(schema.players[0])
+      ring.reload()
     },
 
     pause: function () {
