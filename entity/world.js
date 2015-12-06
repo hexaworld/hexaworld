@@ -22,16 +22,16 @@ World.prototype.load = function (schema) {
     if (t.cue) {
       children.push(hex({
         fill: t.cue.fill,
-        scale: 0.2,
+        scale: 0.19,
         cue: true
       }))
     }
     if (t.target) {
       children.push(circle({
         fill: t.target.fill,
-        stroke: 'white',
+        stroke: t.target.fill,
         thickness: 0.75,
-        scale: 0.1,
+        scale: 0.09,
         target: true
       }))
     }

@@ -27,8 +27,10 @@ module.exports = function (element, schema, opts) {
   var energy = require('./ui/energy.js')(container)
   var lives = require('./ui/lives.js')(container)
 
+  var scoreVal = 0
+
   level.update(1, 2)
-  score.update(100)
+  score.update(scoreVal)
   energy.update(90)
   lives.update(2)
 
@@ -132,6 +134,9 @@ module.exports = function (element, schema, opts) {
     tile.children.some(function (child, i) {
       return child.children.some(function (bit, j) {
         if (bit.props.consumable && bit.contains(player.position())) {
+          scoreVal = scoreVal + 10
+          score.update(scoreVal)
+
           return tile.children[i].children.splice(j, 1)
         }
       })
@@ -140,7 +145,18 @@ module.exports = function (element, schema, opts) {
 
   game.on('start', function () {})
 
-  game.on('end', function () {})
+  var done = false
+
+  game.on('end', function () {
+    ring.startFlashing()
+    if (!done) {
+      console.log('win!')
+      console.log(schema.gameplay.timeout - time.seconds())
+      scoreVal = scoreVal + 1000
+      score.update(scoreVal)
+      done = true
+    }
+  })
 
   game.start()
 
