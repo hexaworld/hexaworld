@@ -50,7 +50,7 @@ module.exports = function (element, schema, opts) {
   })
 
   var camera = new Camera({
-    scale: 100 * 1/height,
+    scale: 100 * 1 / height,
     speed: {translation: 0.1, rotation: 0.1, scale: 0.002},
     friction: 0.9,
     yoked: true
