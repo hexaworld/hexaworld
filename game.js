@@ -21,8 +21,10 @@ module.exports = function (element, schema, opts) {
   var energy = require('./ui/energy.js')(container)
   var lives = require('./ui/lives.js')(container)
 
+  var scoreVal = 0
+
   level.update(1, 2)
-  score.update(100)
+  score.update(scoreVal)
   energy.update(90)
   lives.update(2)
 
@@ -123,6 +125,8 @@ module.exports = function (element, schema, opts) {
         if (bit.props.consumable) {
           if (bit.contains(position)) {
             tile.children[i].children.splice(j, 1)
+            scoreVal = scoreVal + 10
+            score.update(scoreVal)
           }
         }
       })
