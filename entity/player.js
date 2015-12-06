@@ -61,10 +61,10 @@ Player.prototype.move = function (keyboard, world) {
   var keys = keyboard.keysDown
 
   if (inside && !self.inside) {
-    self.emit('enter', { tile: tile.geometry.transform, position: self.geometry.transform })
+    self.emit('enter', { tile: tile.transform.translation, position: self.geometry.transform })
     self.inside = true
   } else if (!inside && self.inside) {
-    self.emit('exit', { tile: tile.geometry.transform, position: self.geometry.transform })
+    self.emit('exit', { tile: tile.transform.translation, position: self.geometry.transform })
     self.inside = false
   }
 
