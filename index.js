@@ -17,4 +17,4 @@ var schema = {
 }
 
 var game = require('./game.js')
-game('game-container', schema, {size: 600})
+game('game-container', schema)
