@@ -12,7 +12,7 @@ module.exports = function (element, schema, opts) {
   var container = document.getElementById(element)
   var canvas = document.createElement('canvas')
   var height = container.clientHeight || opts.size
-  console.log(height)
+
   container.style.width = height * 0.7 + 'px'
   container.style.height = height + 'px'
   container.style.position = 'relative'
@@ -28,12 +28,12 @@ module.exports = function (element, schema, opts) {
   var lives = require('./ui/lives.js')(container)
 
   var scoreVal = 0
-  var energyVal = 100
   var energyMax = 100
+  var energyVal = energyMax
 
   level.update(1, 2)
   score.update(scoreVal)
-  energy.update(energyVal / energyMax * 100)
+  energy.update(10)
   lives.update(2)
 
   var game = new Game({
@@ -120,7 +120,6 @@ module.exports = function (element, schema, opts) {
   game.on('update', function (interval) {
     var playerCoordinates = player.coordinates()
     var tile = world.getTileAtCoordinates(playerCoordinates)
-  
     if (player.moving) energyVal -= 0.1
     energy.update(energyVal)
 
@@ -167,6 +166,8 @@ module.exports = function (element, schema, opts) {
       world.load(schema.tiles)
       player.load(schema.players[0])
       ring.reload()
+      scoreVal = 0
+      energyVal = energyMax
     },
 
     pause: function () {
