@@ -11,7 +11,8 @@ module.exports = function (opts) {
       stroke: opts.stroke,
       thickness: opts.thickness,
       target: opts.target || false,
-      cue: opts.cue || false
+      cue: opts.cue || false,
+      trigger: opts.trigger || false
     },
 
     points: _.range(7).map(function (i) {

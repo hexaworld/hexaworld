@@ -12,10 +12,22 @@ module.exports = function (opts) {
 
   var thickness = opts.thickness
 
-  var center = [hex({scale: 0.25, children: [circle({
-    fill: 'white', stroke: 'white', thickness: opts.thickness,
-    translation: [0, 0], scale: 0.075, consumable: true
-  })]})]
+  var center = [
+    hex({
+      scale: 0.25, 
+      trigger: true,
+      children: [
+        circle({
+          fill: 'white', 
+          stroke: 'white', 
+          thickness: opts.thickness,
+          translation: [0, 0], 
+          scale: 0.075, 
+          consumable: true
+        })
+      ]
+    })
+  ]
 
   var wedges = _.range(6).map(function (i) {
     return wedge({rotation: i * 60})
@@ -71,6 +83,6 @@ module.exports = function (opts) {
       scale: opts.scale
     },
 
-    children: opts.children ? children.concat(opts.children) : children
+    children: opts.children ? opts.children.concat(children) : children
   })
 }

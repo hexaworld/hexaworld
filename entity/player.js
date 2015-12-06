@@ -1,3 +1,4 @@
+var _ = require('lodash')
 var inherits = require('inherits')
 var mouse = require('../geometry/mouse.js')
 var Collision = require('../util/collision.js')
@@ -51,7 +52,8 @@ Player.prototype.move = function (keyboard, world) {
 
   var current = self.geometry.transform
   var tile = world.tiles[world.locate(current.translation)]
-  var inside = tile.children[0].contains(current.translation)
+  var trigger = _.find(tile.children, function (child) { return child.props.trigger })
+  var inside = trigger.contains(current.translation)
   var keys = keyboard.keysDown
 
   var delta
