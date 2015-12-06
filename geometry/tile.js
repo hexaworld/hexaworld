@@ -15,17 +15,7 @@ module.exports = function (opts) {
   var center = [
     hex({
       scale: 0.25,
-      trigger: true,
-      children: [
-        circle({
-          fill: 'white',
-          stroke: 'white',
-          thickness: opts.thickness,
-          translation: [0, 0],
-          scale: 0.06,
-          consumable: true
-        })
-      ]
+      trigger: true
     })
   ]
 
@@ -42,13 +32,12 @@ module.exports = function (opts) {
   _.remove(ends, _.isUndefined)
   var paths = _.range(6).map(function (i) {
     if (_.includes(opts.paths, i)) {
-      return path({
-        rotation: i * 60,
-        thickness: thickness,
-        children: [
+      var children = []
+      if (Math.random() > 0) {
+        children = [
           circle({
             fill: 'white', stroke: 'white', thickness: opts.thickness,
-            translation: [0, 1], scale: 0.06, consumable: true
+            translation: [0, 1.5], scale: 0.06, consumable: true
           }),
           circle({
             fill: 'white', stroke: 'white', thickness: opts.thickness,
@@ -56,9 +45,14 @@ module.exports = function (opts) {
           }),
           circle({
             fill: 'white', stroke: 'white', thickness: opts.thickness,
-            translation: [0, 3], scale: 0.06, consumable: true
+            translation: [0, 2.5], scale: 0.06, consumable: true
           })
         ]
+      }
+      return path({
+        rotation: i * 60,
+        thickness: thickness,
+        children: children
       })
     }
   })

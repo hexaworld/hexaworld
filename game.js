@@ -27,16 +27,16 @@ module.exports = function (element, schema, opts) {
 
   var score = require('./ui/score.js')(container)
   var level = require('./ui/level.js')(container, {name: 'playpen'})
-  var energy = require('./ui/energy.js')(container)
+  var steps = require('./ui/steps.js')(container)
   var lives = require('./ui/lives.js')(container)
 
   var scoreVal = 0
-  var energyMax = 20
-  var energyVal = energyMax
+  var stepsMax = 20
+  var stepsVal = stepsMax
 
   level.update(1, 2)
   score.update(scoreVal)
-  energy.update(energyVal, energyMax)
+  steps.update(stepsVal, stepsMax)
   lives.update(3)
 
   var game = new Game({
@@ -131,6 +131,11 @@ module.exports = function (element, schema, opts) {
     this.move(keyboard, world)
   })
 
+  player.on('exit', function (interval) {
+    stepsVal -= 1
+    steps.update(stepsVal, stepsMax)
+  })
+
   camera.on('update', function (interval) {
     if (camera.yoked) {
       camera.transform.translation = player.position()
@@ -154,9 +159,7 @@ module.exports = function (element, schema, opts) {
   game.on('update', function (interval) {
     var playerCoordinates = player.coordinates()
     var tile = world.getTileAtCoordinates(playerCoordinates)
-    if (player.moving) energyVal -= 0.015
-    energy.update(Math.round(energyVal), energyMax)
-
+    
     var target
     if (tile) {
       target = tile.target()
@@ -204,7 +207,7 @@ module.exports = function (element, schema, opts) {
       player.load(schema.players[0])
       ring.reload()
       scoreVal = 0
-      energyVal = energyMax
+      stepsVal = stepsMax
     },
 
     pause: function () {
