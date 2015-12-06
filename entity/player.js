@@ -92,7 +92,7 @@ Player.prototype.move = function (keyboard, world) {
     self.waiting = true
     current = self.geometry.transform
     center = {
-      position: [tile.transform.translation[0], tile.transform.translation[1]]
+      translation: [tile.transform.translation[0], tile.transform.translation[1]]
     }
     delta = self.movement.center.compute(current, center)
     self.geometry.update(delta)
