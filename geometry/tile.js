@@ -14,15 +14,15 @@ module.exports = function (opts) {
 
   var center = [
     hex({
-      scale: 0.25, 
+      scale: 0.25,
       trigger: true,
       children: [
         circle({
-          fill: 'white', 
-          stroke: 'white', 
+          fill: 'white',
+          stroke: 'white',
           thickness: opts.thickness,
-          translation: [0, 0], 
-          scale: 0.075, 
+          translation: [0, 0],
+          scale: 0.075,
           consumable: true
         })
       ]
