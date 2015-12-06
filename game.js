@@ -16,6 +16,7 @@ module.exports = function (element, schema, opts) {
   container.style.width = height * 0.7 + 'px'
   container.style.height = height + 'px'
   container.style.position = 'relative'
+  container.style.background = 'rgb(55,55,55)'
 
   canvas.id = 'game'
   canvas.style.marginTop = height * 0.15
