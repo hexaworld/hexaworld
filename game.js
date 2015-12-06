@@ -85,7 +85,7 @@ module.exports = function (element, schema, opts) {
 
   keyboard.on('keydown', function (keyCode) {
     if (keyCode === '<space>') {
-      if (game.ticker.paused === true) {
+      if (game.paused === true) {
         game.resume()
       } else {
         game.pause()
