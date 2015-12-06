@@ -24,6 +24,7 @@ module.exports = function (container) {
   style.top = 0
   style.width = width * 0.2
   style.height = width * 0.05
+  style.paddingBottom = width * 0.005
   style.position = 'absolute'
   style.borderLeft = 'solid rgb(150,150,150) 8px'
   style.borderBottom = 'solid rgb(150,150,150) 5px'
@@ -51,7 +52,7 @@ module.exports = function (container) {
     icon.setAttribute('width', width * 0.05)
     icon.setAttribute('height', width * 0.05)
     label.appendChild(icon)
-    var character = mouse({scale: 5, stroke: 'rgb(150,150,150)', fill: 'rgb(75,75,75)', thickness: 4})
+    var character = mouse({scale: 6, stroke: 'rgb(150,150,150)', fill: 'rgb(75,75,75)', thickness: 4})
     var camera = {transform: transform(), game: {width: width * 0.05, height: width * 0.05}}
     character.draw(icon.getContext('2d'), camera, {order: 'bottom'})
   }
