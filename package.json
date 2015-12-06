@@ -6,11 +6,10 @@
     "start": "budo index.js:bundle.js --live"
   },
   "dependencies": {
-    "crtrdg-entity": "^0.2.2",
+    "crtrdg-entity": "^1.0.0",
     "crtrdg-gameloop": "^1.0.0",
-    "crtrdg-keyboard": "0.0.2",
+    "crtrdg-keyboard": "^1.0.0",
     "crtrdg-mouse": "~0.0.1",
-    "crtrdg-player": "0.0.1",
     "crtrdg-time": "0.0.0",
     "d3-color": "^0.2.7",
     "eventemitter2": "^0.4.14",

@@ -60,6 +60,7 @@ module.exports = function (canvas, schema, opts) {
 
   function relay (emitter, name, tag) {
     var emit = function (tag, value) {
+      value = value || {}
       var ret = value
       if (typeof ret === 'string') {
         ret = { value: ret }
@@ -77,8 +78,10 @@ module.exports = function (canvas, schema, opts) {
     }
   }
 
-  relay(player, 'player')
-  relay(keyboard, 'keyboard')
+  relay(player, 'player', 'enter')
+  relay(player, 'player', 'exit')
+  relay(keyboard, 'keyboard', 'keyup')
+  relay(keyboard, 'keyboard', 'keydown')
   relay(game, 'game', 'start')
   relay(game, 'game', 'end')
 
