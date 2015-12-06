@@ -28,10 +28,12 @@ module.exports = function (element, schema, opts) {
   var lives = require('./ui/lives.js')(container)
 
   var scoreVal = 0
+  var energyVal = 100
+  var energyMax = 100
 
   level.update(1, 2)
   score.update(scoreVal)
-  energy.update(90)
+  energy.update(energyVal / energyMax * 100)
   lives.update(2)
 
   var game = new Game({
@@ -118,6 +120,9 @@ module.exports = function (element, schema, opts) {
   game.on('update', function (interval) {
     var playerCoordinates = player.coordinates()
     var tile = world.getTileAtCoordinates(playerCoordinates)
+  
+    if (player.moving) energyVal -= 0.1
+    energy.update(energyVal)
 
     var target
     if (tile) {
@@ -129,14 +134,11 @@ module.exports = function (element, schema, opts) {
       ring.startFlashing()
     }
 
-    // will never be on two consumable bits at once,
-    // use `some` to short circuit.
     tile.children.some(function (child, i) {
       return child.children.some(function (bit, j) {
         if (bit.props.consumable && bit.contains(player.position())) {
-          scoreVal = scoreVal + 10
+          scoreVal += 10
           score.update(scoreVal)
-
           return tile.children[i].children.splice(j, 1)
         }
       })

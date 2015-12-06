@@ -28,6 +28,7 @@ function Player (schema, opts) {
   })
   this.collision = new Collision()
   this.waiting = true
+  this.moving = true
 }
 
 Player.prototype.load = function (schema) {
@@ -58,6 +59,7 @@ Player.prototype.move = function (keyboard, world) {
 
   var delta
   if (inside) {
+    self.moving = false
     if (self.movement.tile.keypress(keys)) self.waiting = false
     if (self.waiting) {
       var center = {
@@ -70,6 +72,7 @@ Player.prototype.move = function (keyboard, world) {
     self.movement.path.reset()
     self.movement.path.clear()
   } else {
+    self.moving = true
     self.waiting = true
     self.movement.tile.reset()
     delta = self.movement.path.compute(keys, current)

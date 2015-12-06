@@ -48,7 +48,7 @@ module.exports = function (container) {
   label.appendChild(energy)
 
   function update (percent) {
-    energy.innerHTML = percent + '%'
+    energy.innerHTML = Math.round(percent) + '%'
   }
 
   return {
