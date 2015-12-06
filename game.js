@@ -134,16 +134,16 @@ module.exports = function (element, schema, opts) {
   game.on('start', function () {})
 
   var done = false
-  
+
   game.on('end', function () {
-      ring.startFlashing()
-      if (!done) {
-        console.log('win!')
-        console.log(schema.gameplay.timeout - time.seconds())
-        scoreVal = scoreVal + 1000
-        score.update(scoreVal)
-        done = true
-      }
+    ring.startFlashing()
+    if (!done) {
+      console.log('win!')
+      console.log(schema.gameplay.timeout - time.seconds())
+      scoreVal = scoreVal + 1000
+      score.update(scoreVal)
+      done = true
+    }
   })
 
   game.start()
