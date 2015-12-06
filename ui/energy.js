@@ -1,3 +1,5 @@
+var _ = require('lodash')
+
 module.exports = function (container) {
   var width = container.clientWidth
   var height = container.clientHeight
@@ -18,6 +20,7 @@ module.exports = function (container) {
   style.top = 0
   style.width = width * 0.2
   style.height = width * 0.05
+  style.paddingBottom = width * 0.005
   style.position = 'absolute'
   style.borderRight = 'solid rgb(150,150,150) 8px'
   style.borderBottom = 'solid rgb(150,150,150) 5px'
@@ -37,18 +40,42 @@ module.exports = function (container) {
   style.color = 'rgb(150,150,150)'
   style.fontFamily = 'Hack'
   style.fontSize = width * 0.04 + 'px'
-  text.innerHTML = 'energy'
+  text.innerHTML = 'steps'
   label.appendChild(text)
 
-  var energy = document.createElement('span')
-  style = energy.style
+  var number = document.createElement('span')
+  style = number.style
   style.color = 'rgb(200,200,200)'
+  style.color = 'rgb(150,150,150)'
   style.fontFamily = 'Hack'
   style.fontSize = width * 0.04 + 'px'
-  label.appendChild(energy)
+  label.appendChild(number)
 
-  function update (percent) {
-    energy.innerHTML = Math.round(percent) + '%'
+  var barWidth = width * 0.09
+
+  var bar = document.createElement('canvas')
+  bar.setAttribute('width', barWidth)
+  bar.setAttribute('height', barWidth * 0.45)
+  bar.style.background = 'rgb(55,55,55)'
+  bar.style.border = 'solid rgb(150,150,150) 1px'
+  bar.style.marginLeft = '7px'
+  bar.style.position = 'absolute'
+  label.appendChild(bar)
+
+  var fill = document.createElement('canvas')
+  fill.setAttribute('width', barWidth)
+  fill.setAttribute('height', barWidth * 0.45)
+  fill.style.background = 'rgb(150,150,150)'
+  fill.style.border = 'solid rgb(150,150,150) 1px'
+  fill.style.marginLeft = '7px'
+  fill.style.position = 'absolute'
+  label.appendChild(fill)
+
+  function update (count, value) {
+    count = Math.max(count, 0)
+    value = Math.max(value, 0)
+    number.innerHTML = (count < 10) ? ("0" + count) : count
+    fill.setAttribute('width', barWidth * value)
   }
 
   return {

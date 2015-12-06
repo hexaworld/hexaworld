@@ -29,13 +29,13 @@ module.exports = function (element, schema, opts) {
   var lives = require('./ui/lives.js')(container)
 
   var scoreVal = 0
-  var energyMax = 100
+  var energyMax = 20
   var energyVal = energyMax
 
   level.update(1, 2)
   score.update(scoreVal)
   energy.update(10)
-  lives.update(2)
+  lives.update(3)
 
   var game = new Game({
     canvas: canvas,
@@ -122,7 +122,7 @@ module.exports = function (element, schema, opts) {
     var playerCoordinates = player.coordinates()
     var tile = world.getTileAtCoordinates(playerCoordinates)
     if (player.moving) energyVal -= 0.1
-    energy.update(energyVal)
+    energy.update(Math.round(energyVal), energyVal / energyMax)
 
     var target
     if (tile) {
