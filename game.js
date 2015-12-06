@@ -8,12 +8,16 @@ var Ring = require('./entity/ring.js')
 var Mask = require('./util/mask.js')
 
 module.exports = function (element, schema, opts) {
-  opts = opts || {width: 0.75, height: 0.75}
+  opts = opts || {size: 600}
   var container = document.getElementById(element)
   var canvas = document.createElement('canvas')
-  var width = container.clientWidth * opts.width
+  var width = container.clientHeight || opts.size
+  container.style.width = width * 0.75 + 'px'
+  container.style.height = width + 'px'
+  container.style.position = 'absolute'
 
   canvas.id = 'game'
+  canvas.style.marginTop = width * 0.15
   container.appendChild(canvas)
 
   var score = require('./ui/score.js')(container)
@@ -28,8 +32,8 @@ module.exports = function (element, schema, opts) {
 
   var game = new Game({
     canvas: canvas,
-    width: width,
-    height: width
+    width: width * 0.7,
+    height: width * 0.7
   })
 
   var keyboard = new Keyboard(game)

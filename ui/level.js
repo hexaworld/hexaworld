@@ -34,7 +34,7 @@ module.exports = function (container, opts) {
   style.position = 'absolute'
   style.color = 'rgb(150,150,150)'
   style.fontFamily = 'Hack'
-  style.fontSize = '20px'
+  style.fontSize = width * 0.04 + 'px'
   text.innerHTML = opts.name + ' '
   label.appendChild(text)
 

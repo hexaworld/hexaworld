@@ -40,16 +40,16 @@ module.exports = function (container) {
   style.position = 'absolute'
   style.color = 'rgb(150,150,150)'
   style.fontFamily = 'Hack'
-  style.fontSize = '24px'
+  style.fontSize = width * 0.04 + 'px'
   text.innerHTML = 'lives'
   label.appendChild(text)
 
   function drawIcon () {
     var icon = document.createElement('canvas')
-    icon.setAttribute('width', width * 0.04)
-    icon.setAttribute('height', width * 0.04)
+    icon.setAttribute('width', width * 0.05)
+    icon.setAttribute('height', width * 0.05)
     label.appendChild(icon)
-    var character = mouse({scale: 7, stroke: 'rgb(150,150,150)', fill: 'rgb(75,75,75)', thickness: 4})
+    var character = mouse({scale: 5, stroke: 'rgb(150,150,150)', fill: 'rgb(75,75,75)', thickness: 4})
     var camera = {transform: transform(), game: {width: width * 0.05, height: width * 0.05}}
     character.draw(icon.getContext('2d'), camera, {order: 'bottom'})
   }

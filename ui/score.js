@@ -28,12 +28,12 @@ module.exports = function (container, max) {
   style = text.style
   style.position = 'absolute'
   style.left = width * 0.04
-  style.bottom = height * 0.005
+  style.bottom = height * 0.001
   style.width = width * 0.3
   style.position = 'absolute'
   style.color = 'rgb(150,150,150)'
   style.fontFamily = 'Hack'
-  style.fontSize = '20px'
+  style.fontSize = width * 0.04 + 'px'
   text.innerHTML = 'score '
   label.appendChild(text)
 
