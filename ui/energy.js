@@ -49,31 +49,9 @@ module.exports = function (container) {
   style.fontSize = width * 0.04 + 'px'
   label.appendChild(number)
 
-  var barWidth = width * 0.09
-
-  var bar = document.createElement('canvas')
-  bar.setAttribute('width', barWidth)
-  bar.setAttribute('height', barWidth * 0.45)
-  bar.style.background = 'rgb(55,55,55)'
-  bar.style.border = 'solid rgb(150,150,150) 1px'
-  bar.style.marginLeft = '7px'
-  bar.style.position = 'absolute'
-  label.appendChild(bar)
-
-  var fill = document.createElement('canvas')
-  fill.setAttribute('width', barWidth)
-  fill.setAttribute('height', barWidth * 0.45)
-  fill.style.background = 'rgb(150,150,150)'
-  fill.style.border = 'solid rgb(150,150,150) 1px'
-  fill.style.marginLeft = '7px'
-  fill.style.position = 'absolute'
-  label.appendChild(fill)
-
-  function update (count, value) {
+  function update (count, max) {
     count = Math.max(count, 0)
-    value = Math.max(value, 0)
-    number.innerHTML = (count < 10) ? ('0' + count) : count
-    fill.setAttribute('width', barWidth * value)
+    number.innerHTML = ((count < 10) ? ('0' + count) : count) + '/' + max
   }
 
   return {

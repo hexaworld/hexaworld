@@ -36,7 +36,7 @@ module.exports = function (element, schema, opts) {
 
   level.update(1, 2)
   score.update(scoreVal)
-  energy.update(10)
+  energy.update(energyVal, energyMax)
   lives.update(3)
 
   var game = new Game({
@@ -155,7 +155,7 @@ module.exports = function (element, schema, opts) {
     var playerCoordinates = player.coordinates()
     var tile = world.getTileAtCoordinates(playerCoordinates)
     if (player.moving) energyVal -= 0.015
-    energy.update(Math.round(energyVal), energyVal / energyMax)
+    energy.update(Math.round(energyVal), energyMax)
 
     var target
     if (tile) {
