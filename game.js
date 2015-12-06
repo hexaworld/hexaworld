@@ -154,7 +154,7 @@ module.exports = function (element, schema, opts) {
   game.on('update', function (interval) {
     var playerCoordinates = player.coordinates()
     var tile = world.getTileAtCoordinates(playerCoordinates)
-    if (player.moving) energyVal -= 0.1
+    if (player.moving) energyVal -= 0.015
     energy.update(Math.round(energyVal), energyVal / energyMax)
 
     var target
