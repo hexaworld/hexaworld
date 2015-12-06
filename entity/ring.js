@@ -65,8 +65,16 @@ Ring.prototype.recolor = function (colors) {
   })
 }
 
-Ring.prototype.flash = function () {
+Ring.prototype.startFlashing = function () {
   this.flashing = true
+}
+
+Ring.prototype.stopFlashing = function () {
+  this.flashing = false
+}
+
+Ring.toggleFlashing = function () {
+  this.flashing ? this.stopFlashing() : this.startFlashing()
 }
 
 Ring.prototype.flashingColors = function () {
@@ -75,6 +83,10 @@ Ring.prototype.flashingColors = function () {
     var idx = Math.floor(Math.random() * colors.length) + 0
     notch.props.fill = colors[idx]
   })
+}
+
+Ring.prototype.reload = function () {
+  this.flashing = false
 }
 
 Ring.prototype.project = function (origin, targets) {
