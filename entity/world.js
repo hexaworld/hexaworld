@@ -21,7 +21,7 @@ World.prototype.load = function (schema) {
     if (t.cue) {
       children.push(hex({
         fill: t.cue.fill,
-        scale: 0.25,
+        scale: 0.2,
         cue: true
       }))
     }
@@ -42,6 +42,8 @@ World.prototype.load = function (schema) {
       thickness: self.opts.thickness
     })
   })
+
+
 }
 
 World.prototype.draw = function (context, camera) {

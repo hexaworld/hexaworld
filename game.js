@@ -14,6 +14,16 @@ module.exports = function (element, schema) {
   var height = container.clientHeight * 0.75
   container.appendChild(canvas)
 
+  var score = require('./ui/score.js')(container)
+  var level = require('./ui/level.js')(container, {name: 'playpen'})
+  var energy = require('./ui/energy.js')(container)
+  var lives = require('./ui/lives.js')(container)
+
+  level.update(1, 2)
+  score.update(100)
+  energy.update(90)
+  lives.update(2)
+
   var game = new Game({
     canvas: canvas,
     width: width,
