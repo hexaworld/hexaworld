@@ -50,7 +50,7 @@ module.exports = function (element, schema, opts) {
   })
 
   var camera = new Camera({
-    scale: 100 * 1/height,
+    scale: 100 * 1 / height,
     speed: {translation: 0.1, rotation: 0.1, scale: 0.002},
     friction: 0.9,
     yoked: true
@@ -114,22 +114,25 @@ module.exports = function (element, schema, opts) {
   })
 
   game.on('update', function (interval) {
-    var targets = world.targets()
-    if (targets.length > 0 && targets[0].contains(player.position())) {
+    var playerCoordinates = player.coordinates()
+    var tile = world.getTileAtCoordinates(playerCoordinates)
+
+    var target
+    if (tile) {
+      target = tile.target()
+    }
+    if (target && target.contains(player.position())) {
       console.log('win!')
       console.log(schema.gameplay.timeout - time.seconds())
       ring.startFlashing()
     }
 
-    var position = player.position()
-    var tile = world.tiles[world.locate(position)]
-
-    tile.children.forEach(function (child, i) {
-      child.children.forEach(function (bit, j) {
-        if (bit.props.consumable) {
-          if (bit.contains(position)) {
-            tile.children[i].children.splice(j, 1)
-          }
+    // will never be on two consumable bits at once,
+    // use `some` to short circuit.
+    tile.children.some(function (child, i) {
+      return child.children.some(function (bit, j) {
+        if (bit.props.consumable && bit.contains(player.position())) {
+          return tile.children[i].children.splice(j, 1)
         }
       })
     })
