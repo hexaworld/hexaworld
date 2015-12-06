@@ -71,6 +71,6 @@ module.exports = function (opts) {
       scale: opts.scale
     },
 
-    children: opts.children ? opts.children.concat(children) : children
+    children: opts.children ? children.concat(opts.children) : children
   })
 }
