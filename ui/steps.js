@@ -1,4 +1,4 @@
-module.exports = function (container) {
+module.exports = function (container, opts) {
   var width = container.clientWidth
   var height = container.clientHeight
   var style
@@ -49,9 +49,9 @@ module.exports = function (container) {
   style.fontSize = width * 0.04 + 'px'
   label.appendChild(number)
 
-  function update (count, max) {
+  function update (count) {
     count = Math.max(count, 0)
-    number.innerHTML = ((count < 10) ? ('0' + count) : count) + '/' + max
+    number.innerHTML = ((count < 10) ? ('0' + count) : count) + '/' + opts.max
   }
 
   return {

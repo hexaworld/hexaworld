@@ -27,16 +27,15 @@ module.exports = function (element, schema, opts) {
 
   var score = require('./ui/score.js')(container)
   var level = require('./ui/level.js')(container, {name: 'playpen'})
-  var steps = require('./ui/steps.js')(container)
+  var steps = require('./ui/steps.js')(container, {max: schema.gameplay.steps})
   var lives = require('./ui/lives.js')(container)
 
   var scoreVal = 0
-  var stepsMax = 20
-  var stepsVal = stepsMax
+  var stepsVal = schema.gameplay.steps
 
   level.update(1, 2)
   score.update(scoreVal)
-  steps.update(stepsVal, stepsMax)
+  steps.update(stepsVal)
   lives.update(3)
 
   var game = new Game({
@@ -68,7 +67,8 @@ module.exports = function (element, schema, opts) {
     translation: [game.width / 2, game.width / 2],
     extent: 0.1 * game.width / 2,
     count: 8,
-    offset: 3
+    offset: 3,
+    maxdistance: schema.gameplay.sight
   })
 
   var mask = new Mask({
@@ -133,7 +133,7 @@ module.exports = function (element, schema, opts) {
 
   player.on('exit', function (interval) {
     stepsVal -= 1
-    steps.update(stepsVal, stepsMax)
+    steps.update(stepsVal)
   })
 
   camera.on('update', function (interval) {
@@ -207,7 +207,7 @@ module.exports = function (element, schema, opts) {
       player.load(schema.players[0])
       ring.reload()
       scoreVal = 0
-      stepsVal = stepsMax
+      stepsVal = schema.gameplay.steps
     },
 
     pause: function () {

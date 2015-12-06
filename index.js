@@ -11,9 +11,9 @@ var schema = {
     {translation: [1, -2], paths: [0, 2], cue: {fill: '#CF5557'}}
   ],
   players: [
-    {translation: [0, 0], character: 'mouse'}
+    {translation: [0, 0], rotation: 0, character: 'mouse'}
   ],
-  gameplay: {timeout: 60}
+  gameplay: {steps: 20, sight: 150}
 }
 
 var game = require('./game.js')
