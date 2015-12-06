@@ -45,18 +45,20 @@ module.exports = function (opts) {
       return path({
         rotation: i * 60,
         thickness: thickness,
-        children: [circle({
-          fill: 'white', stroke: 'white', thickness: opts.thickness,
-          translation: [0, 1], scale: 0.075, consumable: true
-        }),
-        circle({
-          fill: 'white', stroke: 'white', thickness: opts.thickness,
-          translation: [0, 2], scale: 0.075, consumable: true
-        }),
-        circle({
-          fill: 'white', stroke: 'white', thickness: opts.thickness,
-          translation: [0, 3], scale: 0.075, consumable: true
-        })]
+        children: [
+          circle({
+            fill: 'white', stroke: 'white', thickness: opts.thickness,
+            translation: [0, 1], scale: 0.075, consumable: true
+          }),
+          circle({
+            fill: 'white', stroke: 'white', thickness: opts.thickness,
+            translation: [0, 2], scale: 0.075, consumable: true
+          }),
+          circle({
+            fill: 'white', stroke: 'white', thickness: opts.thickness,
+            translation: [0, 3], scale: 0.075, consumable: true
+          })
+        ]
       })
     }
   })
