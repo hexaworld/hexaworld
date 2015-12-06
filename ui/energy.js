@@ -34,7 +34,7 @@ module.exports = function (container) {
   style.position = 'absolute'
   style.color = 'rgb(150,150,150)'
   style.fontFamily = 'Hack'
-  style.fontSize = '24px'
+  style.fontSize = width * 0.04 + 'px'
   text.innerHTML = 'energy'
   label.appendChild(text)
 
@@ -42,7 +42,7 @@ module.exports = function (container) {
   style = energy.style
   style.color = 'rgb(200,200,200)'
   style.fontFamily = 'Hack'
-  style.fontSize = '20px'
+  style.fontSize = width * 0.04 + 'px'
   label.appendChild(energy)
 
   function update (percent) {
