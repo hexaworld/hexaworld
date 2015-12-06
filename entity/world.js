@@ -42,8 +42,6 @@ World.prototype.load = function (schema) {
       thickness: self.opts.thickness
     })
   })
-
-
 }
 
 World.prototype.draw = function (context, camera) {

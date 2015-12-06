@@ -7,11 +7,13 @@ var World = require('./entity/world.js')
 var Ring = require('./entity/ring.js')
 var Mask = require('./util/mask.js')
 
-module.exports = function (element, schema) {
+module.exports = function (element, schema, opts) {
+  opts = opts || {width: 0.75, height: 0.75}
   var container = document.getElementById(element)
   var canvas = document.createElement('canvas')
-  var width = container.clientWidth * 0.75
-  var height = container.clientHeight * 0.75
+  var width = container.clientWidth * opts.width
+
+  canvas.id = 'game'
   container.appendChild(canvas)
 
   var score = require('./ui/score.js')(container)
