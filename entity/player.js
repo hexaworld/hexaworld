@@ -26,14 +26,14 @@ function Player (schema, opts) {
     speed: opts.speed
   })
   this.movement.deadend = new Automove({
-    keymap: ['A', 'D', '<left>', '<right>'],
-    heading: [-180, 180, -180, 180],
-    shift: [0, 0, 0, 0],
-    speed: {translation: 0, rotation: opts.speed.rotation}
+    keymap: [],
+    heading: [],
+    shift: [],
+    speed: {translation: -opts.speed.translation, rotation: opts.speed.rotation}
   })
   this.collision = new Collision()
   this.waiting = true
-  this.turning = false
+  this.reversing = false
 }
 
 Player.prototype.load = function (schema) {
@@ -83,24 +83,21 @@ Player.prototype.move = function (keyboard, world) {
       self.movement.tile.reset()
     } 
     self.movement.deadend.reset()
-    self.turning = false
+    self.reversing = false
 
   } else {
     delta = self.movement.path.compute(keys, current) 
     var correction = self.collision.handle(world, self.geometry, delta)
 
-    if (correction && !self.turning) {
-      console.log('turning')
-      self.turning = true
+    if (correction && !self.reversing) {
+      self.reversing = true
       self.geometry.update(correction)      
     }
 
-    if (self.turning) {
-      console.log('deadend')
+    if (self.reversing) {
       delta = self.movement.deadend.compute(keys, current) 
       self.geometry.update(delta)
     } else {
-      console.log('free')
       self.geometry.update(delta)
     }
     
