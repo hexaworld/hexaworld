@@ -29,10 +29,11 @@ function Player (schema, opts) {
     keymap: ['A', 'D', '<left>', '<right>'],
     heading: [-180, 180, -180, 180],
     shift: [0, 0, 0, 0],
-    speed: {translation: -2, rotation: opts.speed.rotation}
+    speed: {translation: 0, rotation: opts.speed.rotation}
   })
   this.collision = new Collision()
   this.waiting = true
+  this.turning = false
 }
 
 Player.prototype.load = function (schema) {
@@ -82,21 +83,28 @@ Player.prototype.move = function (keyboard, world) {
       self.movement.tile.reset()
     } 
     self.movement.deadend.reset()
+    self.turning = false
 
   } else {
     delta = self.movement.path.compute(keys, current) 
     var correction = self.collision.handle(world, self.geometry, delta)
-    
-    if (correction) {
+
+    if (correction && !self.turning) {
+      console.log('turning')
+      self.turning = true
+      self.geometry.update(correction)      
+    }
+
+    if (self.turning) {
       console.log('deadend')
       delta = self.movement.deadend.compute(keys, current) 
       self.geometry.update(delta)
     } else {
       console.log('free')
-      self.waiting = true
       self.geometry.update(delta)
     }
-
+    
+    self.waiting = true
     self.movement.tile.reset()
   }
 }
