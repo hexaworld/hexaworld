@@ -48,7 +48,7 @@ module.exports = function (element, schema, opts) {
 
   var player = new Player(schema.players[0], {
     scale: 2,
-    speed: {translation: 1.0, rotation: 8.0},
+    speed: {translation: 1.25, rotation: 8.0},
     friction: 0.9,
     stroke: 'white',
     fill: 'rgb(75,75,75)',
