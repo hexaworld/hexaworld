@@ -11,7 +11,7 @@ inherits(Player, Entity)
 
 function Player (schema, opts) {
   this.opts = opts || {}
-  this.load(schema)
+  this.reload(schema)
   this.movement = {}
   this.movement.center = new Fixmove({speed: opts.speed})
   this.movement.tile = new Automove({
@@ -35,12 +35,11 @@ function Player (schema, opts) {
   this.collision = new Collision()
   this.waiting = true
   this.reversing = false
-  // this will usually cause an 'enter' event to be emitted at the start of a game
   this.inside = false
   this.moving = true
 }
 
-Player.prototype.load = function (schema) {
+Player.prototype.reload = function (schema) {
   var self = this
   var translation = [
     50 * 3 / 2 * schema.translation[0],

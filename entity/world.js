@@ -10,10 +10,10 @@ inherits(World, Entity)
 
 function World (schema, opts) {
   this.opts = opts || {}
-  this.load(schema)
+  this.reload(schema)
 }
 
-World.prototype.load = function (schema) {
+World.prototype.reload = function (schema) {
   var self = this
 
   self._tileCache = {}

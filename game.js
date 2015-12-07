@@ -30,17 +30,9 @@ module.exports = function (element, schema, opts) {
   container.appendChild(canvas)
 
   var score = require('./ui/score.js')(container)
-  var level = require('./ui/level.js')(container, {name: 'playpen'})
-  var steps = require('./ui/steps.js')(container, {max: schema.gameplay.steps})
+  var level = require('./ui/level.js')(container)
+  var steps = require('./ui/steps.js')(container)
   var lives = require('./ui/lives.js')(container)
-
-  var scoreVal = 0
-  var stepsVal = schema.gameplay.steps
-
-  level.update(1, 2)
-  score.update(scoreVal)
-  steps.update(stepsVal)
-  lives.update(3)
 
   var game = new Game({
     canvas: canvas,
@@ -66,13 +58,12 @@ module.exports = function (element, schema, opts) {
     yoked: true
   })
 
-  var ring = new Ring({
+  var ring = new Ring(schema.gameplay, {
     size: 0.82 * game.width / 2,
     translation: [game.width / 2, game.width / 2],
     extent: 0.1 * game.width / 2,
     count: 8,
-    offset: 3,
-    maxdistance: schema.gameplay.sight
+    offset: 3
   })
 
   var mask = new Mask({
@@ -137,7 +128,7 @@ module.exports = function (element, schema, opts) {
 
   player.on('exit', function (interval) {
     stepsVal -= 1
-    steps.update(stepsVal)
+    steps.update(stepsVal, stepsMax)
   })
 
   camera.on('update', function (interval) {
@@ -203,16 +194,26 @@ module.exports = function (element, schema, opts) {
     }
   })
 
+  function reload (schema) {
+    world.reload(schema.tiles)
+    player.reload(schema.players[0])
+    ring.reload(schema.gameplay)
+    lifeVal = schema.gameplay.lives
+    scoreVal = 0
+    stepsMax = schema.gameplay.steps
+    stepsVal = schema.gameplay.steps
+    level.update('playpen', 1, 2)
+    score.update(scoreVal)
+    steps.update(stepsVal, stepsMax)
+    lives.update(lifeVal)
+  }
+
+  reload(schema)
+
   game.start()
 
   return {
-    reload: function (schema) {
-      world.load(schema.tiles)
-      player.load(schema.players[0])
-      ring.reload()
-      scoreVal = 0
-      stepsVal = schema.gameplay.steps
-    },
+    reload: reload,
 
     pause: function () {
       game.pause()

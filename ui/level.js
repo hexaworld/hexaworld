@@ -1,4 +1,4 @@
-module.exports = function (container, opts) {
+module.exports = function (container) {
   var width = container.clientWidth
   var height = container.clientHeight
   var style
@@ -37,16 +37,12 @@ module.exports = function (container, opts) {
   style.color = 'rgb(150,150,150)'
   style.fontFamily = 'Hack'
   style.fontSize = width * 0.04 + 'px'
-  text.innerHTML = opts.name + ' '
+  text.innerHTML = 'playpen '
   label.appendChild(text)
 
-  var number = document.createElement('span')
-  style = number.style
-  style.color = 'rgb(200,200,200)'
-  text.appendChild(number)
-
-  function update (current, max) {
-    number.innerHTML = current + '/' + max
+  function update (name, current, max) {
+    text.innerHTML = name + ' ' + '<span style="color: rgb(200,200,200)">' 
+      + current + '/' + max + '</span>'
   }
 
   return {

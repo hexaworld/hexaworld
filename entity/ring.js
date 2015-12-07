@@ -8,7 +8,7 @@ var Entity = require('crtrdg-entity')
 module.exports = Ring
 inherits(Ring, Entity)
 
-function Ring (opts) {
+function Ring (schema, opts) {
   var offset = opts.offset || 0
   var count = opts.count || 6
   var extent = opts.extent || 20
@@ -17,9 +17,6 @@ function Ring (opts) {
 
   this.maxangle = opts.maxangle || 360
   this.minangle = opts.minangle || 20
-  this.maxdistance = opts.maxdistance || 150
-  this.flashing = false
-  this.flashingColors = []
 
   var notches = _.flatten(_.range(6).map(function (side) {
     return _.range(1, count - 1).map(function (ind) {
@@ -51,6 +48,13 @@ function Ring (opts) {
   })
 
   this.notches = notches
+  this.reload(schema)
+}
+
+Ring.prototype.reload = function (schema) {
+  this.sight = schema.sight
+  this.flashing = false
+  this.flashingColors = []
 }
 
 Ring.prototype.draw = function (context) {
@@ -88,18 +92,13 @@ Ring.prototype.flash = function () {
   })
 }
 
-Ring.prototype.reload = function () {
-  this.flashing = false
-  this.flashingColors = []
-}
-
 Ring.prototype.project = function (origin, targets) {
   var self = this
   return targets.map(function (target) {
     var diff = origin.difference(target)
     var dist = origin.distance(target)
 
-    var radius = dist.translation / self.maxdistance
+    var radius = dist.translation / self.sight
     var angle = Math.atan2(-diff.translation[1], -diff.translation[0]) * 180 / Math.PI
 
     if (angle < 0) angle += 360
