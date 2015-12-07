@@ -52,7 +52,12 @@ module.exports = function (container) {
     icon.setAttribute('width', width * 0.05)
     icon.setAttribute('height', width * 0.05)
     label.appendChild(icon)
-    var character = mouse({scale: 6, stroke: 'rgb(150,150,150)', fill: 'rgb(75,75,75)', thickness: 4})
+    var character = mouse({
+      scale: width * 0.015, 
+      stroke: 'rgb(150,150,150)', 
+      fill: 'rgb(75,75,75)', 
+      thickness: width * 0.006
+    })
     var camera = {transform: transform(), game: {width: width * 0.05, height: width * 0.05}}
     character.draw(icon.getContext('2d'), camera, {order: 'bottom'})
   }
