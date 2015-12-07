@@ -21,14 +21,20 @@ function Player (schema, opts) {
     speed: opts.speed
   })
   this.movement.path = new Automove({
-    keymap: ['W', 'S', 'A', 'D', '<up>', '<down>', '<left>', '<right>'],
-    heading: [0, 0, -180, 180, 0, 0, -180, 180],
-    shift: [1, -1, 2, 2, 1, -1, 2, 2],
-    speed: {translation: opts.speed.translation, rotation: opts.speed.rotation * 0.8}
+    keymap: [],
+    heading: [],
+    shift: [],
+    speed: opts.speed
+  })
+  this.movement.deadend = new Automove({
+    keymap: [],
+    heading: [],
+    shift: [],
+    speed: {translation: -opts.speed.translation, rotation: opts.speed.rotation}
   })
   this.collision = new Collision()
   this.waiting = true
-
+  this.reversing = false
   // this will usually cause an 'enter' event to be emitted at the start of a game
   this.inside = false
   this.moving = true
@@ -71,38 +77,50 @@ Player.prototype.move = function (keyboard, world) {
   }
 
   var delta
+  var correction
+
   if (inside) {
     self.moving = false
+    self.movement.deadend.reset()
+    self.reversing = false
+
     if (self.movement.tile.keypress(keys)) self.waiting = false
     if (self.waiting) {
       var center = {
-        translation: [tile.transform.translation[0], tile.transform.translation[1]]
+        translation: tile.transform.translation
       }
       delta = self.movement.center.compute(current, center)
     } else {
       delta = self.movement.tile.compute(keys, current, tile.transform)
     }
-    self.movement.path.reset()
-    self.movement.path.clear()
-  } else {
-    self.moving = true
-    self.waiting = true
-    self.movement.tile.reset()
-    delta = self.movement.path.compute(keys, current)
-  }
 
-  self.geometry.update(delta)
-  var collide = self.collision.handle(world, self.geometry, delta)
-
-  if (collide & inside) {
-    self.waiting = true
-    current = self.geometry.transform
-    center = {
-      translation: [tile.transform.translation[0], tile.transform.translation[1]]
-    }
-    delta = self.movement.center.compute(current, center)
     self.geometry.update(delta)
+    correction = self.collision.handle(world, self.geometry, delta)
+
+    if (correction) {
+      self.geometry.update(correction)
+      self.waiting = true
+      self.movement.tile.reset()
+    }
+  } else {
+    self.waiting = true
+    self.moving = true
     self.movement.tile.reset()
+
+    delta = self.movement.path.compute(keys, current)
+    correction = self.collision.handle(world, self.geometry, delta)
+
+    if (correction && !self.reversing) {
+      self.reversing = true
+      self.geometry.update(correction)
+    }
+
+    if (self.reversing) {
+      delta = self.movement.deadend.compute(keys, current)
+      self.geometry.update(delta)
+    } else {
+      self.geometry.update(delta)
+    }
   }
 }
 
