@@ -37,6 +37,7 @@ module.exports = function (container) {
     var icon = document.createElement('canvas')
     icon.setAttribute('width', width * 0.05)
     icon.setAttribute('height', width * 0.05)
+    icon.className = 'life-icon'
     label.appendChild(icon)
     var character = mouse({
       scale: width * 0.015, 
@@ -49,6 +50,10 @@ module.exports = function (container) {
   }
 
   function update (count) {
+    var existing = document.getElementsByClassName('life-icon')
+    while (existing[0]) {
+      existing[0].remove()
+    }
     _.range(count).forEach(function (i) {
       drawIcon()
     })
