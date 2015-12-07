@@ -1,4 +1,4 @@
-module.exports = function (container) {
+module.exports = function (container, opts) {
   var width = container.clientWidth
   var height = container.clientHeight
   var style
@@ -18,10 +18,13 @@ module.exports = function (container) {
   style.top = 0
   style.width = width * 0.2
   style.height = width * 0.05
+  style.paddingBottom = width * 0.005
   style.position = 'absolute'
-  style.borderRight = 'solid rgb(200,200,200) 8px'
-  style.borderBottom = 'solid rgb(200,200,200) 5px'
+  style.borderRight = 'solid rgb(150,150,150) 8px'
+  style.borderBottom = 'solid rgb(150,150,150) 5px'
   style.transform = 'skew(-45deg)'
+  style.msTransform = 'skew(-45deg)'
+  style.webkitTransform = 'skew(-45deg)'
   label.appendChild(edge)
 
   var text = document.createElement('div')
@@ -35,18 +38,20 @@ module.exports = function (container) {
   style.color = 'rgb(150,150,150)'
   style.fontFamily = 'Hack'
   style.fontSize = width * 0.04 + 'px'
-  text.innerHTML = 'energy'
+  text.innerHTML = 'steps'
   label.appendChild(text)
 
-  var energy = document.createElement('span')
-  style = energy.style
+  var number = document.createElement('span')
+  style = number.style
   style.color = 'rgb(200,200,200)'
+  style.color = 'rgb(150,150,150)'
   style.fontFamily = 'Hack'
   style.fontSize = width * 0.04 + 'px'
-  label.appendChild(energy)
+  label.appendChild(number)
 
-  function update (percent) {
-    energy.innerHTML = percent + '%'
+  function update (count) {
+    count = Math.max(count, 0)
+    number.innerHTML = ((count < 10) ? ('0' + count) : count) + '/' + opts.max
   }
 
   return {

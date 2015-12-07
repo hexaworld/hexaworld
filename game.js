@@ -1,3 +1,5 @@
+var _ = require('lodash')
+var EventEmitter = require('eventemitter2').EventEmitter2
 var Game = require('crtrdg-gameloop')
 var Keyboard = require('crtrdg-keyboard')
 var Time = require('crtrdg-time')
@@ -12,10 +14,11 @@ module.exports = function (element, schema, opts) {
   var container = document.getElementById(element)
   var canvas = document.createElement('canvas')
   var height = container.clientHeight || opts.size
-  console.log(height)
+
   container.style.width = height * 0.7 + 'px'
   container.style.height = height + 'px'
   container.style.position = 'relative'
+  container.style.background = 'rgb(55,55,55)'
 
   canvas.id = 'game'
   canvas.style.marginTop = height * 0.15
@@ -24,15 +27,16 @@ module.exports = function (element, schema, opts) {
 
   var score = require('./ui/score.js')(container)
   var level = require('./ui/level.js')(container, {name: 'playpen'})
-  var energy = require('./ui/energy.js')(container)
+  var steps = require('./ui/steps.js')(container, {max: schema.gameplay.steps})
   var lives = require('./ui/lives.js')(container)
 
   var scoreVal = 0
+  var stepsVal = schema.gameplay.steps
 
   level.update(1, 2)
   score.update(scoreVal)
-  energy.update(90)
-  lives.update(2)
+  steps.update(stepsVal)
+  lives.update(3)
 
   var game = new Game({
     canvas: canvas,
@@ -63,7 +67,8 @@ module.exports = function (element, schema, opts) {
     translation: [game.width / 2, game.width / 2],
     extent: 0.1 * game.width / 2,
     count: 8,
-    offset: 3
+    offset: 3,
+    maxdistance: schema.gameplay.sight
   })
 
   var mask = new Mask({
@@ -76,6 +81,37 @@ module.exports = function (element, schema, opts) {
 
   var time = new Time(game)
 
+  var events = new EventEmitter({
+    wildcard: true
+  })
+
+  function relay (emitter, name, tag) {
+    var emit = function (tag, value) {
+      value = value || {}
+      var ret = value
+      if (typeof ret === 'string') {
+        ret = { value: ret }
+      }
+      events.emit([name, tag], _.merge(ret, { time: (new Date()).toISOString() }))
+    }
+    if (!tag) {
+      emitter.onAny(function (value) {
+        emit(this.event, value)
+      })
+    } else {
+      emitter.on(tag, function (value) {
+        emit(tag, value)
+      })
+    }
+  }
+
+  relay(player, 'player', 'enter')
+  relay(player, 'player', 'exit')
+  relay(keyboard, 'keyboard', 'keyup')
+  relay(keyboard, 'keyboard', 'keydown')
+  relay(game, 'game', 'start')
+  relay(game, 'game', 'end')
+
   player.addTo(game)
   camera.addTo(game)
   world.addTo(game)
@@ -83,7 +119,7 @@ module.exports = function (element, schema, opts) {
 
   keyboard.on('keydown', function (keyCode) {
     if (keyCode === '<space>') {
-      if (game.ticker.paused === true) {
+      if (game.paused === true) {
         game.resume()
       } else {
         game.pause()
@@ -93,6 +129,11 @@ module.exports = function (element, schema, opts) {
 
   player.on('update', function (interval) {
     this.move(keyboard, world)
+  })
+
+  player.on('exit', function (interval) {
+    stepsVal -= 1
+    steps.update(stepsVal)
   })
 
   camera.on('update', function (interval) {
@@ -116,22 +157,28 @@ module.exports = function (element, schema, opts) {
   })
 
   game.on('update', function (interval) {
-    var targets = world.targets()
-    if (targets.length > 0 && targets[0].contains(player.position())) {
-      game.end()
+    var playerCoordinates = player.coordinates()
+    var tile = world.getTileAtCoordinates(playerCoordinates)
+
+    var target
+    if (tile) {
+      target = tile.target()
+    }
+    if (target && target.contains(player.position())) {
+      var cue = tile.cue()
+      if (cue && cue.props.fill) {
+        ring.startFlashing(['#FFFFFF', '#999999', cue.props.fill, cue.props.fill])
+      } else {
+        ring.startFlashing(['#FF5050', '#FF8900', '#00C3EE', '#64FF00'])
+      }
     }
 
-    var position = player.position()
-    var tile = world.tiles[world.locate(position)]
-
-    tile.children.forEach(function (child, i) {
-      child.children.forEach(function (bit, j) {
-        if (bit.props.consumable) {
-          if (bit.contains(position)) {
-            tile.children[i].children.splice(j, 1)
-            scoreVal = scoreVal + 10
-            score.update(scoreVal)
-          }
+    tile.children.some(function (child, i) {
+      return child.children.some(function (bit, j) {
+        if (bit.props.consumable && bit.contains(player.position())) {
+          scoreVal += 10
+          score.update(scoreVal)
+          return tile.children[i].children.splice(j, 1)
         }
       })
     })
@@ -159,6 +206,8 @@ module.exports = function (element, schema, opts) {
       world.load(schema.tiles)
       player.load(schema.players[0])
       ring.reload()
+      scoreVal = 0
+      stepsVal = schema.gameplay.steps
     },
 
     pause: function () {
@@ -167,6 +216,8 @@ module.exports = function (element, schema, opts) {
 
     resume: function () {
       game.resume()
-    }
+    },
+
+    events: events
   }
 }

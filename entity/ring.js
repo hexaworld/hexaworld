@@ -19,6 +19,7 @@ function Ring (opts) {
   this.minangle = opts.minangle || 20
   this.maxdistance = opts.maxdistance || 150
   this.flashing = false
+  this.flashingColors = []
 
   var notches = _.flatten(_.range(6).map(function (side) {
     return _.range(1, count - 1).map(function (ind) {
@@ -53,7 +54,7 @@ function Ring (opts) {
 }
 
 Ring.prototype.draw = function (context) {
-  if (this.flashing) this.flashingColors()
+  if (this.flashing) this.flash()
   this.notches.forEach(function (notch) {
     notch.draw(context)
   })
@@ -65,20 +66,22 @@ Ring.prototype.recolor = function (colors) {
   })
 }
 
-Ring.prototype.startFlashing = function () {
+Ring.prototype.startFlashing = function (colors) {
+  this.flashingColors = colors
   this.flashing = true
 }
 
 Ring.prototype.stopFlashing = function () {
   this.flashing = false
+  this.flashingColors = []
 }
 
-Ring.toggleFlashing = function () {
-  this.flashing ? this.stopFlashing() : this.startFlashing()
+Ring.toggleFlashing = function (colors) {
+  this.flashing ? this.stopFlashing() : this.startFlashing(colors)
 }
 
-Ring.prototype.flashingColors = function () {
-  var colors = _.shuffle(['#FF5050', '#FF8900', '#00C3EE', '#64FF00'])
+Ring.prototype.flash = function () {
+  var colors = this.flashingColors
   this.notches.forEach(function (notch, i) {
     var idx = Math.floor(Math.random() * colors.length) + 0
     notch.props.fill = colors[idx]
@@ -87,6 +90,7 @@ Ring.prototype.flashingColors = function () {
 
 Ring.prototype.reload = function () {
   this.flashing = false
+  this.flashingColors = []
 }
 
 Ring.prototype.project = function (origin, targets) {

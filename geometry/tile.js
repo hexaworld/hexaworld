@@ -12,10 +12,12 @@ module.exports = function (opts) {
 
   var thickness = opts.thickness
 
-  var center = [hex({scale: 0.25, children: [circle({
-    fill: 'white', stroke: 'white', thickness: opts.thickness,
-    translation: [0, 0], scale: 0.075, consumable: true
-  })]})]
+  var center = [
+    hex({
+      scale: 0.25,
+      trigger: true
+    })
+  ]
 
   var wedges = _.range(6).map(function (i) {
     return wedge({rotation: i * 60})
@@ -30,21 +32,27 @@ module.exports = function (opts) {
   _.remove(ends, _.isUndefined)
   var paths = _.range(6).map(function (i) {
     if (_.includes(opts.paths, i)) {
+      var children = []
+      if (Math.random() > 0) {
+        children = [
+          circle({
+            fill: 'white', stroke: 'white', thickness: opts.thickness,
+            translation: [0, 1.5], scale: 0.06, consumable: true
+          }),
+          circle({
+            fill: 'white', stroke: 'white', thickness: opts.thickness,
+            translation: [0, 2], scale: 0.06, consumable: true
+          }),
+          circle({
+            fill: 'white', stroke: 'white', thickness: opts.thickness,
+            translation: [0, 2.5], scale: 0.06, consumable: true
+          })
+        ]
+      }
       return path({
         rotation: i * 60,
         thickness: thickness,
-        children: [circle({
-          fill: 'white', stroke: 'white', thickness: opts.thickness,
-          translation: [0, 1], scale: 0.075, consumable: true
-        }),
-        circle({
-          fill: 'white', stroke: 'white', thickness: opts.thickness,
-          translation: [0, 2], scale: 0.075, consumable: true
-        }),
-        circle({
-          fill: 'white', stroke: 'white', thickness: opts.thickness,
-          translation: [0, 3], scale: 0.075, consumable: true
-        })]
+        children: children
       })
     }
   })
@@ -71,6 +79,6 @@ module.exports = function (opts) {
       scale: opts.scale
     },
 
-    children: opts.children ? children.concat(opts.children) : children
+    children: opts.children ? opts.children.concat(children) : children
   })
 }

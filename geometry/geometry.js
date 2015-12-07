@@ -47,6 +47,14 @@ Geometry.prototype.contains = function (point) {
   return inside(point, self.points)
 }
 
+Geometry.prototype.target = function (point) {
+  return _.find(this.children, function (child) { return child.props.target })
+}
+
+Geometry.prototype.cue = function (point) {
+  return _.find(this.children, function (child) { return child.props.cue })
+}
+
 Geometry.prototype.intersects = function (other) {
   var self = this
   var response = new sat.Response()
