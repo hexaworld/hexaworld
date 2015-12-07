@@ -34,14 +34,10 @@ function Player (schema, opts) {
   })
   this.collision = new Collision()
   this.waiting = true
-<<<<<<< HEAD
   this.reversing = false
-=======
-
   // this will usually cause an 'enter' event to be emitted at the start of a game
   this.inside = false
   this.moving = true
->>>>>>> master
 }
 
 Player.prototype.load = function (schema) {
@@ -85,6 +81,9 @@ Player.prototype.move = function (keyboard, world) {
 
   if (inside) {
     self.moving = false
+    self.movement.deadend.reset()
+    self.reversing = false
+
     if (self.movement.tile.keypress(keys)) self.waiting = false
     if (self.waiting) {
       var center = {
@@ -103,15 +102,11 @@ Player.prototype.move = function (keyboard, world) {
       self.waiting = true
       self.movement.tile.reset()
     }
-    self.movement.deadend.reset()
-    self.reversing = false
   } else {
-<<<<<<< HEAD
-=======
-    self.moving = true
     self.waiting = true
+    self.moving = true
     self.movement.tile.reset()
->>>>>>> master
+
     delta = self.movement.path.compute(keys, current)
     correction = self.collision.handle(world, self.geometry, delta)
 
@@ -126,9 +121,6 @@ Player.prototype.move = function (keyboard, world) {
     } else {
       self.geometry.update(delta)
     }
-
-    self.waiting = true
-    self.movement.tile.reset()
   }
 }
 
