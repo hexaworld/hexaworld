@@ -5,8 +5,8 @@ module.exports = function (container, max) {
 
   var label = document.createElement('div')
   style = label.style
-  style.right = width * 0.225
-  style.top = height * 0.075
+  style.left = width * 0.2
+  style.bottom = height * 0.1
   style.width = width * 0.2
   style.height = width * 0.05
   style.position = 'absolute'
@@ -19,8 +19,8 @@ module.exports = function (container, max) {
   style.width = width * 0.2
   style.height = width * 0.06
   style.position = 'absolute'
-  style.borderBottom = 'solid rgb(150,150,150) 5px'
-  style.borderLeft = 'solid rgb(150,150,150) 8px'
+  style.borderBottom = 'solid rgb(150,150,150) ' + width * 0.011 + 'px'
+  style.borderLeft = 'solid rgb(150,150,150) ' + width * 0.011 * 1.6 + 'px'
   style.transform = 'skew(45deg)'
   style.msTransform = 'skew(45deg)'
   style.webkitTransform = 'skew(45deg)'
@@ -29,10 +29,12 @@ module.exports = function (container, max) {
   var text = document.createElement('div')
   style = text.style
   style.position = 'absolute'
-  style.left = width * 0.04
-  style.bottom = height * 0.001
+  style.right = width * 0.0
+  style.marginRight = -width * 0.02
+  style.bottom = -height * 0.05
   style.width = width * 0.3
   style.position = 'absolute'
+  style.textAlign = 'right'
   style.color = 'rgb(150,150,150)'
   style.fontFamily = 'Hack'
   style.fontSize = width * 0.04 + 'px'
@@ -42,7 +44,14 @@ module.exports = function (container, max) {
   var number = document.createElement('span')
   style = number.style
   style.color = 'rgb(200,200,200)'
-  text.appendChild(number)
+  style.right = width * 0.0
+  style.marginRight = -width * 0.02
+  style.width = width * 0.3
+  style.position = 'absolute'
+  style.textAlign = 'right'
+  style.fontFamily = 'Hack'
+  style.fontSize = width * 0.04 + 'px'
+  label.appendChild(number)
 
   function update (count) {
     number.innerHTML = count
