@@ -13,7 +13,7 @@ var schema = {
   players: [
     {translation: [0, 0], rotation: 0, character: 'mouse'}
   ],
-  gameplay: {steps: 20, sight: 150}
+  gameplay: {steps: 20, lives: 3, sight: 150}
 }
 
 var game = require('./game.js')
