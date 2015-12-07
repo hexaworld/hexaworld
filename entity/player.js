@@ -62,7 +62,8 @@ Player.prototype.move = function (keyboard, world) {
   var keys = keyboard.keysDown
 
   var delta
-  
+  var correction
+
   if (inside) {
     if (self.movement.tile.keypress(keys)) self.waiting = false
     if (self.waiting) {
@@ -73,34 +74,33 @@ Player.prototype.move = function (keyboard, world) {
     } else {
       delta = self.movement.tile.compute(keys, current, tile.transform)
     }
-    
+
     self.geometry.update(delta)
-    var correction = self.collision.handle(world, self.geometry, delta)
+    correction = self.collision.handle(world, self.geometry, delta)
 
     if (correction) {
       self.geometry.update(correction)
       self.waiting = true
       self.movement.tile.reset()
-    } 
+    }
     self.movement.deadend.reset()
     self.reversing = false
-
   } else {
-    delta = self.movement.path.compute(keys, current) 
-    var correction = self.collision.handle(world, self.geometry, delta)
+    delta = self.movement.path.compute(keys, current)
+    correction = self.collision.handle(world, self.geometry, delta)
 
     if (correction && !self.reversing) {
       self.reversing = true
-      self.geometry.update(correction)      
+      self.geometry.update(correction)
     }
 
     if (self.reversing) {
-      delta = self.movement.deadend.compute(keys, current) 
+      delta = self.movement.deadend.compute(keys, current)
       self.geometry.update(delta)
     } else {
       self.geometry.update(delta)
     }
-    
+
     self.waiting = true
     self.movement.tile.reset()
   }
