@@ -210,6 +210,7 @@ module.exports = function (element, schema, opts) {
         setTimeout( function() { 
           fail = false
           message.hide()
+          world.reload(schema.tiles)
           main.show()
         }, 1000)
       }
@@ -235,6 +236,7 @@ module.exports = function (element, schema, opts) {
         steps.update(state.steps)
         setTimeout( function() { 
           message.hide()
+          world.reload(schema.tiles)
           main.show()
           complete = false
         }, 1000)
