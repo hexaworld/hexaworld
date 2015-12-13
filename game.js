@@ -3,6 +3,7 @@ var EventEmitter = require('eventemitter2').EventEmitter2
 var Game = require('crtrdg-gameloop')
 var Keyboard = require('crtrdg-keyboard')
 var Time = require('crtrdg-time')
+var State = require('./state.js')
 var Player = require('./entity/player.js')
 var Camera = require('./entity/camera.js')
 var World = require('./entity/world.js')
@@ -11,33 +12,21 @@ var Mask = require('./util/mask.js')
 
 module.exports = function (element, schema, opts) {
   opts = opts || {size: 700}
+
   var container = document.getElementById(element)
-  var canvas = document.createElement('canvas')
-  var height = container.clientHeight || opts.size
 
-  if (height * 0.7 > window.innerWidth) {
-    height = window.innerWidth * (1 / 0.7) - 30
-  }
-
-  container.style.width = height * 0.7 + 'px'
-  container.style.height = height + 'px'
-  container.style.position = 'relative'
-  container.style.background = 'rgb(55,55,55)'
-
-  canvas.id = 'game'
-  canvas.style.marginTop = height * 0.15
-  canvas.style.position = 'absolute'
-  container.appendChild(canvas)
-
+  var main = require('./ui/main.js')(container, opts)
   var score = require('./ui/score.js')(container)
-  var level = require('./ui/level.js')(container)
+  var stages = require('./ui/stages.js')(container)
   var steps = require('./ui/steps.js')(container)
   var lives = require('./ui/lives.js')(container)
 
+  var state = new State(schema.gameplay)
+
   var game = new Game({
-    canvas: canvas,
-    width: height * 0.7,
-    height: height * 0.7
+    canvas: main.canvas,
+    width: main.height * 0.7,
+    height: main.height * 0.7
   })
 
   var keyboard = new Keyboard(game)
@@ -52,7 +41,7 @@ module.exports = function (element, schema, opts) {
   })
 
   var camera = new Camera({
-    scale: 100 * 1 / height,
+    scale: 130 * 1 / main.height,
     speed: {translation: 0.1, rotation: 0.1, scale: 0.002},
     friction: 0.9,
     yoked: true
@@ -127,8 +116,8 @@ module.exports = function (element, schema, opts) {
   })
 
   player.on('exit', function (interval) {
-    stepsVal -= 1
-    steps.update(stepsVal, stepsMax)
+    state.steps.current -= 1
+    steps.update(state.steps)
   })
 
   camera.on('update', function (interval) {
@@ -171,8 +160,8 @@ module.exports = function (element, schema, opts) {
     tile.children.some(function (child, i) {
       return child.children.some(function (bit, j) {
         if (bit.props.consumable && bit.contains(player.position())) {
-          scoreVal += 10
-          score.update(scoreVal)
+          state.score += 10
+          score.update(state.score)
           return tile.children[i].children.splice(j, 1)
         }
       })
@@ -184,12 +173,9 @@ module.exports = function (element, schema, opts) {
   var done = false
 
   game.on('end', function () {
-    ring.startFlashing()
     if (!done) {
-      console.log('win!')
-      console.log(schema.gameplay.timeout - time.seconds())
-      scoreVal = scoreVal + 1000
-      score.update(scoreVal)
+      state.score.current += 1000
+      score.update(state.score)
       done = true
     }
   })
@@ -198,14 +184,11 @@ module.exports = function (element, schema, opts) {
     world.reload(schema.tiles)
     player.reload(schema.players[0])
     ring.reload(schema.gameplay)
-    lifeVal = schema.gameplay.lives
-    scoreVal = 0
-    stepsMax = schema.gameplay.steps
-    stepsVal = schema.gameplay.steps
-    level.update('playpen', 1, 2)
-    score.update(scoreVal)
-    steps.update(stepsVal, stepsMax)
-    lives.update(lifeVal)
+    state.reload(schema.gameplay)
+    score.update(state.score)
+    stages.update(state.stages)
+    steps.update(state.steps)
+    lives.update(state.lives)
   }
 
   reload(schema)

@@ -49,12 +49,12 @@ module.exports = function (container) {
     character.draw(icon.getContext('2d'), camera, {order: 'bottom'})
   }
 
-  function update (count) {
+  function update (state) {
     var existing = document.getElementsByClassName('life-icon')
     while (existing[0]) {
       existing[0].remove()
     }
-    _.range(count).forEach(function (i) {
+    _.range(state.current).forEach(function (i) {
       drawIcon()
     })
   }

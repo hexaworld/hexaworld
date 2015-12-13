@@ -13,7 +13,16 @@ var schema = {
   players: [
     {translation: [0, 0], rotation: 0, character: 'mouse'}
   ],
-  gameplay: {steps: 20, lives: 3, sight: 150}
+  gameplay: {
+    name: 'welcome',
+    steps: 20, 
+    lives: 3, 
+    sight: 150,
+    stages: 2,
+    start: [0, 0],
+    target: [0, 1],
+    message: 'welcome to hexaworld! try to find the big white circle'
+  }
 }
 
 var game = require('./game.js')

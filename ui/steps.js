@@ -48,11 +48,13 @@ module.exports = function (container) {
   style.fontSize = width * 0.04 + 'px'
   label.appendChild(number)
 
-  function update (count, max) {
-    count = Math.max(count, 0)
-    count = ((count < 10) ? ('0' + count) : count)
-    max = ((max < 10) ? ('0' + max) : max)
-    number.innerHTML = count + '/' + max
+  function update (state) {
+    var current = state.current
+    var total = state.total
+    current = Math.max(current, 0)
+    current = ((current < 10) ? ('0' + current) : current)
+    total = ((total < 10) ? ('0' + total) : total)
+    number.innerHTML = current + '/' + total
   }
 
   return {
