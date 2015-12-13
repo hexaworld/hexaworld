@@ -9,7 +9,13 @@ var World = require('./entity/world.js')
 var Ring = require('./entity/ring.js')
 var Mask = require('./util/mask.js')
 
-module.exports = function (schema, canvas) {
+module.exports = function (canvas, schema, opts) {
+  opts = opts || {size: 700}
+
+  if (_.isString(canvas)) {
+    container = document.getElementById(canvas)
+    canvas = require('./ui/main.js')(container, opts).canvas
+  }
 
   var height = canvas.clientHeight
 
