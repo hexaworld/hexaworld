@@ -46,11 +46,11 @@ module.exports = function (id, schemas, config, opts) {
   })
 
   function completed() {
-    if (state.stages.current === state.stages.total) {
+    if (state.stages.current === state.stages.total - 1) {
       game.flash()
       setTimeout( function() { 
         main.hide()
-        message.show('YOU WON!')
+        message.show('LEVEL COMPLETE')
       }, 1000)
     } else {
       game.flash()
@@ -82,7 +82,7 @@ module.exports = function (id, schemas, config, opts) {
 
     if (state.steps.current === 0 & state.lives.current > 1) {
       main.hide()
-      message.show('OH NO!')
+      message.show('OUTTA STEPS TRY AGAIN')
       state.lives.current -= 1
       lives.update(state.lives)
       setTimeout( function() {

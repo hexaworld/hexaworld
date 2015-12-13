@@ -5,7 +5,7 @@ var opts = {
 var config = {
   name: 'welcome',
   lives: 3,
-  stages: 2,
+  stages: 3,
   size: 700,
   steps: 6
 }
