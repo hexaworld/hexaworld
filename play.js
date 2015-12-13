@@ -1,8 +1,11 @@
 var _ = require('lodash')
 var State = require('./state.js')
 
-module.exports = function (id, schemas, config, opts) {
+module.exports = function (id, level, opts) {
   opts = opts || {size: 700}
+
+  var maps = level.maps
+  var config = level.config
 
   var container = document.getElementById(id)
 
@@ -15,7 +18,7 @@ module.exports = function (id, schemas, config, opts) {
 
   var state = new State(config)
 
-  var game = require('./game.js')(schemas[0], main.canvas)
+  var game = require('./game.js')(main.canvas, maps[0])
 
   main.hide()
   message.show('WELCOME TO HEXAWORLD!')
@@ -38,7 +41,7 @@ module.exports = function (id, schemas, config, opts) {
   })
 
   game.events.on(['player', 'enter'], function(event) {
-    if (_.isEqual(event.tile, schemas[state.stages.current].gameplay.target)) {
+    if (_.isEqual(event.tile, maps[state.stages.current].gameplay.target)) {
       completed()
     } else {
       failed()
@@ -64,7 +67,7 @@ module.exports = function (id, schemas, config, opts) {
         main.hide()
         message.show('YOU DID IT!')
         setTimeout( function() {
-          game.reload(schemas[state.stages.current])
+          game.reload(maps[state.stages.current])
           message.hide()
           main.show()
         }, 1000)
@@ -88,7 +91,7 @@ module.exports = function (id, schemas, config, opts) {
       setTimeout( function() {
         state.steps.current = state.steps.total
         steps.update(state.steps)
-        game.moveto(schemas[state.stages.current].gameplay.start)
+        game.moveto(maps[state.stages.current].gameplay.start)
         message.hide()
         main.show()
       }, 1000)

@@ -6,7 +6,6 @@ var config = {
   name: 'welcome',
   lives: 3,
   stages: 3,
-  size: 700,
   steps: 6
 }
 
@@ -32,10 +31,15 @@ var base = function(start) {
   }
 }
 
-var schemas = [
+var maps = [
   base({translation: [0, -2], rotation: 180}),
   base({translation: [1, -1], rotation: 0}),
   base({translation: [0, -1], rotation: 0})
 ]
 
-require('./play.js')('container', schemas, config, opts)
+var level = {
+  config: config,
+  maps: maps
+}
+
+require('./play.js')('container', level, opts)
