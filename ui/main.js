@@ -1,5 +1,4 @@
 module.exports = function (container, opts) {
-    
   var canvas = document.createElement('canvas')
   var height = container.clientHeight || opts.size
 
@@ -21,5 +20,4 @@ module.exports = function (container, opts) {
     canvas: canvas,
     height: height
   }
-
 }

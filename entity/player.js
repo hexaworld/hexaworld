@@ -1,6 +1,5 @@
 var _ = require('lodash')
 var inherits = require('inherits')
-var transform = require('transformist')
 var mouse = require('../geometry/mouse.js')
 var Collision = require('../util/collision.js')
 var Fixmove = require('../movement/fixmove.js')
@@ -59,7 +58,7 @@ Player.prototype.reload = function (schema) {
   }
 }
 
-Player.prototype.moveto = function(coordinate) {
+Player.prototype.moveto = function (coordinate) {
   var translation = [
     50 * 3 / 2 * coordinate[0],
     50 * Math.sqrt(3) * (coordinate[1] + coordinate[0] / 2)
@@ -71,7 +70,7 @@ Player.prototype.moveto = function(coordinate) {
 
 Player.prototype.move = function (keyboard, world) {
   var self = this
-  
+
   var tile = world.getTileAtCoordinates(this.coordinates())
   var current = self.geometry.transform
 

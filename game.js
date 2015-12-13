@@ -76,7 +76,7 @@ module.exports = function (element, schema, opts) {
       if (typeof ret === 'string') {
         ret = { value: ret }
       }
-      events.emit([name, tag], _.merge(ret, { time: (new Date()).toISOString() }))
+      events.emit([name, tag], _.merge(ret, { time: (time.seconds()).toISOString() }))
     }
     if (!tag) {
       emitter.onAny(function (value) {

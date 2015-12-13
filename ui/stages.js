@@ -41,8 +41,8 @@ module.exports = function (container) {
   label.appendChild(text)
 
   function update (state) {
-    text.innerHTML = state.name + ' ' + '<span style="color: rgb(200,200,200)">' 
-      + state.current + '/' + state.total + '</span>'
+    text.innerHTML = state.name + ' ' + '<span style="color: rgb(200,200,200)">' +
+      state.current + '/' + state.total + '</span>'
   }
 
   return {

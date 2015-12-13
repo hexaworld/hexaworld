@@ -15,8 +15,8 @@ var schema = {
   ],
   gameplay: {
     name: 'welcome',
-    steps: 20, 
-    lives: 3, 
+    steps: 20,
+    lives: 3,
     sight: 150,
     stages: 2,
     start: [0, 0],

@@ -40,9 +40,9 @@ module.exports = function (container) {
     icon.className = 'life-icon'
     label.appendChild(icon)
     var character = mouse({
-      scale: width * 0.015, 
-      stroke: 'rgb(150,150,150)', 
-      fill: 'rgb(75,75,75)', 
+      scale: width * 0.015,
+      stroke: 'rgb(150,150,150)',
+      fill: 'rgb(75,75,75)',
       thickness: width * 0.006
     })
     var camera = {transform: transform(), game: {width: width * 0.05, height: width * 0.05}}
