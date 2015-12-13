@@ -20,6 +20,15 @@ module.exports = function (element, schema, opts) {
   var stages = require('./ui/stages.js')(container)
   var steps = require('./ui/steps.js')(container)
   var lives = require('./ui/lives.js')(container)
+  var message = require('./ui/message.js')(container)
+
+  main.hide()
+  message.show('WELCOME TO HEXAWORLD!')
+
+  setTimeout( function() {
+    main.show()
+    message.hide()
+  }, 2000)
 
   var state = new State(schema.gameplay)
 
@@ -155,30 +164,83 @@ module.exports = function (element, schema, opts) {
       } else {
         ring.startFlashing(['#FF5050', '#FF8900', '#00C3EE', '#64FF00'])
       }
+      setTimeout( function() { 
+        completed() 
+      }, 1000)
     }
 
     tile.children.some(function (child, i) {
       return child.children.some(function (bit, j) {
         if (bit.props.consumable && bit.contains(player.position())) {
-          state.score += 10
+          state.score.current += 10
           score.update(state.score)
           return tile.children[i].children.splice(j, 1)
         }
       })
     })
+
+    if (state.steps.current === 0 & state.lives.current > 0) {
+      setTimeout( function() {
+        failed() 
+      }, 1000)
+    }
+
   })
 
   game.on('start', function () {})
 
-  var done = false
+  var complete = false
+  var fail = false
 
-  game.on('end', function () {
-    if (!done) {
-      state.score.current += 1000
-      score.update(state.score)
-      done = true
+  function failed () {
+    if (!fail) {
+      main.hide()
+      state.lives.current -= 1
+      lives.update(state.lives)
+      fail = true
+
+      if (state.lives.current === 0) {
+        message.show('YOU LOST!')
+      } else {
+        message.show('OH NO!')
+        state.steps.current = state.steps.total
+        player.moveto(schema.gameplay.start[state.stages.current - 1])
+        ring.stopFlashing()
+        steps.update(state.steps)
+        setTimeout( function() { 
+          fail = false
+          message.hide()
+          main.show()
+        }, 1000)
+      }
     }
-  })
+  }
+
+  function completed () {
+    if (!complete) {
+      main.hide()
+      state.stages.current += 1
+      stages.update(state.stages)
+      complete = true
+
+      if (state.stages.current === (state.stages.total + 1)) {
+        message.show('YOU WON!')
+      } else {
+        message.show('YOU DID IT!')
+        state.score.current += 1000
+        state.steps.current = state.steps.total
+        player.moveto(schema.gameplay.start[state.stages.current - 1])
+        ring.stopFlashing()
+        score.update(state.score)
+        steps.update(state.steps)
+        setTimeout( function() { 
+          message.hide()
+          main.show()
+          complete = false
+        }, 1000)
+      }
+    }
+  }
 
   function reload (schema) {
     world.reload(schema.tiles)

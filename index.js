@@ -11,15 +11,15 @@ var schema = {
     {translation: [1, -2], paths: [0, 2], cue: {fill: '#CF5557'}}
   ],
   players: [
-    {translation: [0, 0], rotation: 0, character: 'mouse'}
+    {translation: [0, -2], rotation: 0, character: 'mouse'}
   ],
   gameplay: {
     name: 'welcome',
-    steps: 20,
+    steps: 5,
     lives: 3,
     sight: 150,
-    stages: 2,
-    start: [0, 0],
+    stages: 3,
+    start: [[0, -2], [0, -1], [1, -1]],
     target: [0, 1],
     message: 'welcome to hexaworld! try to find the big white circle'
   }

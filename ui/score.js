@@ -54,7 +54,7 @@ module.exports = function (container) {
   label.appendChild(number)
 
   function update (state) {
-    number.innerHTML = state
+    number.innerHTML = state.current
   }
 
   return {
