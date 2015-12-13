@@ -21,19 +21,18 @@ module.exports = function (container) {
   style.opacity = 0
   label.appendChild(message)
 
-  function show(text) {
-  	style.opacity = 1
-  	message.innerHTML = text
+  function show (text) {
+    style.opacity = 1
+    message.innerHTML = text
   }
 
-  function hide(text) {
-  	style.opacity = 0
-  	message.innerHTML = text
+  function hide (text) {
+    style.opacity = 0
+    message.innerHTML = text
   }
 
   return {
-  	show: show,
-  	hide: hide
+    show: show,
+    hide: hide
   }
-
 }

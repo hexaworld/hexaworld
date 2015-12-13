@@ -53,7 +53,7 @@ function Player (opts) {
 }
 
 Player.prototype.moveto = function (transform) {
-  rotation = transform.rotation || 0
+  var rotation = transform.rotation || 0
   var translation = [
     50 * 3 / 2 * transform.translation[0],
     50 * Math.sqrt(3) * (transform.translation[1] + transform.translation[0] / 2)

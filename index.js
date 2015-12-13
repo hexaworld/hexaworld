@@ -9,7 +9,7 @@ var config = {
   steps: 6
 }
 
-var base = function(start) {
+var base = function (start) {
   return {
     tiles: [
       {translation: [0, 0], paths: [0, 2, 4], cue: {fill: '#DE863A'}},
@@ -23,7 +23,7 @@ var base = function(start) {
       {translation: [1, -2], paths: [0, 2], cue: {fill: '#CF5557'}}
     ],
     gameplay: {
-      start: {translation: start.translation, rotation: start.rotation}, 
+      start: {translation: start.translation, rotation: start.rotation},
       target: [0, 1],
       flash: ['#FF5050', '#FF8900', '#00C3EE', '#64FF00'],
       message: 'welcome to hexaworld! try to find the big white circle'

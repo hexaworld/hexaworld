@@ -25,22 +25,22 @@ module.exports = function (id, level, opts) {
 
   game.start()
 
-  setTimeout( function() {
+  setTimeout(function () {
     message.hide()
     main.show()
   }, 2000)
 
-  game.events.on(['player', 'collect'], function(event) {
+  game.events.on(['player', 'collect'], function (event) {
     state.score.current += 10
     score.update(state.score)
   })
 
-  game.events.on(['player', 'exit'], function(event) {
+  game.events.on(['player', 'exit'], function (event) {
     state.steps.current -= 1
     steps.update(state.steps)
   })
 
-  game.events.on(['player', 'enter'], function(event) {
+  game.events.on(['player', 'enter'], function (event) {
     if (_.isEqual(event.tile, maps[state.stages.current].gameplay.target)) {
       completed()
     } else {
@@ -48,10 +48,10 @@ module.exports = function (id, level, opts) {
     }
   })
 
-  function completed() {
+  function completed () {
     if (state.stages.current === state.stages.total - 1) {
       game.flash()
-      setTimeout( function() { 
+      setTimeout(function () {
         main.hide()
         message.show('LEVEL COMPLETE')
       }, 1000)
@@ -63,10 +63,10 @@ module.exports = function (id, level, opts) {
       state.steps.current = state.steps.total
       score.update(state.score)
       steps.update(state.steps)
-      setTimeout( function() { 
+      setTimeout(function () {
         main.hide()
         message.show('YOU DID IT!')
-        setTimeout( function() {
+        setTimeout(function () {
           game.reload(maps[state.stages.current])
           message.hide()
           main.show()
@@ -75,7 +75,7 @@ module.exports = function (id, level, opts) {
     }
   }
 
-  function failed() {
+  function failed () {
     if (state.steps.current === 0 & state.lives.current === 1) {
       state.lives.current -= 1
       lives.update(state.lives)
@@ -88,7 +88,7 @@ module.exports = function (id, level, opts) {
       message.show('OUTTA STEPS TRY AGAIN')
       state.lives.current -= 1
       lives.update(state.lives)
-      setTimeout( function() {
+      setTimeout(function () {
         state.steps.current = state.steps.total
         steps.update(state.steps)
         game.moveto(maps[state.stages.current].gameplay.start)

@@ -18,11 +18,11 @@ module.exports = function (container, opts) {
   canvas.style.position = 'absolute'
   container.appendChild(canvas)
 
-  function hide() {
+  function hide () {
     canvas.style.opacity = 0
   }
 
-  function show() {
+  function show () {
     canvas.style.opacity = 1
   }
 

@@ -13,7 +13,7 @@ module.exports = function (canvas, schema, opts) {
   opts = opts || {size: 700}
 
   if (_.isString(canvas)) {
-    container = document.getElementById(canvas)
+    var container = document.getElementById(canvas)
     canvas = require('./ui/main.js')(container, opts).canvas
   }
 
@@ -176,7 +176,7 @@ module.exports = function (canvas, schema, opts) {
       player.moveto(transform)
     },
 
-    flash: function() {
+    flash: function () {
       ring.startFlashing(schema.gameplay.flash)
     },
 
