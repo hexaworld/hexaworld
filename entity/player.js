@@ -59,9 +59,10 @@ Player.prototype.moveto = function (transform) {
     50 * Math.sqrt(3) * (transform.translation[1] + transform.translation[0] / 2)
   ]
   this.geometry.unstage()
-  this.geometry.transform.rotation = rotation
   this.geometry.transform.translation = translation
+  this.geometry.transform.rotation = 0
   this.geometry.stage()
+  this.geometry.update({rotation: rotation})
 }
 
 Player.prototype.move = function (keyboard, world) {
