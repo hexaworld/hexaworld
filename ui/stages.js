@@ -40,9 +40,9 @@ module.exports = function (container) {
   text.innerHTML = 'playpen '
   label.appendChild(text)
 
-  function update (name, current, max) {
-    text.innerHTML = name + ' ' + '<span style="color: rgb(200,200,200)">' 
-      + current + '/' + max + '</span>'
+  function update (state) {
+    text.innerHTML = state.name + ' ' + '<span style="color: rgb(200,200,200)">' 
+      + state.current + '/' + state.total + '</span>'
   }
 
   return {
