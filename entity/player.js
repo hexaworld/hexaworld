@@ -1,5 +1,6 @@
 var _ = require('lodash')
 var inherits = require('inherits')
+var transform = require('transformist')
 var mouse = require('../geometry/mouse.js')
 var Collision = require('../util/collision.js')
 var Fixmove = require('../movement/fixmove.js')
@@ -58,11 +59,22 @@ Player.prototype.reload = function (schema) {
   }
 }
 
+Player.prototype.moveto = function(coordinate) {
+  var translation = [
+    50 * 3 / 2 * coordinate[0],
+    50 * Math.sqrt(3) * (coordinate[1] + coordinate[0] / 2)
+  ]
+  this.geometry.unstage()
+  this.geometry.transform.translation = translation
+  this.geometry.stage()
+}
+
 Player.prototype.move = function (keyboard, world) {
   var self = this
-
+  
   var tile = world.getTileAtCoordinates(this.coordinates())
   var current = self.geometry.transform
+
   var trigger = _.find(tile.children, function (child) { return child.props.trigger })
   var inside = trigger.contains(current.translation)
   var keys = keyboard.keysDown
@@ -133,12 +145,9 @@ Player.prototype.position = function () {
 
 Player.prototype.coordinates = function () {
   var position = this.position()
-
   var tileScale = 50
-
   var x = position[0] / 3 / tileScale * 2
   var y = (position[1] - tileScale * Math.sqrt(3) * x / 2) / (tileScale * Math.sqrt(3))
-
   return [Math.round(x), Math.round(y)]
 }
 
