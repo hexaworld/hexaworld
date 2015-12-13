@@ -12,6 +12,8 @@ module.exports = function (container, opts) {
   container.style.background = 'rgb(55,55,55)'
 
   canvas.id = 'game'
+  canvas.width = height * 0.7
+  canvas.height = height * 0.7
   canvas.style.marginTop = height * 0.15
   canvas.style.position = 'absolute'
   container.appendChild(canvas)

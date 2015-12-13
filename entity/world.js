@@ -68,7 +68,7 @@ World.prototype.locate = function (point) {
   return _.indexOf(status, true)
 }
 
-World.prototype.getTileAtCoordinates = function (point) {
+World.prototype.gettile = function (point) {
   return this._tileCache[point[0]][point[1]]
 }
 

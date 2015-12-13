@@ -1,16 +1,16 @@
 module.exports = State
 
-function State (schema) {
+function State (opts) {
   if (!(this instanceof State)) {
-    return new State(schema)
+    return new State(opts)
   }
-  this.reload(schema)
+  this.reload(opts)
 }
 
-State.prototype.reload = function (schema) {
+State.prototype.reload = function (opts) {
   this.completed = 0
   this.score = {current: 0}
-  this.lives = {current: schema.lives, total: schema.lives}
-  this.steps = {current: schema.steps, total: schema.steps}
-  this.stages = {name: schema.name, current: 1, total: schema.stages}
+  this.lives = {current: opts.lives, total: opts.lives}
+  this.steps = {current: opts.steps, total: opts.steps}
+  this.stages = {name: opts.name, current: 0, total: opts.stages}
 }

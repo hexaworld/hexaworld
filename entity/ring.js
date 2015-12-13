@@ -8,7 +8,7 @@ var Entity = require('crtrdg-entity')
 module.exports = Ring
 inherits(Ring, Entity)
 
-function Ring (schema, opts) {
+function Ring (opts) {
   var offset = opts.offset || 0
   var count = opts.count || 6
   var extent = opts.extent || 20
@@ -17,6 +17,7 @@ function Ring (schema, opts) {
 
   this.maxangle = opts.maxangle || 360
   this.minangle = opts.minangle || 20
+  this.sight = opts.sight || 150
 
   var notches = _.flatten(_.range(6).map(function (side) {
     return _.range(1, count - 1).map(function (ind) {
@@ -48,11 +49,6 @@ function Ring (schema, opts) {
   })
 
   this.notches = notches
-  this.reload(schema)
-}
-
-Ring.prototype.reload = function (schema) {
-  this.sight = schema.sight
   this.flashing = false
   this.flashingColors = []
 }

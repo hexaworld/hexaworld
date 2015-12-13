@@ -9,9 +9,22 @@ var Entity = require('crtrdg-entity')
 module.exports = Player
 inherits(Player, Entity)
 
-function Player (schema, opts) {
+function Player (opts) {
   this.opts = opts || {}
-  this.reload(schema)
+  var translation = [
+    50 * 3 / 2 * opts.translation[0],
+    50 * Math.sqrt(3) * (opts.translation[1] + opts.translation[0] / 2)
+  ]
+  if (opts.character === 'mouse') {
+    this.geometry = mouse({
+      translation: translation,
+      rotation: opts.rotation,
+      fill: opts.fill,
+      stroke: opts.stroke,
+      scale: opts.scale,
+      thickness: opts.thickness
+    })
+  }
   this.movement = {}
   this.movement.center = new Fixmove({speed: opts.speed})
   this.movement.tile = new Automove({
@@ -39,31 +52,14 @@ function Player (schema, opts) {
   this.moving = true
 }
 
-Player.prototype.reload = function (schema) {
-  var self = this
+Player.prototype.moveto = function (transform) {
+  rotation = transform.rotation || 0
   var translation = [
-    50 * 3 / 2 * schema.translation[0],
-    50 * Math.sqrt(3) * (schema.translation[1] + schema.translation[0] / 2)
-  ]
-  var rotation = schema.rotation
-  if (schema.character === 'mouse') {
-    self.geometry = mouse({
-      translation: translation,
-      rotation: rotation,
-      fill: self.opts.fill,
-      stroke: self.opts.stroke,
-      scale: self.opts.scale,
-      thickness: self.opts.thickness
-    })
-  }
-}
-
-Player.prototype.moveto = function (coordinate) {
-  var translation = [
-    50 * 3 / 2 * coordinate[0],
-    50 * Math.sqrt(3) * (coordinate[1] + coordinate[0] / 2)
+    50 * 3 / 2 * transform.translation[0],
+    50 * Math.sqrt(3) * (transform.translation[1] + transform.translation[0] / 2)
   ]
   this.geometry.unstage()
+  this.geometry.transform.rotation = rotation
   this.geometry.transform.translation = translation
   this.geometry.stage()
 }
@@ -71,7 +67,7 @@ Player.prototype.moveto = function (coordinate) {
 Player.prototype.move = function (keyboard, world) {
   var self = this
 
-  var tile = world.getTileAtCoordinates(this.coordinates())
+  var tile = world.gettile(this.coordinates())
   var current = self.geometry.transform
 
   var trigger = _.find(tile.children, function (child) { return child.props.trigger })
@@ -79,10 +75,10 @@ Player.prototype.move = function (keyboard, world) {
   var keys = keyboard.keysDown
 
   if (inside && !self.inside) {
-    self.emit('enter', { tile: tile.transform.translation, position: self.geometry.transform })
+    self.emit('enter', { tile: self.coordinates(), position: self.geometry.transform })
     self.inside = true
   } else if (!inside && self.inside) {
-    self.emit('exit', { tile: tile.transform.translation, position: self.geometry.transform })
+    self.emit('exit', { tile: self.coordinates(), position: self.geometry.transform })
     self.inside = false
   }
 

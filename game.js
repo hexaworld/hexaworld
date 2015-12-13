@@ -3,45 +3,29 @@ var EventEmitter = require('eventemitter2').EventEmitter2
 var Game = require('crtrdg-gameloop')
 var Keyboard = require('crtrdg-keyboard')
 var Time = require('crtrdg-time')
-var State = require('./state.js')
 var Player = require('./entity/player.js')
 var Camera = require('./entity/camera.js')
 var World = require('./entity/world.js')
 var Ring = require('./entity/ring.js')
 var Mask = require('./util/mask.js')
 
-module.exports = function (element, schema, opts) {
-  opts = opts || {size: 700}
+module.exports = function (schema, canvas) {
 
-  var container = document.getElementById(element)
-
-  var main = require('./ui/main.js')(container, opts)
-  var score = require('./ui/score.js')(container)
-  var stages = require('./ui/stages.js')(container)
-  var steps = require('./ui/steps.js')(container)
-  var lives = require('./ui/lives.js')(container)
-  var message = require('./ui/message.js')(container)
-
-  main.hide()
-  message.show('WELCOME TO HEXAWORLD!')
-
-  setTimeout( function() {
-    main.show()
-    message.hide()
-  }, 2000)
-
-  var state = new State(schema.gameplay)
+  var height = canvas.clientHeight
 
   var game = new Game({
-    canvas: main.canvas,
-    width: main.height * 0.7,
-    height: main.height * 0.7
+    canvas: canvas,
+    width: height,
+    height: height
   })
 
   var keyboard = new Keyboard(game)
 
-  var player = new Player(schema.players[0], {
+  var player = new Player({
     scale: 2,
+    translation: [0, 0],
+    rotation: 0,
+    character: 'mouse',
     speed: {translation: 1.25, rotation: 8.0},
     friction: 0.9,
     stroke: 'white',
@@ -50,13 +34,13 @@ module.exports = function (element, schema, opts) {
   })
 
   var camera = new Camera({
-    scale: 130 * 1 / main.height,
+    scale: 130 * 1 / height * 0.7,
     speed: {translation: 0.1, rotation: 0.1, scale: 0.002},
     friction: 0.9,
     yoked: true
   })
 
-  var ring = new Ring(schema.gameplay, {
+  var ring = new Ring({
     size: 0.82 * game.width / 2,
     translation: [game.width / 2, game.width / 2],
     extent: 0.1 * game.width / 2,
@@ -100,6 +84,7 @@ module.exports = function (element, schema, opts) {
 
   relay(player, 'player', 'enter')
   relay(player, 'player', 'exit')
+  relay(player, 'player', 'collect')
   relay(keyboard, 'keyboard', 'keyup')
   relay(keyboard, 'keyboard', 'keydown')
   relay(game, 'game', 'start')
@@ -124,11 +109,6 @@ module.exports = function (element, schema, opts) {
     this.move(keyboard, world)
   })
 
-  player.on('exit', function (interval) {
-    state.steps.current -= 1
-    steps.update(state.steps)
-  })
-
   camera.on('update', function (interval) {
     if (camera.yoked) {
       camera.transform.translation = player.position()
@@ -150,113 +130,26 @@ module.exports = function (element, schema, opts) {
   })
 
   game.on('update', function (interval) {
-    var playerCoordinates = player.coordinates()
-    var tile = world.getTileAtCoordinates(playerCoordinates)
-
-    var target
-    if (tile) {
-      target = tile.target()
-    }
-    if (target && target.contains(player.position())) {
-      var cue = tile.cue()
-      if (cue && cue.props.fill) {
-        ring.startFlashing(['#FFFFFF', '#999999', cue.props.fill, cue.props.fill])
-      } else {
-        ring.startFlashing(['#FF5050', '#FF8900', '#00C3EE', '#64FF00'])
-      }
-      setTimeout( function() { 
-        completed() 
-      }, 1000)
-    }
+    var coordinates = player.coordinates()
+    var tile = world.gettile(coordinates)
 
     tile.children.some(function (child, i) {
       return child.children.some(function (bit, j) {
         if (bit.props.consumable && bit.contains(player.position())) {
-          state.score.current += 10
-          score.update(state.score)
+          player.emit('collect')
           return tile.children[i].children.splice(j, 1)
         }
       })
     })
-
-    if (state.steps.current === 0 & state.lives.current > 0) {
-      setTimeout( function() {
-        failed() 
-      }, 1000)
-    }
-
   })
-
-  game.on('start', function () {})
-
-  var complete = false
-  var fail = false
-
-  function failed () {
-    if (!fail) {
-      main.hide()
-      state.lives.current -= 1
-      lives.update(state.lives)
-      fail = true
-
-      if (state.lives.current === 0) {
-        message.show('YOU LOST!')
-      } else {
-        message.show('OH NO!')
-        state.steps.current = state.steps.total
-        player.moveto(schema.gameplay.start[state.stages.current - 1])
-        ring.stopFlashing()
-        steps.update(state.steps)
-        setTimeout( function() { 
-          fail = false
-          message.hide()
-          main.show()
-        }, 1000)
-      }
-    }
-  }
-
-  function completed () {
-    if (!complete) {
-      main.hide()
-      complete = true
-
-      if (state.stages.current === (state.stages.total)) {
-        message.show('YOU WON!')
-      } else {
-        state.stages.current += 1
-        stages.update(state.stages)
-        message.show('YOU DID IT!')
-        state.score.current += 1000
-        state.steps.current = state.steps.total
-        player.moveto(schema.gameplay.start[state.stages.current - 1])
-        ring.stopFlashing()
-        score.update(state.score)
-        steps.update(state.steps)
-        setTimeout( function() { 
-          message.hide()
-          world.reload(schema.tiles)
-          main.show()
-          complete = false
-        }, 1000)
-      }
-    }
-  }
 
   function reload (schema) {
     world.reload(schema.tiles)
-    player.reload(schema.players[0])
-    ring.reload(schema.gameplay)
-    state.reload(schema.gameplay)
-    score.update(state.score)
-    stages.update(state.stages)
-    steps.update(state.steps)
-    lives.update(state.lives)
+    player.moveto(schema.gameplay.start)
+    ring.stopFlashing()
   }
 
   reload(schema)
-
-  game.start()
 
   return {
     reload: reload,
@@ -267,6 +160,18 @@ module.exports = function (element, schema, opts) {
 
     resume: function () {
       game.resume()
+    },
+
+    start: function () {
+      game.start()
+    },
+
+    moveto: function (transform) {
+      player.moveto(transform)
+    },
+
+    flash: function() {
+      ring.startFlashing(schema.gameplay.flash)
     },
 
     events: events
