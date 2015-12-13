@@ -210,7 +210,6 @@ module.exports = function (element, schema, opts) {
         setTimeout( function() { 
           fail = false
           message.hide()
-          world.reload(schema.tiles)
           main.show()
         }, 1000)
       }
@@ -220,13 +219,13 @@ module.exports = function (element, schema, opts) {
   function completed () {
     if (!complete) {
       main.hide()
-      state.stages.current += 1
-      stages.update(state.stages)
       complete = true
 
-      if (state.stages.current === (state.stages.total + 1)) {
+      if (state.stages.current === (state.stages.total)) {
         message.show('YOU WON!')
       } else {
+        state.stages.current += 1
+        stages.update(state.stages)
         message.show('YOU DID IT!')
         state.score.current += 1000
         state.steps.current = state.steps.total
