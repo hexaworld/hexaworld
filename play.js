@@ -72,7 +72,7 @@ module.exports = function (id, level, opts) {
           message.hide()
           main.show()
         }, 1000)
-      }, 1000)
+      }, 600)
     }
   }
 
