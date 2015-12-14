@@ -45,7 +45,17 @@ module.exports = function (container) {
       (state.current + 1) + '/' + (state.total) + '</span>'
   }
 
+  function hide () {
+    label.style.opacity = 0
+  }
+
+  function show () {
+    label.style.opacity = 1
+  }
+
   return {
-    update: update
+    update: update,
+    hide: hide,
+    show: show
   }
 }

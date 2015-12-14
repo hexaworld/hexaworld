@@ -26,9 +26,8 @@ module.exports = function (container) {
     message.innerHTML = text
   }
 
-  function hide (text) {
+  function hide () {
     style.opacity = 0
-    message.innerHTML = text
   }
 
   return {
