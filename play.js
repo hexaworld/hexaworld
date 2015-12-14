@@ -4,7 +4,7 @@ var State = require('./state.js')
 module.exports = function (id, level, opts) {
   opts = opts || {size: 700}
 
-  function load(level) {
+  function load (level) {
     var tmp
     var maps = []
     level.maps.forEach(function (map) {
@@ -20,7 +20,7 @@ module.exports = function (id, level, opts) {
   }
 
   level = load(level)
-  
+
   var container = document.getElementById(id)
 
   var main = require('./ui/main.js')(container, opts)
@@ -104,7 +104,7 @@ module.exports = function (id, level, opts) {
     }
   }
 
-  function start() {
+  function start () {
     score.update(state.score)
     stages.update(state.stages)
     steps.update(state.steps)
@@ -131,7 +131,7 @@ module.exports = function (id, level, opts) {
       game.resume()
     },
 
-    reload: function(updated) {
+    reload: function (updated) {
       level = load(updated)
       state.reload(level.config)
       game.reload(level.maps[state.stages.current])
