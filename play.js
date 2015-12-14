@@ -4,7 +4,16 @@ var State = require('./state.js')
 module.exports = function (id, level, opts) {
   opts = opts || {size: 700}
 
-  var maps = level.maps
+  var tmp
+  var maps = []
+  level.maps.forEach(function (map) {
+    map.gameplay.start.forEach(function (start) {
+      tmp = _.cloneDeep(map)
+      tmp.gameplay.start = start
+      maps.push(tmp)
+    })
+  })
+
   var config = level.config
   config.stages = maps.length
 
