@@ -101,7 +101,7 @@ module.exports = function (id, level, opts) {
       setTimeout(function () {
         state.steps.current = state.steps.total
         steps.update(state.steps)
-        game.moveto(maps[state.stages.current].start)
+        game.moveto(maps[state.stages.current].start[0])
         message.hide()
         main.show()
       }, 1000)

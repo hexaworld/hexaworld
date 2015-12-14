@@ -17,7 +17,6 @@ function Ring (opts) {
 
   this.maxangle = opts.maxangle || 360
   this.minangle = opts.minangle || 20
-  this.sight = opts.sight || 150
 
   var notches = _.flatten(_.range(6).map(function (side) {
     return _.range(1, count - 1).map(function (ind) {
@@ -94,7 +93,7 @@ Ring.prototype.project = function (origin, targets) {
     var diff = origin.difference(target)
     var dist = origin.distance(target)
 
-    var radius = dist.translation / self.sight
+    var radius = dist.translation / target.scale
     var angle = Math.atan2(-diff.translation[1], -diff.translation[0]) * 180 / Math.PI
 
     if (angle < 0) angle += 360
