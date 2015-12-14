@@ -6,6 +6,7 @@ module.exports = function (id, level, opts) {
 
   var maps = level.maps
   var config = level.config
+  config.stages = maps.length
 
   var container = document.getElementById(id)
 
