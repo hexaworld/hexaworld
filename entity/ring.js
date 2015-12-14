@@ -88,7 +88,6 @@ Ring.prototype.flash = function () {
 }
 
 Ring.prototype.project = function (origin, targets) {
-  var self = this
   return targets.map(function (target) {
     var diff = origin.difference(target)
     var dist = origin.distance(target)

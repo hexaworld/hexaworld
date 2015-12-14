@@ -20,8 +20,9 @@ World.prototype.reload = function (schema) {
   self.tiles = _.map(schema, function (t) {
     var children = []
     if (t.cue) {
+      var scale = 0.16
       if (t.cue.scale === 1) scale = 0.13
-      if (t.cue.scale === 2 || !t.cue.scale) scale = 0.16
+      if (t.cue.scale === 2) scale = 0.16
       if (t.cue.scale === 3) scale = 0.19
       children.push(hex({
         fill: t.cue.fill,
