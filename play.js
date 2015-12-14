@@ -7,9 +7,9 @@ module.exports = function (id, level, opts) {
   var tmp
   var maps = []
   level.maps.forEach(function (map) {
-    map.gameplay.start.forEach(function (start) {
+    map.start.forEach(function (start) {
       tmp = _.cloneDeep(map)
-      tmp.gameplay.start = start
+      tmp.start = [start]
       maps.push(tmp)
     })
   })
@@ -51,7 +51,7 @@ module.exports = function (id, level, opts) {
   })
 
   game.events.on(['player', 'enter'], function (event) {
-    if (_.isEqual(event.tile, maps[state.stages.current].gameplay.target)) {
+    if (_.isEqual(event.tile, maps[state.stages.current].target)) {
       completed()
     } else {
       failed()
@@ -101,7 +101,7 @@ module.exports = function (id, level, opts) {
       setTimeout(function () {
         state.steps.current = state.steps.total
         steps.update(state.steps)
-        game.moveto(maps[state.stages.current].gameplay.start)
+        game.moveto(maps[state.stages.current].start)
         message.hide()
         main.show()
       }, 1000)

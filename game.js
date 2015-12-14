@@ -151,7 +151,7 @@ module.exports = function (canvas, schema, opts) {
 
   function reload (schema) {
     world.reload(schema.tiles)
-    player.moveto(schema.gameplay.start)
+    player.moveto(schema.start[0])
     ring.stopFlashing()
   }
 
@@ -177,7 +177,7 @@ module.exports = function (canvas, schema, opts) {
     },
 
     flash: function () {
-      ring.startFlashing(schema.gameplay.flash)
+      ring.startFlashing(schema.flash)
     },
 
     events: events

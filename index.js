@@ -21,14 +21,10 @@ var base = function (start) {
       {translation: [0, -2], paths: [0, 5]},
       {translation: [1, -2], paths: [0, 2], cue: {fill: '#CF5557'}}
     ],
-    gameplay: {
-      start: [
-        {translation: start.translation, rotation: start.rotation}
-      ],
-      target: [0, 1],
-      flash: ['#FF5050', '#FF8900', '#00C3EE', '#64FF00'],
-      message: 'welcome to hexaworld! try to find the big white circle'
-    }
+    start: [{translation: start.translation, rotation: start.rotation}],
+    target: [0, 1],
+    flash: ['#FF5050', '#FF8900', '#00C3EE', '#64FF00'],
+    message: 'welcome to hexaworld! try to find the big white circle'
   }
 }
 
