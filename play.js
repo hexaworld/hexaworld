@@ -26,7 +26,7 @@ module.exports = function (id, level, opts) {
   var main = require('./ui/main.js')(container, opts)
   var score = require('./ui/score.js')(container)
   var stages = require('./ui/stages.js')(container)
-  var steps = require('./ui/steps.js')(container)
+  var moves = require('./ui/moves.js')(container)
   var lives = require('./ui/lives.js')(container)
   var message = require('./ui/message.js')(container)
 
@@ -40,13 +40,11 @@ module.exports = function (id, level, opts) {
   })
 
   game.events.on(['player', 'exit'], function (event) {
-    state.steps.current -= 1
-    steps.update(state.steps)
+    state.moves.current -= 1
+    moves.update(state.moves)
   })
 
   game.events.on(['player', 'enter'], function (event) {
-    console.log('enter event')
-    console.log(level.maps[state.stages.current].target)
     if (_.isEqual(event.tile, level.maps[state.stages.current].target)) {
       completed()
     } else {
@@ -66,9 +64,9 @@ module.exports = function (id, level, opts) {
       state.stages.current += 1
       stages.update(state.stages)
       state.score.current += 1000
-      state.steps.current = state.steps.total
+      state.moves.current = state.moves.total
       score.update(state.score)
-      steps.update(state.steps)
+      moves.update(state.moves)
       setTimeout(function () {
         main.hide()
         message.show('YOU DID IT!')
@@ -82,21 +80,21 @@ module.exports = function (id, level, opts) {
   }
 
   function failed () {
-    if (state.steps.current === 0 & state.lives.current === 1) {
+    if (state.moves.current === 0 & state.lives.current === 1) {
       state.lives.current -= 1
       lives.update(state.lives)
       main.hide()
       message.show('GAME OVER')
     }
 
-    if (state.steps.current === 0 & state.lives.current > 1) {
+    if (state.moves.current === 0 & state.lives.current > 1) {
       main.hide()
       message.show('OUT OF STEPS TRY AGAIN')
       state.lives.current -= 1
       lives.update(state.lives)
       setTimeout(function () {
-        state.steps.current = state.steps.total
-        steps.update(state.steps)
+        state.moves.current = state.moves.total
+        moves.update(state.moves)
         game.moveto(level.maps[state.stages.current].start[0])
         message.hide()
         main.show()
@@ -107,14 +105,14 @@ module.exports = function (id, level, opts) {
   function start () {
     score.update(state.score)
     stages.update(state.stages)
-    steps.update(state.steps)
+    moves.update(state.moves)
     lives.update(state.lives)
     score.show()
     stages.show()
-    steps.show()
+    moves.show()
     lives.show()
     main.hide()
-    message.show('WELCOME TO HEXAWORLD!')
+    message.show('GET READY!')
     setTimeout(function () {
       message.hide()
       main.show()
@@ -135,6 +133,7 @@ module.exports = function (id, level, opts) {
       level = load(updated)
       state.reload(level.config)
       game.reload(level.maps[state.stages.current])
+      start()
     },
 
     start: start

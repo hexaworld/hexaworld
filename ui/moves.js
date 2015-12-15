@@ -38,7 +38,7 @@ module.exports = function (container) {
   style.color = 'rgb(150,150,150)'
   style.fontFamily = 'Hack'
   style.fontSize = width * 0.04 + 'px'
-  text.innerHTML = 'steps'
+  text.innerHTML = 'moves'
   label.appendChild(text)
 
   var number = document.createElement('span')

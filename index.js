@@ -5,7 +5,7 @@ var opts = {
 var config = {
   name: 'welcome',
   lives: 3,
-  steps: 6
+  moves: 6
 }
 
 var base = function (start) {
