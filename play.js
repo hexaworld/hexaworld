@@ -1,5 +1,7 @@
 var _ = require('lodash')
+var EventEmitter = require('eventemitter2').EventEmitter2
 var State = require('./state.js')
+var formatEvent = require('./util/events.js').formatEvent
 
 module.exports = function (id, level, opts) {
   opts = opts || {size: 700}
@@ -32,6 +34,8 @@ module.exports = function (id, level, opts) {
 
   var state = new State(level.config)
 
+  var events = new EventEmitter()
+
   var game = require('./game.js')(main.canvas, level.maps[0])
 
   game.events.on(['player', 'collect'], function (event) {
@@ -54,9 +58,14 @@ module.exports = function (id, level, opts) {
     }
   })
 
+  game.events.onAny(function (event) {
+    events.emit(this.event, event)
+  })
+
   function completed () {
     if (state.stages.current === state.stages.total - 1) {
       game.flash()
+      events.emit(['game', 'completed'], formatEvent())
       setTimeout(function () {
         main.hide()
         message.show('LEVEL COMPLETE')
@@ -69,6 +78,7 @@ module.exports = function (id, level, opts) {
       state.steps.current = state.steps.total
       score.update(state.score)
       steps.update(state.steps)
+      events.emit(['map', 'completed'], formatEvent())
       setTimeout(function () {
         main.hide()
         message.show('YOU DID IT!')
@@ -87,11 +97,13 @@ module.exports = function (id, level, opts) {
       lives.update(state.lives)
       main.hide()
       message.show('GAME OVER')
+      events.emit(['game', 'failed'], formatEvent())
     }
 
     if (state.steps.current === 0 & state.lives.current > 1) {
       main.hide()
       message.show('OUT OF STEPS TRY AGAIN')
+      events.emit(['map', 'failed'], formatEvent())
       state.lives.current -= 1
       lives.update(state.lives)
       setTimeout(function () {
@@ -137,6 +149,8 @@ module.exports = function (id, level, opts) {
       game.reload(level.maps[state.stages.current])
     },
 
-    start: start
+    start: start,
+
+    events: events
   }
 }
