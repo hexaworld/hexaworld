@@ -39,5 +39,5 @@ var level = {
   maps: maps
 }
 
-var game = require('./play.js')('container', level, opts)
-game.start()
+var play = require('./play.js')('container', level, opts)
+play.start()
