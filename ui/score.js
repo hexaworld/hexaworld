@@ -54,10 +54,20 @@ module.exports = function (container) {
   label.appendChild(number)
 
   function update (state) {
-    number.innerHTML = state
+    number.innerHTML = state.current
+  }
+
+  function hide () {
+    label.style.opacity = 0
+  }
+
+  function show () {
+    label.style.opacity = 1
   }
 
   return {
-    update: update
+    update: update,
+    hide: hide,
+    show: show
   }
 }

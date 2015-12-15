@@ -20,9 +20,13 @@ World.prototype.reload = function (schema) {
   self.tiles = _.map(schema, function (t) {
     var children = []
     if (t.cue) {
+      var scale = 0.16
+      if (t.cue.scale === 1) scale = 0.13
+      if (t.cue.scale === 2) scale = 0.16
+      if (t.cue.scale === 3) scale = 0.19
       children.push(hex({
         fill: t.cue.fill,
-        scale: 0.19,
+        scale: scale,
         cue: true
       }))
     }
@@ -68,7 +72,7 @@ World.prototype.locate = function (point) {
   return _.indexOf(status, true)
 }
 
-World.prototype.getTileAtCoordinates = function (point) {
+World.prototype.gettile = function (point) {
   return this._tileCache[point[0]][point[1]]
 }
 
@@ -86,9 +90,14 @@ World.prototype.cues = function () {
   this.tiles.forEach(function (tile) {
     var cue = _.find(tile.children, function (child) { return child.props.cue })
     if (cue) {
+      var scale
+      if (cue.transform.scale === 0.13) scale = 90
+      if (cue.transform.scale === 0.16) scale = 180
+      if (cue.transform.scale === 0.19) scale = 270
       cues.push({
         translation: tile.transform.translation,
-        color: cue.props.fill
+        color: cue.props.fill,
+        scale: scale
       })
     }
   })

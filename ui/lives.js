@@ -59,7 +59,17 @@ module.exports = function (container) {
     })
   }
 
+  function hide () {
+    label.style.opacity = 0
+  }
+
+  function show () {
+    label.style.opacity = 1
+  }
+
   return {
-    update: update
+    update: update,
+    hide: hide,
+    show: show
   }
 }

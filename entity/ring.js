@@ -8,7 +8,7 @@ var Entity = require('crtrdg-entity')
 module.exports = Ring
 inherits(Ring, Entity)
 
-function Ring (schema, opts) {
+function Ring (opts) {
   var offset = opts.offset || 0
   var count = opts.count || 6
   var extent = opts.extent || 20
@@ -48,11 +48,6 @@ function Ring (schema, opts) {
   })
 
   this.notches = notches
-  this.reload(schema)
-}
-
-Ring.prototype.reload = function (schema) {
-  this.sight = schema.sight
   this.flashing = false
   this.flashingColors = []
 }
@@ -93,12 +88,11 @@ Ring.prototype.flash = function () {
 }
 
 Ring.prototype.project = function (origin, targets) {
-  var self = this
   return targets.map(function (target) {
     var diff = origin.difference(target)
     var dist = origin.distance(target)
 
-    var radius = dist.translation / self.sight
+    var radius = dist.translation / target.scale
     var angle = Math.atan2(-diff.translation[1], -diff.translation[0]) * 180 / Math.PI
 
     if (angle < 0) angle += 360

@@ -42,10 +42,20 @@ module.exports = function (container) {
 
   function update (state) {
     text.innerHTML = state.name + ' ' + '<span style="color: rgb(200,200,200)">' +
-      state.current + '/' + state.total + '</span>'
+      (state.current + 1) + '/' + (state.total) + '</span>'
+  }
+
+  function hide () {
+    label.style.opacity = 0
+  }
+
+  function show () {
+    label.style.opacity = 1
   }
 
   return {
-    update: update
+    update: update,
+    hide: hide,
+    show: show
   }
 }

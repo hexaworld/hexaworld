@@ -12,12 +12,24 @@ module.exports = function (container, opts) {
   container.style.background = 'rgb(55,55,55)'
 
   canvas.id = 'game'
+  canvas.width = height * 0.7
+  canvas.height = height * 0.7
   canvas.style.marginTop = height * 0.15
   canvas.style.position = 'absolute'
   container.appendChild(canvas)
 
+  function hide () {
+    canvas.style.opacity = 0
+  }
+
+  function show () {
+    canvas.style.opacity = 1
+  }
+
   return {
     canvas: canvas,
-    height: height
+    height: height,
+    hide: hide,
+    show: show
   }
 }
