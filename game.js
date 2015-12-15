@@ -2,12 +2,12 @@ var _ = require('lodash')
 var EventEmitter = require('eventemitter2').EventEmitter2
 var Game = require('crtrdg-gameloop')
 var Keyboard = require('crtrdg-keyboard')
-var Time = require('crtrdg-time')
 var Player = require('./entity/player.js')
 var Camera = require('./entity/camera.js')
 var World = require('./entity/world.js')
 var Ring = require('./entity/ring.js')
 var Mask = require('./util/mask.js')
+var formatEvent = require('./util/events.js').formatEvent
 
 module.exports = function (canvas, schema, opts) {
   opts = opts || {size: 700}
@@ -62,8 +62,6 @@ module.exports = function (canvas, schema, opts) {
 
   var world = new World(schema.tiles, {thickness: 0.4})
 
-  var time = new Time(game)
-
   var events = new EventEmitter({
     wildcard: true
   })
@@ -75,7 +73,7 @@ module.exports = function (canvas, schema, opts) {
       if (typeof ret === 'string') {
         ret = { value: ret }
       }
-      events.emit([name, tag], _.merge(ret, { time: String(time.seconds()) }))
+      events.emit([name, tag], formatEvent(ret))
     }
     if (!tag) {
       emitter.onAny(function (value) {
