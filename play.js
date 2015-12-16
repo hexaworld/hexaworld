@@ -16,7 +16,7 @@ module.exports = function (id, level, opts) {
         maps.push(tmp)
       })
     })
-    var config = level.config
+    var config = _.cloneDeep(level.config)
     config.stages = maps.length
     return {maps: maps, config: config}
   }
