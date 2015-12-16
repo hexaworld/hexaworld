@@ -61,6 +61,7 @@ module.exports = function (id, level, opts) {
   })
 
   function completed () {
+    events.emit(['map', 'completed'], formatEvent({ map: state.stages.current }))
     if (state.stages.current === state.stages.total - 1) {
       game.flash()
       events.emit(['level', 'completed'], formatEvent({ level: level.config.name }))
@@ -69,7 +70,6 @@ module.exports = function (id, level, opts) {
         message.show('LEVEL COMPLETE')
       }, 1000)
     } else {
-      events.emit(['map', 'completed'], formatEvent({ map: state.stages.current }))
       game.flash()
       state.stages.current += 1
       stages.update(state.stages)
