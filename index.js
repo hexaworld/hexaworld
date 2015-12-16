@@ -5,7 +5,8 @@ var opts = {
 var config = {
   name: 'welcome',
   lives: 3,
-  moves: 6
+  moves: 6,
+  difficulty: 1
 }
 
 var base = function (start) {
