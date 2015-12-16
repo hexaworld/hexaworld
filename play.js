@@ -63,12 +63,13 @@ module.exports = function (id, level, opts) {
   function completed () {
     if (state.stages.current === state.stages.total - 1) {
       game.flash()
-      events.emit(['game', 'completed'], formatEvent())
+      events.emit(['level', 'completed'], formatEvent({ level: level.config.name }))
       setTimeout(function () {
         main.hide()
         message.show('LEVEL COMPLETE')
       }, 1000)
     } else {
+      events.emit(['map', 'completed'], formatEvent({ map: state.stages.current }))
       game.flash()
       state.stages.current += 1
       stages.update(state.stages)
@@ -76,7 +77,6 @@ module.exports = function (id, level, opts) {
       state.moves.current = state.moves.total
       score.update(state.score)
       moves.update(state.moves)
-      events.emit(['map', 'completed'], formatEvent())
       setTimeout(function () {
         main.hide()
         message.show('YOU DID IT!')
@@ -91,17 +91,17 @@ module.exports = function (id, level, opts) {
 
   function failed () {
     if (state.moves.current === 0 & state.lives.current === 1) {
+      events.emit(['level', 'failed'], formatEvent({ level: level.config.name }))
       state.lives.current -= 1
       lives.update(state.lives)
       main.hide()
       message.show('GAME OVER')
-      events.emit(['game', 'failed'], formatEvent())
     }
 
     if (state.moves.current === 0 & state.lives.current > 1) {
       main.hide()
       message.show('OUT OF STEPS TRY AGAIN')
-      events.emit(['map', 'failed'], formatEvent())
+      events.emit(['map', 'failed'], formatEvent({ map: state.stages.current }))
       state.lives.current -= 1
       lives.update(state.lives)
       setTimeout(function () {
@@ -115,6 +115,9 @@ module.exports = function (id, level, opts) {
   }
 
   function start () {
+    if (state.stages.current === 0 && state.lives.current === state.lives.total) {
+      events.emit(['level', 'started'], formatEvent({ level: level.config.name }))
+    }
     score.update(state.score)
     stages.update(state.stages)
     moves.update(state.moves)
@@ -125,6 +128,7 @@ module.exports = function (id, level, opts) {
     lives.show()
     main.hide()
     message.show('GET READY!')
+    events.emit(['map', 'started'], formatEvent({ map: state.stages.current }))
     setTimeout(function () {
       message.hide()
       main.show()
