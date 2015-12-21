@@ -28,14 +28,14 @@ module.exports = function (canvas, schema, opts) {
   var keyboard = new Keyboard(game)
 
   var player = new Player({
-    scale: 2,
+    scale: 1.8,
     translation: [0, 0],
     rotation: 0,
     character: 'mouse',
     speed: {translation: 1.25, rotation: 8.0},
     friction: 0.9,
     stroke: 'white',
-    fill: 'rgb(75,75,75)',
+    fill: 'white',
     thickness: 0.5
   })
 
@@ -117,6 +117,12 @@ module.exports = function (canvas, schema, opts) {
     if (camera.yoked) {
       camera.transform.translation = player.position()
       camera.transform.rotation = player.angle()
+      var rad = player.angle() * Math.PI / 180
+      var d = [
+        Math.cos(rad) * 0 + Math.sin(rad) * 2, 
+        Math.sin(rad) * 0 - Math.cos(rad) * 2
+      ]
+      camera.transform.compose({translation: d})
     }
     this.move(keyboard)
   })
@@ -136,6 +142,8 @@ module.exports = function (canvas, schema, opts) {
   game.on('update', function (interval) {
     var coordinates = player.coordinates()
     var tile = world.gettile(coordinates)
+    console.log(coordinates)
+    console.log(tile)
 
     tile.children.some(function (child, i) {
       return child.children.some(function (bit, j) {

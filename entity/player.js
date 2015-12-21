@@ -132,7 +132,7 @@ Player.prototype.move = function (keyboard, world) {
 }
 
 Player.prototype.draw = function (context, camera) {
-  this.geometry.draw(context, camera, {order: 'bottom'})
+  this.geometry.draw(context, camera)
 }
 
 Player.prototype.position = function () {
