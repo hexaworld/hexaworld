@@ -26,7 +26,7 @@ World.prototype.reload = function (schema) {
       if (t.cue.scale === 3) scale = 0.19
       children.push(hex({
         fill: t.cue.fill,
-        scale: scale,
+        scale: scale * 7.6,
         cue: true
       }))
     }

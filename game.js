@@ -21,26 +21,26 @@ module.exports = function (canvas, schema, opts) {
 
   var game = new Game({
     canvas: canvas,
-    width: height,
+    width: height * 1.15,
     height: height
   })
 
   var keyboard = new Keyboard(game)
 
   var player = new Player({
-    scale: 2,
+    scale: 2.25,
     translation: [0, 0],
     rotation: 0,
     character: 'mouse',
     speed: {translation: 1.25, rotation: 8.0},
     friction: 0.9,
     stroke: 'white',
-    fill: 'rgb(75,75,75)',
+    fill: 'white',
     thickness: 0.5
   })
 
   var camera = new Camera({
-    scale: 130 * 1 / height * 0.7,
+    scale: 150 * 1 / height * 0.7,
     speed: {translation: 0.1, rotation: 0.1, scale: 0.002},
     friction: 0.9,
     yoked: true
@@ -117,6 +117,12 @@ module.exports = function (canvas, schema, opts) {
     if (camera.yoked) {
       camera.transform.translation = player.position()
       camera.transform.rotation = player.angle()
+      var rad = player.angle() * Math.PI / 180
+      var d = [
+        Math.cos(rad) * 0 + Math.sin(rad) * 40, 
+        Math.sin(rad) * 0 - Math.cos(rad) * 40
+      ]
+      camera.transform.compose({translation: d})
     }
     this.move(keyboard)
   })
@@ -126,11 +132,11 @@ module.exports = function (canvas, schema, opts) {
   })
 
   game.on('draw', function (context) {
-    mask.set(context)
+    //mask.set(context)
     world.draw(context, camera)
     player.draw(context, camera)
-    mask.unset(context)
-    ring.draw(context)
+    //mask.unset(context)
+    //ring.draw(context)
   })
 
   game.on('update', function (interval) {
