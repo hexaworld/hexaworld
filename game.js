@@ -21,7 +21,7 @@ module.exports = function (canvas, schema, opts) {
 
   var game = new Game({
     canvas: canvas,
-    width: height,
+    width: height * 1.15,
     height: height
   })
 

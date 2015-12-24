@@ -6,16 +6,16 @@ module.exports = function (container, opts) {
     height = window.innerWidth * (1 / 0.7) - 30
   }
 
-  container.style.width = height * 0.75 + 'px'
+  container.style.width = height * 1.15 + 'px'
   container.style.height = height + 'px'
   container.style.position = 'relative'
   container.style.perspective = '10em'
   container.style.background = 'rgb(55,55,55)'
 
   canvas.id = 'game'
-  canvas.width = height * 0.75
-  canvas.height = height * 0.75
-  canvas.style.marginTop = -height * 0.05
+  canvas.width = height * 1.15
+  canvas.height = height * 1
+  canvas.style.marginTop = -height * 0.27
   canvas.style.transform = 'rotateX(10deg)'
   canvas.style.position = 'absolute'
 
