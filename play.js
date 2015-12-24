@@ -26,10 +26,10 @@ module.exports = function (id, level, opts) {
   var container = document.getElementById(id)
 
   var main = require('./ui/main.js')(container, opts)
-  var score = require('./ui/score.js')(container)
-  var stages = require('./ui/stages.js')(container)
-  var moves = require('./ui/moves.js')(container)
-  var lives = require('./ui/lives.js')(container)
+  // var score = require('./ui/score.js')(container)
+  // var stages = require('./ui/stages.js')(container)
+  // var moves = require('./ui/moves.js')(container)
+  // var lives = require('./ui/lives.js')(container)
   var message = require('./ui/message.js')(container)
 
   var state = new State(level.config)
@@ -40,12 +40,12 @@ module.exports = function (id, level, opts) {
 
   game.events.on(['player', 'collect'], function (event) {
     state.score.current += 10
-    score.update(state.score)
+    //score.update(state.score)
   })
 
   game.events.on(['player', 'exit'], function (event) {
     state.moves.current -= 1
-    moves.update(state.moves)
+    //moves.update(state.moves)
   })
 
   game.events.on(['player', 'enter'], function (event) {
@@ -63,7 +63,7 @@ module.exports = function (id, level, opts) {
   function completed () {
     events.emit(['map', 'completed'], formatEvent({ map: state.stages.current }))
     state.score.current += 1000 + state.moves.current * 100
-    score.update(state.score)
+    //score.update(state.score)
     if (state.stages.current === state.stages.total - 1) {
       game.flash()
       events.emit(['level', 'completed'], formatEvent({ level: level.config.name }))
@@ -74,10 +74,10 @@ module.exports = function (id, level, opts) {
     } else {
       game.flash()
       state.stages.current += 1
-      stages.update(state.stages)
+      //stages.update(state.stages)
       state.moves.current = state.moves.total
-      score.update(state.score)
-      moves.update(state.moves)
+      //score.update(state.score)
+      //moves.update(state.moves)
       setTimeout(function () {
         main.hide()
         message.show('YOU DID IT!')
@@ -94,7 +94,7 @@ module.exports = function (id, level, opts) {
     if (state.moves.current === 0 & state.lives.current === 1) {
       events.emit(['level', 'failed'], formatEvent({ level: level.config.name }))
       state.lives.current -= 1
-      lives.update(state.lives)
+      //lives.update(state.lives)
       main.hide()
       message.show('GAME OVER')
     }
@@ -104,10 +104,10 @@ module.exports = function (id, level, opts) {
       message.show('OUT OF STEPS TRY AGAIN')
       events.emit(['map', 'failed'], formatEvent({ map: state.stages.current }))
       state.lives.current -= 1
-      lives.update(state.lives)
+      //lives.update(state.lives)
       setTimeout(function () {
         state.moves.current = state.moves.total
-        moves.update(state.moves)
+        //moves.update(state.moves)
         game.moveto(level.maps[state.stages.current].start[0])
         message.hide()
         main.show()
@@ -119,14 +119,14 @@ module.exports = function (id, level, opts) {
     if (state.stages.current === 0 && state.lives.current === state.lives.total) {
       events.emit(['level', 'started'], formatEvent({ level: level.config.name }))
     }
-    score.update(state.score)
-    stages.update(state.stages)
-    moves.update(state.moves)
-    lives.update(state.lives)
-    score.show()
-    stages.show()
-    moves.show()
-    lives.show()
+    // score.update(state.score)
+    // stages.update(state.stages)
+    // moves.update(state.moves)
+    // lives.update(state.lives)
+    // score.show()
+    // stages.show()
+    // moves.show()
+    // lives.show()
     main.hide()
     message.show('GET READY!')
     events.emit(['map', 'started'], formatEvent({ map: state.stages.current }))

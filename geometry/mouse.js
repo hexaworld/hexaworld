@@ -17,14 +17,14 @@ module.exports = function (opts) {
 
   return new Geometry({
     props: {
-      stroke: opts.stroke,
       thickness: opts.thickness,
       fill: opts.fill,
+      shadow: {color: 'rgb(90,90,90)', size: 2},
       type: 'polygon'
     },
 
     points: [
-      [-1.25, 1], [1.25, 1], [0, -1.75]
+      [-1.05, 0.8], [1.05, 0.8], [0, -1.5]
     ],
 
     transform: {

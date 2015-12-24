@@ -28,7 +28,7 @@ module.exports = function (canvas, schema, opts) {
   var keyboard = new Keyboard(game)
 
   var player = new Player({
-    scale: 1.8,
+    scale: 2.25,
     translation: [0, 0],
     rotation: 0,
     character: 'mouse',
@@ -119,8 +119,8 @@ module.exports = function (canvas, schema, opts) {
       camera.transform.rotation = player.angle()
       var rad = player.angle() * Math.PI / 180
       var d = [
-        Math.cos(rad) * 0 + Math.sin(rad) * 2, 
-        Math.sin(rad) * 0 - Math.cos(rad) * 2
+        Math.cos(rad) * 0 + Math.sin(rad) * 32, 
+        Math.sin(rad) * 0 - Math.cos(rad) * 32
       ]
       camera.transform.compose({translation: d})
     }
@@ -132,18 +132,16 @@ module.exports = function (canvas, schema, opts) {
   })
 
   game.on('draw', function (context) {
-    mask.set(context)
+    //mask.set(context)
     world.draw(context, camera)
     player.draw(context, camera)
-    mask.unset(context)
-    ring.draw(context)
+    //mask.unset(context)
+    //ring.draw(context)
   })
 
   game.on('update', function (interval) {
     var coordinates = player.coordinates()
     var tile = world.gettile(coordinates)
-    console.log(coordinates)
-    console.log(tile)
 
     tile.children.some(function (child, i) {
       return child.children.some(function (bit, j) {
