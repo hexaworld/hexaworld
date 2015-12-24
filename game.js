@@ -40,7 +40,7 @@ module.exports = function (canvas, schema, opts) {
   })
 
   var camera = new Camera({
-    scale: 130 * 1 / height * 0.7,
+    scale: 150 * 1 / height * 0.7,
     speed: {translation: 0.1, rotation: 0.1, scale: 0.002},
     friction: 0.9,
     yoked: true
@@ -119,8 +119,8 @@ module.exports = function (canvas, schema, opts) {
       camera.transform.rotation = player.angle()
       var rad = player.angle() * Math.PI / 180
       var d = [
-        Math.cos(rad) * 0 + Math.sin(rad) * 32, 
-        Math.sin(rad) * 0 - Math.cos(rad) * 32
+        Math.cos(rad) * 0 + Math.sin(rad) * 40, 
+        Math.sin(rad) * 0 - Math.cos(rad) * 40
       ]
       camera.transform.compose({translation: d})
     }
