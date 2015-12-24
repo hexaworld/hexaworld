@@ -5,7 +5,7 @@ var opts = {
 var config = {
   name: 'welcome',
   lives: 3,
-  moves: 6,
+  moves: 100,
   difficulty: 1
 }
 
