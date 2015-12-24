@@ -31,7 +31,7 @@ module.exports = function (container) {
   style.height = '100%'
   style.top = 0
   style.background = 'rgb(150,150,150)'
-  style.transition = 'all 0.2s'
+  style.transition = 'width 0.2s'
   style.position = 'absolute'
   label.appendChild(fill)
 
@@ -47,8 +47,16 @@ module.exports = function (container) {
     }, 200)
   }
 
+  function flash() {
+    fill.style.background = 'rgb(240,240,240)'
+  }
+
+  function unflash() {
+    fill.style.background = 'rgb(150,150,150)'
+  }
+
   function update (state) {
-    fill.style.width = width * 0.45 * state.current / state.total
+    fill.style.width = width * 0.45 * Math.max(state.current,0) / state.total
   }
 
   function hide () {
@@ -63,6 +71,8 @@ module.exports = function (container) {
     update: update,
     hide: hide,
     show: show,
-    blink: blink
+    blink: blink,
+    flash: flash,
+    unflash: unflash
   }
 }
