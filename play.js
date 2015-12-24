@@ -1,4 +1,5 @@
 var _ = require('lodash')
+var sprintf = require("sprintf-js").sprintf
 var EventEmitter = require('eventemitter2').EventEmitter2
 var State = require('./state.js')
 var formatEvent = require('./util/events.js').formatEvent
@@ -18,7 +19,7 @@ module.exports = function (id, level, opts) {
     })
     var config = _.cloneDeep(level.config)
     config.stages = maps.length
-    config.score = 10000
+    config.energy = 5000
     return {maps: maps, config: config}
   }
 
@@ -28,8 +29,9 @@ module.exports = function (id, level, opts) {
 
   var main = require('./ui/main.js')(container, opts)
   var message = require('./ui/message.js')(container)
+  var energy = require('./ui/energy.js')(container)
   var score = require('./ui/score.js')(container)
-  //var stages = require('./ui/stages.js')(container)
+  var stages = require('./ui/stages.js')(container)
 
   var state = new State(level.config)
 
@@ -38,18 +40,22 @@ module.exports = function (id, level, opts) {
   var game = require('./game.js')(main.canvas, level.maps[0])
 
   game.events.on(['player', 'collect'], function (event) {
-    state.score.current += 50
+    state.energy.current += 50
+    state.score.current += 10
+    energy.update(state.energy)
     score.update(state.score)
   })
 
   game.events.on(['player', 'exit'], function (event) {
-    state.score.current -= 600
-    score.update(state.score)
+    state.energy.current = Math.max(state.energy.current - 600, 0)
+    energy.update(state.energy)
   })
 
   game.events.on(['player', 'enter'], function (event) {
     if (_.isEqual(event.tile, level.maps[state.stages.current].target)) {
       completed()
+    } else {
+      failed()
     }
   })
 
@@ -57,31 +63,59 @@ module.exports = function (id, level, opts) {
     events.emit(this.event, event)
   })
 
+  function endgame (text) {
+    setTimeout(function () {
+      message.show(text + ' \n SCORE ' + sprintf('%05d', state.score.current))
+      if (state.energy.current > 0) {
+        setTimeout(function () {
+          var display = state.score.current
+          var counter = setInterval(function () {
+            if (state.energy.current === 0) {clearInterval(counter)}
+            state.score.current += Math.min(100, state.energy.current) * 2
+            state.energy.current -= Math.min(100, state.energy.current)
+            message.show(text + ' \n SCORE ' + sprintf('%05d', state.score.current))
+            energy.update(state.energy)
+            score.update(state.score)
+          }, 20)
+        }, 250)
+      }
+    }, 500)
+  }
+
+  function failed () {
+    if (state.energy.current === 0) {
+      energy.blink()
+      events.emit(['level', 'failed'], formatEvent({ level: level.config.name }))
+      main.hide()
+      endgame('GAME OVER')
+    }
+  }
+
   function completed () {
     events.emit(['map', 'completed'], formatEvent({ map: state.stages.current }))
-    state.score.current += 900
-    score.update(state.score)
+    state.energy.current += 900
+    state.score.current += 2000
+    score.update(state.score, {magnitude: 0.5, duration: 200})
+    energy.update(state.energy)
     if (state.stages.current === state.stages.total - 1) {
       game.flash()
       events.emit(['level', 'completed'], formatEvent({ level: level.config.name }))
       setTimeout(function () {
         main.hide()
-        message.show('LEVEL COMPLETE')
-      }, 1000)
+        endgame('COMPLETE!')
+      }, 700)
     } else {
-      game.flash()
       state.stages.current += 1
-      //stages.update(state.stages)
-      score.update(state.score)
+      energy.update(state.energy)
+      game.flash()
       setTimeout(function () {
         main.hide()
-        message.show('YOU DID IT!')
         setTimeout(function () {
           game.reload(level.maps[state.stages.current])
-          message.hide()
+          stages.update(state.stages)
           main.show()
-        }, 1000)
-      }, 600)
+        }, 500)
+      }, 700)
     }
   }
 
@@ -89,16 +123,16 @@ module.exports = function (id, level, opts) {
     if (state.stages.current === 0 && state.lives.current === state.lives.total) {
       events.emit(['level', 'started'], formatEvent({ level: level.config.name }))
     }
-    score.update(state.score)
-    //stages.update(state.stages)
-    score.show()
-    //stages.show()
-    main.hide()
-    message.show('GET READY!')
+    energy.update(state.energy)
+    stages.update(state.stages)    
+    message.show('FIND THE CIRCLE!')
     events.emit(['map', 'started'], formatEvent({ map: state.stages.current }))
     setTimeout(function () {
       message.hide()
       main.show()
+      score.show()
+      energy.show()
+      stages.show()
     }, 1000)
     game.start()
   }

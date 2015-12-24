@@ -1,3 +1,5 @@
+var animate = require('animateplus')
+
 module.exports = function (container, opts) {
   var canvas = document.createElement('canvas')
   var height = container.clientHeight || opts.size
@@ -18,12 +20,24 @@ module.exports = function (container, opts) {
   canvas.style.position = 'absolute'
   container.appendChild(canvas)
 
+  canvas.style.opacity = 0.0
+
   function hide () {
-    canvas.style.opacity = 0
+    animate({
+      el: canvas,
+      opacity: [1, 0],
+      duration: 300,
+      easing: 'easeInQuad'
+    })
   }
 
   function show () {
-    canvas.style.opacity = 1
+    animate({
+      el: canvas,
+      opacity: [0, 1],
+      duration: 300,
+      easing: 'easeInQuad'
+    })
   }
 
   return {

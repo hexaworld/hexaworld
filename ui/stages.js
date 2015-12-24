@@ -5,8 +5,8 @@ module.exports = function (container) {
 
   var label = document.createElement('div')
   style = label.style
-  style.left = width * 0.2
-  style.top = height * 0.075
+  style.right = width * 0.2
+  style.bottom = height * 0.1
   style.width = width * 0.2
   style.height = width * 0.05
   style.position = 'absolute'
@@ -18,31 +18,38 @@ module.exports = function (container) {
   style.top = 0
   style.width = width * 0.2
   style.height = width * 0.05
+  style.paddingBottom = width * 0.005
   style.position = 'absolute'
   style.borderRight = 'solid rgb(150,150,150) ' + width * 0.011 * 1.6 + 'px'
-  style.borderTop = 'solid rgb(150,150,150) ' + width * 0.011 + 'px'
-  style.transform = 'skew(45deg)'
-  style.msTransform = 'skew(45deg)'
-  style.webkitTransform = 'skew(45deg)'
+  style.borderBottom = 'solid rgb(150,150,150) ' + width * 0.011 + 'px'
+  style.transform = 'skew(-45deg)'
+  style.msTransform = 'skew(-45deg)'
+  style.webkitTransform = 'skew(-45deg)'
   label.appendChild(edge)
 
   var text = document.createElement('div')
   style = text.style
   style.position = 'absolute'
-  style.right = width * 0.04
-  style.top = height * 0.015
-  style.width = width * 0.3
-  style.textAlign = 'right'
+  style.left = -width * 0.02
+  style.bottom = -height * 0.05
+  style.width = width * 0.2
+  style.textAlign = 'left'
   style.position = 'absolute'
   style.color = 'rgb(150,150,150)'
   style.fontFamily = 'Hack'
   style.fontSize = width * 0.04 + 'px'
-  text.innerHTML = 'playpen '
+  text.innerHTML = 'stage'
   label.appendChild(text)
 
+  var number = document.createElement('span')
+  style = number.style
+  style.color = 'rgb(200,200,200)'
+  style.fontFamily = 'Hack'
+  style.fontSize = width * 0.04 + 'px'
+  label.appendChild(number)
+
   function update (state) {
-    text.innerHTML = state.name + ' ' + '<span style="color: rgb(200,200,200)">' +
-      (state.current + 1) + '/' + (state.total) + '</span>'
+    number.innerHTML = state.current + 1
   }
 
   function hide () {

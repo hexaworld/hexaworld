@@ -9,7 +9,8 @@ function State (opts) {
 
 State.prototype.reload = function (opts) {
   this.completed = 0
-  this.score = {current: opts.score, total: opts.score}
+  this.energy = {current: opts.energy, total: opts.energy}
+  this.score = {current: 0}
   this.lives = {current: opts.lives, total: opts.lives}
   this.moves = {current: opts.moves, total: opts.moves}
   this.stages = {name: opts.name, current: 0, total: opts.stages}
