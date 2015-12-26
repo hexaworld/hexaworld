@@ -31,7 +31,7 @@ module.exports = function (container) {
   style.height = '120%'
   style.top = 0
   style.background = 'rgb(150,150,150)'
-  style.transition = 'all 0.2s'
+  style.transition = 'width 0.2s'
   style.position = 'absolute'
   label.appendChild(fill)
 
@@ -51,16 +51,23 @@ module.exports = function (container) {
     label.appendChild(notch)
   })
 
-  function blink () {
+  function ghost () {
     var count = 0
     var blinker = setInterval(function () {
-      bar.style.background = 'rgb(150,150,150)'
       setTimeout(function () {
-        bar.style.background = 'rgb(55,55,55)'
+        bar.style.background = 'rgb(50,50,50)'
       }, 100)
+      bar.style.background = 'rgb(150,150,150)'
       count++
       if (count === 4) clearInterval(blinker)
     }, 200)
+  }
+
+  function blink () {    
+    fill.style.background = 'rgb(240,240,240)'
+    setTimeout(function () {
+      fill.style.background = 'rgb(150,150,150)'
+    }, 25)
   }
 
   function update (state) {
@@ -79,6 +86,7 @@ module.exports = function (container) {
     update: update,
     hide: hide,
     show: show,
-    blink: blink
+    blink: blink,
+    ghost: ghost
   }
 }

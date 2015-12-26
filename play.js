@@ -52,7 +52,6 @@ module.exports = function (id, level, opts) {
   })
 
   game.events.on(['player', 'enter'], function (event) {
-    console.log(state.energy.current)
     if (_.isEqual(event.tile, level.maps[state.stages.current].target)) {
       completed()
     } else {
@@ -72,7 +71,7 @@ module.exports = function (id, level, opts) {
 
   function failed () {
     if (state.energy.current <= 0) {
-      energy.blink()
+      energy.ghost()
       events.emit(['level', 'failed'], formatEvent({ level: level.config.name }))
       main.hide()
       endgame('GAME OVER')
@@ -87,16 +86,15 @@ module.exports = function (id, level, opts) {
     game.flash()
 
     setTimeout(function () {
-      var old = state.energy.current
-
       if (state.energy.current > 0) {
+        var remaining = state.energy.current
         var counter = setInterval(function () {
-          if (state.energy.current === 0) { clearInterval(counter) }
-          state.score.current += Math.min(100, state.energy.current) * 3
-          state.energy.current -= Math.min(100, state.energy.current)
-          energy.update(state.energy)
+          if (remaining <= 0) { clearInterval(counter) }
+          state.score.current += Math.min(100, remaining) * 3
+          remaining -= Math.min(100, remaining)
+          energy.blink()
           score.update(state.score, {magnitude: 0.5, duration: 200})
-        }, 20)
+        }, 50)
       }
 
       if (state.stages.current === state.stages.total - 1) {
@@ -112,7 +110,7 @@ module.exports = function (id, level, opts) {
           setTimeout(function () {
             game.reload(level.maps[state.stages.current])
             stages.update(state.stages)
-            state.energy.current = old + 900
+            state.energy.current += 900
             energy.update(state.energy)
             main.show()
           }, 400)
@@ -135,6 +133,7 @@ module.exports = function (id, level, opts) {
       score.show()
       energy.show()
       stages.show()
+
     }, 1000)
     game.start()
   }
