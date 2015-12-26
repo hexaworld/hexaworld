@@ -65,14 +65,6 @@ module.exports = function (container) {
     }, 200)
   }
 
-  function flash() {
-    fill.style.background = 'rgb(240,240,240)'
-  }
-
-  function unflash() {
-    fill.style.background = 'rgb(150,150,150)'
-  }
-
   function update (state) {
     fill.style.width = Math.max(width * 0.45 * Math.max(state.current,0) / state.total - 2, 0)
   }
@@ -89,8 +81,6 @@ module.exports = function (container) {
     update: update,
     hide: hide,
     show: show,
-    blink: blink,
-    flash: flash,
-    unflash: unflash
+    blink: blink
   }
 }

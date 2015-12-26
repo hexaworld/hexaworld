@@ -85,10 +85,11 @@ module.exports = function (id, level, opts) {
     score.update(state.score, {magnitude: 0.5, duration: 300})
     energy.update(state.energy)
     game.flash()
-    energy.flash()
 
     setTimeout(function () {
-      if (state.energy.current > 0) {
+      var old = state.energy.current
+
+      if (state.energy.current > 0) {  
         var counter = setInterval(function () {
           if (state.energy.current === 0) {clearInterval(counter)}
           state.score.current += Math.min(100, state.energy.current) * 3
@@ -111,14 +112,13 @@ module.exports = function (id, level, opts) {
           setTimeout(function () {
             game.reload(level.maps[state.stages.current])
             stages.update(state.stages)
-            state.energy.current = 2400
-            energy.unflash()
+            state.energy.current = old + 900
             energy.update(state.energy)
             main.show()
-          }, 500)
+          }, 400)
         }, 700)
       }
-    }, 600)
+    }, 500)
   }
 
   function start () {
