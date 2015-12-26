@@ -28,8 +28,8 @@ module.exports = function(container) {
   hex.style.strokeLinejoin = 'round'
   hex.style.pointerEvents = 'none'
   var t = ismobile
-    ? 'translate(' + size * 0.3 + ',' + size * 0.6 + ')'
-    : 'translate(' + size * 0.08 + ',' + size * 0.6 + ')'
+    ? 'translate(' + size * 0.3 + ',' + size * 0.62 + ')'
+    : 'translate(' + size * 0.1 + ',' + size * 0.62 + ')'
   hex.setAttribute('transform', t)
   svg.appendChild(hex)
 
@@ -43,8 +43,8 @@ module.exports = function(container) {
   number.style.pointerEvents = 'none'
   number.innerHTML = 'stage '  
   var t = ismobile 
-    ? 'translate(' + size * 0.76 + ',' + size * 0.83 + ')' 
-    : 'translate(' + size * 0.57 + ',' + size * 0.83 + ')' 
+    ? 'translate(' + size * 0.76 + ',' + size * 0.85 + ')' 
+    : 'translate(' + size * 0.6 + ',' + size * 0.85 + ')' 
   number.setAttribute('transform', t)
   svg.appendChild(number)
 
