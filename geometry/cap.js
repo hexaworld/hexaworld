@@ -19,7 +19,7 @@ module.exports = function (opts) {
     props: {
       fill: 'rgb(50,50,50)',
       stroke: 'white',
-      thickness: 4,
+      thickness: 3,
       type: 'polygon'
     },
 
