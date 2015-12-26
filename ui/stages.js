@@ -1,63 +1,65 @@
-module.exports = function (container) {
+var _ = require('lodash')
+
+module.exports = function(container) {
   var width = container.clientWidth
-  var height = container.clientHeight
-  var style
+  var size = width * 0.5
 
-  var label = document.createElement('div')
-  style = label.style
-  style.right = width * 0.2
-  style.bottom = height * 0.1
-  style.width = width * 0.2
-  style.height = width * 0.05
-  style.position = 'absolute'
-  container.appendChild(label)
+  var ismobile = window.innerWidth < window.innerHeight
 
-  var edge = document.createElement('div')
-  style = edge.style
-  style.right = 0
-  style.top = 0
-  style.width = width * 0.2
-  style.height = width * 0.05
-  style.paddingBottom = width * 0.005
-  style.position = 'absolute'
-  style.borderRight = 'solid rgb(150,150,150) ' + width * 0.011 * 1.6 + 'px'
-  style.borderBottom = 'solid rgb(150,150,150) ' + width * 0.011 + 'px'
-  style.transform = 'skew(-45deg)'
-  style.msTransform = 'skew(-45deg)'
-  style.webkitTransform = 'skew(-45deg)'
-  label.appendChild(edge)
+  var points = _.range(7).map(function (i) {
+    var dx = 0.6 * size * Math.cos(i * 2 * Math.PI / 6) + size / 2
+    var dy = 0.425 * size * Math.sin(i * 2 * Math.PI / 6) + size / 2
+    return [dx, dy]
+  })
 
-  var text = document.createElement('div')
-  style = text.style
-  style.position = 'absolute'
-  style.left = -width * 0.02
-  style.bottom = -height * 0.05
-  style.width = width * 0.2
-  style.textAlign = 'left'
-  style.position = 'absolute'
-  style.color = 'rgb(150,150,150)'
-  style.fontFamily = 'Hack'
-  style.fontSize = width * 0.04 + 'px'
-  text.innerHTML = 'stage'
-  label.appendChild(text)
+  var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+  svg.setAttribute('width', size * 1.1)
+  svg.setAttribute('height', size)
+  svg.style.position = 'fixed'
+  svg.style.bottom = 0
+  svg.style.right = ismobile ? 0 : window.innerWidth / 2 - size / 2
+  container.appendChild(svg)
 
-  var number = document.createElement('span')
-  style = number.style
-  style.color = 'rgb(200,200,200)'
-  style.fontFamily = 'Hack'
-  style.fontSize = width * 0.04 + 'px'
-  label.appendChild(number)
+  var hex = document.createElementNS('http://www.w3.org/2000/svg', 'polygon')
+  hex.setAttribute("points", points.join(' '))
+  hex.style.fill = 'rgb(55,55,55)'
+  hex.style.stroke = 'rgb(155,155,155)'
+  hex.style.strokeWidth = '5'
+  hex.style.strokeLinejoin = 'round'
+  hex.style.cursor = 'pointer'
+  hex.style.webkitTapHighlightColor = 'rgba(0,0,0,0)'
+  hex.style.overflow = 'hidden'
+  var t = ismobile
+    ? 'translate(' + size * 0.3 + ',' + size * 0.6 + ')'
+    : 'translate(' + size * 0.08 + ',' + size * 0.6 + ')'
+  hex.setAttribute('transform', t)
+  svg.appendChild(hex)
+
+  var number = document.createElementNS('http://www.w3.org/2000/svg', 'text')
+  number.setAttribute("fill", 'rgb(155,155,155)')
+  number.setAttribute("font-size", width * 0.05)
+  number.setAttribute("font-family", "Hack")
+  number.setAttribute("text-anchor", 'middle')
+  number.setAttribute("dominant-baseline", 'hanging')
+  number.style.opacity = 1
+  number.style.pointerEvents = 'none'
+  number.innerHTML = 'stage '  
+  var t = ismobile 
+    ? 'translate(' + size * 0.76 + ',' + size * 0.83 + ')' 
+    : 'translate(' + size * 0.57 + ',' + size * 0.83 + ')' 
+  number.setAttribute('transform', t)
+  svg.appendChild(number)
 
   function update (state) {
-    number.innerHTML = state.current + 1
+    number.innerHTML = 'stage ' + (state.current + 1) + '/' + state.total
   }
 
   function hide () {
-    label.style.opacity = 0
+    svg.style.opacity = 0
   }
 
   function show () {
-    label.style.opacity = 1
+    svg.style.opacity = 1
   }
 
   return {
@@ -65,4 +67,5 @@ module.exports = function (container) {
     hide: hide,
     show: show
   }
+
 }
