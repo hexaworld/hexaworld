@@ -133,7 +133,6 @@ module.exports = function (id, level, opts) {
       score.show()
       energy.show()
       stages.show()
-
     }, 1000)
     game.start()
   }

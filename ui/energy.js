@@ -63,7 +63,7 @@ module.exports = function (container) {
     }, 200)
   }
 
-  function blink () {    
+  function blink () {
     fill.style.background = 'rgb(240,240,240)'
     setTimeout(function () {
       fill.style.background = 'rgb(150,150,150)'
