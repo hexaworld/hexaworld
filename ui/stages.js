@@ -26,9 +26,7 @@ module.exports = function(container) {
   hex.style.stroke = 'rgb(155,155,155)'
   hex.style.strokeWidth = '5'
   hex.style.strokeLinejoin = 'round'
-  hex.style.cursor = 'pointer'
-  hex.style.webkitTapHighlightColor = 'rgba(0,0,0,0)'
-  hex.style.overflow = 'hidden'
+  hex.style.pointerEvents = 'none'
   var t = ismobile
     ? 'translate(' + size * 0.3 + ',' + size * 0.6 + ')'
     : 'translate(' + size * 0.08 + ',' + size * 0.6 + ')'

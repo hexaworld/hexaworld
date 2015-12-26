@@ -8,9 +8,9 @@ module.exports = function (container) {
   var label = document.createElement('div')
   label.id = 'energy'
   style = label.style
-  style.left = width * 0.15
+  style.left = width * 0.06
   style.width = width * 0.45
-  style.top = width * 0.075
+  style.top = width * 0
   style.height = width * 0.05
   style.position = 'absolute'
   container.appendChild(label)
@@ -32,7 +32,7 @@ module.exports = function (container) {
   style.height = '120%'
   style.top = 0
   style.background = 'rgb(150,150,150)'
-  style.transition = 'width 0.2s'
+  style.transition = 'all 0.2s'
   style.position = 'absolute'
   label.appendChild(fill)
 
