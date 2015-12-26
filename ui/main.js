@@ -9,6 +9,7 @@ module.exports = function (container, opts) {
   container.style.width = height * 0.7 + 'px'
   container.style.height = height + 'px'
   container.style.position = 'relative'
+  container.style.top = (window.innerHeight - height) * 0.5
   container.style.background = 'rgb(55,55,55)'
 
   canvas.id = 'game'
