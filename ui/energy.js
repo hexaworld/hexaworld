@@ -2,7 +2,6 @@ var _ = require('lodash')
 
 module.exports = function (container) {
   var width = container.clientWidth
-  var height = container.clientHeight
   var style
 
   var label = document.createElement('div')
@@ -38,7 +37,7 @@ module.exports = function (container) {
 
   var n = 8
 
-  _.range(n).forEach( function (i) {
+  _.range(n).forEach(function (i) {
     var notch = document.createElement('div')
     style = notch.style
     style.left = i * ((width * 0.45) / n)
@@ -49,11 +48,10 @@ module.exports = function (container) {
     style.border = 'solid 3px rgb(150,150,150)'
     style.outline = 'solid 6px rgb(55,55,55)'
     style.zIndex = '1000'
-    energy.appendChild(notch)
-
+    label.appendChild(notch)
   })
 
-  function blink() {
+  function blink () {
     var count = 0
     var blinker = setInterval(function () {
       bar.style.background = 'rgb(150,150,150)'
@@ -66,7 +64,7 @@ module.exports = function (container) {
   }
 
   function update (state) {
-    fill.style.width = Math.max(width * 0.45 * Math.max(state.current,0) / state.total - 2, 0)
+    fill.style.width = Math.max(width * 0.45 * Math.max(state.current, 0) / state.total - 2, 0)
   }
 
   function hide () {

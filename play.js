@@ -1,5 +1,5 @@
 var _ = require('lodash')
-var sprintf = require("sprintf-js").sprintf
+var sprintf = require('sprintf-js').sprintf
 var EventEmitter = require('eventemitter2').EventEmitter2
 var State = require('./state.js')
 var formatEvent = require('./util/events.js').formatEvent
@@ -89,9 +89,9 @@ module.exports = function (id, level, opts) {
     setTimeout(function () {
       var old = state.energy.current
 
-      if (state.energy.current > 0) {  
+      if (state.energy.current > 0) {
         var counter = setInterval(function () {
-          if (state.energy.current === 0) {clearInterval(counter)}
+          if (state.energy.current === 0) { clearInterval(counter) }
           state.score.current += Math.min(100, state.energy.current) * 3
           state.energy.current -= Math.min(100, state.energy.current)
           energy.update(state.energy)
@@ -126,7 +126,7 @@ module.exports = function (id, level, opts) {
       events.emit(['level', 'started'], formatEvent({ level: level.config.name }))
     }
     energy.update(state.energy)
-    stages.update(state.stages)    
+    stages.update(state.stages)
     message.show('FIND THE CIRCLE!')
     events.emit(['map', 'started'], formatEvent({ map: state.stages.current }))
     setTimeout(function () {

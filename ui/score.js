@@ -1,9 +1,8 @@
-var sprintf = require("sprintf-js").sprintf
+var sprintf = require('sprintf-js').sprintf
 var animate = require('animateplus')
 
 module.exports = function (container) {
   var width = container.clientWidth
-  var height = container.clientHeight
   var style
 
   var label = document.createElement('div')
@@ -36,7 +35,7 @@ module.exports = function (container) {
       scale: [1, 1 + opts.magnitude],
       duration: 50,
       easing: 'easeInQuad',
-      complete: function() {
+      complete: function () {
         animate({
           el: number,
           scale: [1 + opts.magnitude, 1],

@@ -1,6 +1,6 @@
 var _ = require('lodash')
 
-module.exports = function(container) {
+module.exports = function (container) {
   var width = container.clientWidth
   var size = width * 0.5
 
@@ -12,6 +12,8 @@ module.exports = function(container) {
     return [dx, dy]
   })
 
+  var t
+
   var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
   svg.setAttribute('width', size * 1.1)
   svg.setAttribute('height', size)
@@ -21,30 +23,30 @@ module.exports = function(container) {
   container.appendChild(svg)
 
   var hex = document.createElementNS('http://www.w3.org/2000/svg', 'polygon')
-  hex.setAttribute("points", points.join(' '))
+  hex.setAttribute('points', points.join(' '))
   hex.style.fill = 'rgb(55,55,55)'
   hex.style.stroke = 'rgb(155,155,155)'
   hex.style.strokeWidth = '5'
   hex.style.strokeLinejoin = 'round'
   hex.style.pointerEvents = 'none'
-  var t = ismobile
+  t = ismobile
     ? 'translate(' + size * 0.3 + ',' + size * 0.62 + ')'
     : 'translate(' + size * 0.1 + ',' + size * 0.62 + ')'
   hex.setAttribute('transform', t)
   svg.appendChild(hex)
 
   var number = document.createElementNS('http://www.w3.org/2000/svg', 'text')
-  number.setAttribute("fill", 'rgb(155,155,155)')
-  number.setAttribute("font-size", width * 0.05)
-  number.setAttribute("font-family", "Hack")
-  number.setAttribute("text-anchor", 'middle')
-  number.setAttribute("dominant-baseline", 'hanging')
+  number.setAttribute('fill', 'rgb(155,155,155)')
+  number.setAttribute('font-size', width * 0.05)
+  number.setAttribute('font-family', 'Hack')
+  number.setAttribute('text-anchor', 'middle')
+  number.setAttribute('dominant-baseline', 'hanging')
   number.style.opacity = 1
   number.style.pointerEvents = 'none'
-  number.innerHTML = 'stage '  
-  var t = ismobile 
-    ? 'translate(' + size * 0.76 + ',' + size * 0.85 + ')' 
-    : 'translate(' + size * 0.6 + ',' + size * 0.85 + ')' 
+  number.innerHTML = 'stage '
+  t = ismobile
+    ? 'translate(' + size * 0.76 + ',' + size * 0.85 + ')'
+    : 'translate(' + size * 0.6 + ',' + size * 0.85 + ')'
   number.setAttribute('transform', t)
   svg.appendChild(number)
 
@@ -65,5 +67,4 @@ module.exports = function(container) {
     hide: hide,
     show: show
   }
-
 }
