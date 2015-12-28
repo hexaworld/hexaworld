@@ -24,6 +24,7 @@ module.exports = function (container, opts) {
   canvas.height = height * 0.7
   canvas.style.marginTop = ismobile ? height * 0.18 : height * 0.15
   canvas.style.position = 'absolute'
+  canvas.style.zIndex = 2000
   container.appendChild(canvas)
 
   canvas.style.opacity = 0.0

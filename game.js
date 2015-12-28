@@ -2,6 +2,7 @@ var _ = require('lodash')
 var EventEmitter = require('eventemitter2').EventEmitter2
 var Game = require('crtrdg-gameloop')
 var Keyboard = require('crtrdg-keyboard')
+var Touch = require('crtrdg-touch')
 var Player = require('./entity/player.js')
 var Camera = require('./entity/camera.js')
 var World = require('./entity/world.js')
@@ -27,6 +28,7 @@ module.exports = function (canvas, schema, opts) {
   })
 
   var keyboard = new Keyboard(game)
+  var touch = new Touch(game)
 
   var player = new Player({
     scale: 2,
@@ -111,7 +113,8 @@ module.exports = function (canvas, schema, opts) {
   })
 
   player.on('update', function (interval) {
-    this.move(keyboard, world)
+    var keys = _.extend(_.cloneDeep(keyboard.keysDown), touch.down)
+    this.move(keys, world)
   })
 
   camera.on('update', function (interval) {

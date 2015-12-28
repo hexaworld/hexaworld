@@ -28,9 +28,13 @@ function Player (opts) {
   this.movement = {}
   this.movement.center = new Fixmove({speed: opts.speed})
   this.movement.tile = new Automove({
-    keymap: ['A', 'D', 'W', '<left>', '<right>', '<up>'],
-    heading: [-60, 60, 0, -60, 60, 0],
-    shift: [0, 0, 8, 0, 0, 8],
+    keymap: [
+      'A', 'D', 'W', 
+      '<left>', '<right>', '<up>', 
+      '<swipeLeft>', '<swipeRight>', '<swipeUp>',
+      '<tapLeft>', '<tapRight>', '<tapUp>'],
+    heading: [-60, 60, 0, -60, 60, 0, -60, 60, 0, -60, 60, 0],
+    shift: [0, 0, 8, 0, 0, 8, 0, 0, 8, 0, 0, 8],
     speed: opts.speed
   })
   this.movement.path = new Automove({
@@ -65,7 +69,7 @@ Player.prototype.moveto = function (transform) {
   this.geometry.update({rotation: rotation})
 }
 
-Player.prototype.move = function (keyboard, world) {
+Player.prototype.move = function (keys, world) {
   var self = this
 
   var tile = world.gettile(this.coordinates())
@@ -73,7 +77,6 @@ Player.prototype.move = function (keyboard, world) {
 
   var trigger = _.find(tile.children, function (child) { return child.props.trigger })
   var inside = trigger.contains(current.translation)
-  var keys = keyboard.keysDown
 
   if (inside && !self.inside) {
     self.emit('enter', { tile: self.coordinates(), position: self.geometry.transform })
