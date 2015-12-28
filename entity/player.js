@@ -29,8 +29,8 @@ function Player (opts) {
   this.movement.center = new Fixmove({speed: opts.speed})
   this.movement.tile = new Automove({
     keymap: [
-      'A', 'D', 'W', 
-      '<left>', '<right>', '<up>', 
+      'A', 'D', 'W',
+      '<left>', '<right>', '<up>',
       '<swipeLeft>', '<swipeRight>', '<swipeUp>',
       '<tapLeft>', '<tapRight>', '<tapUp>'],
     heading: [-60, 60, 0, -60, 60, 0, -60, 60, 0, -60, 60, 0],
