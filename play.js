@@ -95,7 +95,6 @@ module.exports = function (id, level, opts) {
             state.score.current += Math.min(300, remaining) * 3
             remaining -= Math.min(300, remaining)
             energy.blink()
-            console.log('blink')
             score.update(state.score, {magnitude: 0.25, duration: 250})
           }
         }, 150)
