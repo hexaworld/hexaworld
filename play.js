@@ -89,8 +89,8 @@ module.exports = function (id, level, opts) {
       if (state.energy.current > 0) {
         var remaining = state.energy.current
         var counter = setInterval(function () {
-          if (remaining <= 0) { 
-            clearInterval(counter) 
+          if (remaining <= 0) {
+            clearInterval(counter)
           } else {
             state.score.current += Math.min(300, remaining) * 3
             remaining -= Math.min(300, remaining)

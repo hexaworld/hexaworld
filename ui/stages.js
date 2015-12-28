@@ -28,7 +28,7 @@ module.exports = function (container) {
     svg.style.bottom = 0
     svg.style.left = offset + size * 0.4
   }
-   
+
   container.appendChild(svg)
 
   var hex = document.createElementNS('http://www.w3.org/2000/svg', 'polygon')
