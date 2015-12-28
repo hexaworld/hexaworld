@@ -14,7 +14,8 @@ module.exports = function (canvas, schema, opts) {
 
   if (_.isString(canvas)) {
     var container = document.getElementById(canvas)
-    canvas = require('./ui/main.js')(container, opts).canvas
+    var main = require('./ui/main.js')(container, opts)
+    canvas = main.canvas
   }
 
   var height = canvas.clientHeight
@@ -47,7 +48,7 @@ module.exports = function (canvas, schema, opts) {
   })
 
   var ring = new Ring({
-    size: 0.82 * game.width / 2,
+    size: 0.88 * game.width / 2,
     translation: [game.width / 2, game.width / 2],
     extent: 0.1 * game.width / 2,
     count: 8,
@@ -55,7 +56,7 @@ module.exports = function (canvas, schema, opts) {
   })
 
   var mask = new Mask({
-    size: 0.8 * game.width / 2,
+    size: 0.86 * game.width / 2,
     translation: [game.width / 2, game.width / 2],
     fill: 'rgb(90,90,90)'
   })
@@ -157,6 +158,14 @@ module.exports = function (canvas, schema, opts) {
 
   return {
     reload: reload,
+
+    show: function () {
+      canvas.style.opacity = 1
+    },
+
+    hide: function () {
+      canvas.style.opacity = 0
+    },
 
     pause: function () {
       game.pause()

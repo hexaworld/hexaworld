@@ -80,10 +80,21 @@ Ring.toggleFlashing = function (colors) {
 }
 
 Ring.prototype.flash = function () {
-  var colors = this.flashingColors
+  var colors = this.colors
   this.notches.forEach(function (notch, i) {
-    var idx = Math.floor(Math.random() * colors.length) + 0
-    notch.props.fill = colors[idx]
+    if (colors[i] === 'rgb(55,55,55)') {
+      if (Math.random() > 0.5) {
+        notch.props.fill = 'rgb(230,230,230)'
+      } else {
+        notch.props.fill = 'rgb(130,130,130)'
+      }
+    } else {
+      if (Math.random() > 0.5) {
+        notch.props.fill = color.interpolateHsl(colors[i], 'rgb(230,230,230)')(0.2)
+      } else {
+        notch.props.fill = color.interpolateHsl(colors[i], 'rgb(130,130,130)')(0.2)
+      }
+    }
   })
 }
 
@@ -137,5 +148,6 @@ Ring.prototype.update = function (player, world) {
     return fills[0].fill.toString()
   })
 
+  this.colors = colors
   this.recolor(colors)
 }

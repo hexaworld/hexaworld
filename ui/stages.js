@@ -1,56 +1,74 @@
+var _ = require('lodash')
+
 module.exports = function (container) {
   var width = container.clientWidth
-  var height = container.clientHeight
-  var style
+  var size = width * 0.5
 
-  var label = document.createElement('div')
-  style = label.style
-  style.left = width * 0.2
-  style.top = height * 0.075
-  style.width = width * 0.2
-  style.height = width * 0.05
-  style.position = 'absolute'
-  container.appendChild(label)
+  var ismobile = window.innerWidth < window.innerHeight
 
-  var edge = document.createElement('div')
-  style = edge.style
-  style.right = 0
-  style.top = 0
-  style.width = width * 0.2
-  style.height = width * 0.05
-  style.position = 'absolute'
-  style.borderRight = 'solid rgb(150,150,150) ' + width * 0.011 * 1.6 + 'px'
-  style.borderTop = 'solid rgb(150,150,150) ' + width * 0.011 + 'px'
-  style.transform = 'skew(45deg)'
-  style.msTransform = 'skew(45deg)'
-  style.webkitTransform = 'skew(45deg)'
-  label.appendChild(edge)
+  var points = _.range(7).map(function (i) {
+    var dx = 0.6 * size * Math.cos(i * 2 * Math.PI / 6) + size / 2
+    var dy = 0.425 * size * Math.sin(i * 2 * Math.PI / 6) + size / 2
+    return [dx, dy]
+  })
 
-  var text = document.createElement('div')
-  style = text.style
-  style.position = 'absolute'
-  style.right = width * 0.04
-  style.top = height * 0.015
-  style.width = width * 0.3
-  style.textAlign = 'right'
-  style.position = 'absolute'
-  style.color = 'rgb(150,150,150)'
-  style.fontFamily = 'Hack'
-  style.fontSize = width * 0.04 + 'px'
-  text.innerHTML = 'playpen '
-  label.appendChild(text)
+  var t
+
+  var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+  svg.setAttribute('width', size * 1.2)
+  svg.setAttribute('height', size)
+  if (ismobile) {
+    svg.style.position = 'fixed'
+    svg.style.bottom = 0
+    svg.style.right = 0
+  } else {
+    var offset = container.offsetLeft
+    if (container.offsetParent) offset += container.offsetParent.offsetLeft
+    svg.style.position = 'fixed'
+    svg.style.bottom = 0
+    svg.style.left = offset + size * 0.4
+  }
+
+  container.appendChild(svg)
+
+  var hex = document.createElementNS('http://www.w3.org/2000/svg', 'polygon')
+  hex.setAttribute('points', points.join(' '))
+  hex.style.fill = 'rgb(55,55,55)'
+  hex.style.stroke = 'rgb(155,155,155)'
+  hex.style.strokeWidth = '5'
+  hex.style.strokeLinejoin = 'round'
+  hex.style.pointerEvents = 'none'
+  t = ismobile
+    ? 'translate(' + size * 0.45 + ',' + size * 0.62 + ')'
+    : 'translate(' + size * 0.1 + ',' + size * 0.62 + ')'
+  hex.setAttribute('transform', t)
+  svg.appendChild(hex)
+
+  var number = document.createElementNS('http://www.w3.org/2000/svg', 'text')
+  number.setAttribute('fill', 'rgb(155,155,155)')
+  number.setAttribute('font-size', width * 0.05)
+  number.setAttribute('font-family', 'Hack')
+  number.setAttribute('text-anchor', 'middle')
+  number.setAttribute('dominant-baseline', 'hanging')
+  number.style.opacity = 1
+  number.style.pointerEvents = 'none'
+  number.innerHTML = ''
+  t = ismobile
+    ? 'translate(' + size * 0.89 + ',' + size * 0.85 + ')'
+    : 'translate(' + size * 0.6 + ',' + size * 0.85 + ')'
+  number.setAttribute('transform', t)
+  svg.appendChild(number)
 
   function update (state) {
-    text.innerHTML = state.name + ' ' + '<span style="color: rgb(200,200,200)">' +
-      (state.current + 1) + '/' + (state.total) + '</span>'
+    number.innerHTML = (state.current + 1) + '/' + state.total + ' found'
   }
 
   function hide () {
-    label.style.opacity = 0
+    svg.style.opacity = 0
   }
 
   function show () {
-    label.style.opacity = 1
+    svg.style.opacity = 1
   }
 
   return {
