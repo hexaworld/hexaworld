@@ -14,7 +14,8 @@ module.exports = function (canvas, schema, opts) {
 
   if (_.isString(canvas)) {
     var container = document.getElementById(canvas)
-    canvas = require('./ui/main.js')(container, opts).canvas
+    var main = require('./ui/main.js')(container, opts)
+    canvas = main.canvas
   }
 
   var height = canvas.clientHeight
@@ -157,6 +158,14 @@ module.exports = function (canvas, schema, opts) {
 
   return {
     reload: reload,
+
+    show: function () {
+      canvas.style.opacity = 1
+    },
+
+    hide: function () {
+      canvas.style.opacity = 0
+    },
 
     pause: function () {
       game.pause()

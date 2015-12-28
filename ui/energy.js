@@ -67,7 +67,7 @@ module.exports = function (container) {
     fill.style.background = 'rgb(240,240,240)'
     setTimeout(function () {
       fill.style.background = 'rgb(150,150,150)'
-    }, 25)
+    }, 50)
   }
 
   function update (state) {

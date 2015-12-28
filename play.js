@@ -81,7 +81,7 @@ module.exports = function (id, level, opts) {
   function completed () {
     events.emit(['map', 'completed'], formatEvent({ map: state.stages.current }))
     state.score.current += 2000
-    score.update(state.score, {magnitude: 0.5, duration: 300})
+    score.update(state.score, {magnitude: 0.5, duration: 200})
     energy.update(state.energy)
     game.flash()
 
@@ -89,12 +89,16 @@ module.exports = function (id, level, opts) {
       if (state.energy.current > 0) {
         var remaining = state.energy.current
         var counter = setInterval(function () {
-          if (remaining <= 0) { clearInterval(counter) }
-          state.score.current += Math.min(100, remaining) * 3
-          remaining -= Math.min(100, remaining)
-          energy.blink()
-          score.update(state.score, {magnitude: 0.5, duration: 200})
-        }, 50)
+          if (remaining <= 0) { 
+            clearInterval(counter) 
+          } else {
+            state.score.current += Math.min(300, remaining) * 3
+            remaining -= Math.min(300, remaining)
+            energy.blink()
+            console.log('blink')
+            score.update(state.score, {magnitude: 0.3, duration: 250})
+          }
+        }, 150)
       }
 
       if (state.stages.current === state.stages.total - 1) {
@@ -116,7 +120,7 @@ module.exports = function (id, level, opts) {
           }, 400)
         }, 700)
       }
-    }, 500)
+    }, 400)
   }
 
   function start () {
@@ -149,6 +153,7 @@ module.exports = function (id, level, opts) {
     reload: function (updated) {
       level = load(updated)
       state.reload(level.config)
+      main.canvas.style.opacity = 0
       game.reload(level.maps[state.stages.current])
       start()
     },

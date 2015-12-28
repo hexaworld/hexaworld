@@ -15,11 +15,20 @@ module.exports = function (container) {
   var t
 
   var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-  svg.setAttribute('width', size * 1.1)
+  svg.setAttribute('width', size * 1.2)
   svg.setAttribute('height', size)
-  svg.style.position = 'fixed'
-  svg.style.bottom = 0
-  svg.style.right = ismobile ? 0 : window.innerWidth / 2 - size / 2
+  if (ismobile) {
+    svg.style.position = 'fixed'
+    svg.style.bottom = 0
+    svg.style.right = 0
+  } else {
+    var offset = container.offsetLeft
+    if (container.offsetParent) offset += container.offsetParent.offsetLeft
+    svg.style.position = 'fixed'
+    svg.style.bottom = 0
+    svg.style.left = offset + size * 0.4
+  }
+   
   container.appendChild(svg)
 
   var hex = document.createElementNS('http://www.w3.org/2000/svg', 'polygon')
@@ -30,7 +39,7 @@ module.exports = function (container) {
   hex.style.strokeLinejoin = 'round'
   hex.style.pointerEvents = 'none'
   t = ismobile
-    ? 'translate(' + size * 0.3 + ',' + size * 0.62 + ')'
+    ? 'translate(' + size * 0.45 + ',' + size * 0.62 + ')'
     : 'translate(' + size * 0.1 + ',' + size * 0.62 + ')'
   hex.setAttribute('transform', t)
   svg.appendChild(hex)
@@ -43,15 +52,15 @@ module.exports = function (container) {
   number.setAttribute('dominant-baseline', 'hanging')
   number.style.opacity = 1
   number.style.pointerEvents = 'none'
-  number.innerHTML = 'stage '
+  number.innerHTML = ''
   t = ismobile
-    ? 'translate(' + size * 0.76 + ',' + size * 0.85 + ')'
+    ? 'translate(' + size * 0.89 + ',' + size * 0.85 + ')'
     : 'translate(' + size * 0.6 + ',' + size * 0.85 + ')'
   number.setAttribute('transform', t)
   svg.appendChild(number)
 
   function update (state) {
-    number.innerHTML = 'stage ' + (state.current + 1) + '/' + state.total
+    number.innerHTML = (state.current + 1) + '/' + state.total + ' found'
   }
 
   function hide () {
