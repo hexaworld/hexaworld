@@ -1,7 +1,7 @@
 var _ = require('lodash')
 
 module.exports = function (container) {
-  var width = container.clientWidth
+  var width = window.innerHeight * 0.6
   var size = width * 0.5
 
   var ismobile = window.innerWidth < window.innerHeight
@@ -26,7 +26,7 @@ module.exports = function (container) {
     if (container.offsetParent) offset += container.offsetParent.offsetLeft
     svg.style.position = 'fixed'
     svg.style.bottom = 0
-    svg.style.left = offset + size * 0.4
+    svg.style.left = offset + container.clientWidth * 0.5 - size * 1.2 * 0.5
   }
 
   container.appendChild(svg)
