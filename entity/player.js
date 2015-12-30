@@ -32,9 +32,9 @@ function Player (opts) {
       'A', 'D', 'W',
       '<left>', '<right>', '<up>',
       '<swipeLeft>', '<swipeRight>', '<swipeUp>',
-      '<tapLeft>', '<tapRight>', '<tapUp>'],
-    heading: [-60, 60, 0, -60, 60, 0, -60, 60, 0, -60, 60, 0],
-    shift: [0, 0, 8, 0, 0, 8, 0, 0, 8, 0, 0, 8],
+      '<tapDownLeft>', '<tapDownRight>', '<tapUpLeft>', '<tapUpRight>'],
+    heading: [-60, 60, 0, -60, 60, 0, -60, 60, 0, -60, 60, 0, 0],
+    shift: [0, 0, 8, 0, 0, 8, 0, 0, 8, 0, 0, 8, 8],
     speed: opts.speed
   })
   this.movement.path = new Automove({
