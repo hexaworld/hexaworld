@@ -9,7 +9,7 @@
     "crtrdg-entity": "^1.0.0",
     "crtrdg-gameloop": "^1.0.0",
     "crtrdg-keyboard": "^1.0.0",
-    "crtrdg-mouse": "~0.0.1",
+    "crtrdg-touch": "^1.0.0",
     "crtrdg-time": "0.0.0",
     "d3-color": "^0.2.7",
     "eventemitter2": "^0.4.14",
@@ -19,6 +19,11 @@
     "sat": "^0.5.0",
     "sprintf-js": "^1.0.3",
     "transformist": "^1.0.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hexaworld/hexaworld.git"
   },
   "devDependencies": {
     "budo": "~7.0.0",
