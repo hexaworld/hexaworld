@@ -12,7 +12,8 @@ module.exports = function (opts) {
       thickness: opts.thickness,
       target: opts.target || false,
       cue: opts.cue || false,
-      trigger: opts.trigger || false
+      trigger: opts.trigger || false,
+      surface: opts.surface || false
     },
 
     points: _.range(7).map(function (i) {

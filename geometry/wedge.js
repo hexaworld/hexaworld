@@ -10,7 +10,8 @@ module.exports = function (opts) {
       stroke: 'rgb(55,55,55)',
       thickness: 0,
       type: 'polygon',
-      obstacle: true
+      obstacle: true,
+      surface: opts.surface || false
     },
 
     points: [

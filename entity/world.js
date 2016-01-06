@@ -25,15 +25,15 @@ World.prototype.reload = function (schema) {
       if (t.cue.scale === 2) scale = 0.16
       if (t.cue.scale === 3) scale = 0.19
       children.push(hex({
-        fill: t.cue.fill,
+        // fill: t.cue.fill,
         scale: scale,
         cue: true
       }))
     }
     if (t.target) {
       children.push(circle({
-        fill: t.target.fill,
-        stroke: t.target.fill,
+        // fill: t.target.fill,
+        // stroke: t.target.fill,
         thickness: 0.75,
         scale: 0.09,
         target: true
@@ -45,7 +45,8 @@ World.prototype.reload = function (schema) {
       translation: t.translation,
       paths: t.paths,
       children: children,
-      thickness: self.opts.thickness
+      thickness: self.opts.thickness,
+      surface: true
     })
 
     var x = t.translation[0]

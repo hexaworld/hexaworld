@@ -42,12 +42,12 @@ module.exports = function (canvas, schema, opts) {
     thickness: 0.5
   })
 
-  var camera = new Camera({
-    scale: 130 * 1 / height * 0.7,
-    speed: {translation: 0.1, rotation: 0.1, scale: 0.002},
-    friction: 0.9,
-    yoked: true
-  })
+  // var camera = new Camera({
+  //   scale: 130 * 1 / height * 0.7,
+  //   speed: {translation: 0.1, rotation: 0.1, scale: 0.002},
+  //   friction: 0.9,
+  //   yoked: true
+  // })
 
   var ring = new Ring({
     size: 0.88 * game.width / 2,
@@ -98,7 +98,7 @@ module.exports = function (canvas, schema, opts) {
   relay(game, 'game', 'end')
 
   player.addTo(game)
-  camera.addTo(game)
+  //camera.addTo(game)
   world.addTo(game)
   ring.addTo(game)
 
@@ -112,29 +112,49 @@ module.exports = function (canvas, schema, opts) {
     }
   })
 
+
   player.on('update', function (interval) {
     var keys = _.extend(_.cloneDeep(keyboard.keysDown), touch.down)
     this.move(keys, world)
+
+    var xy = player.position()
+    var rad = player.angle() * Math.PI / 180
+    var scale = 100
+    var offset = [
+      scale * Math.sin(rad),
+      scale * Math.cos(rad)
+    ]
+
+    camera.target = [xy[0], xy[1], 0]
+    camera.position = [xy[0], xy[1] - 50, 200]
+    
   })
 
-  camera.on('update', function (interval) {
-    if (camera.yoked) {
-      camera.transform.translation = player.position()
-      camera.transform.rotation = player.angle()
-    }
-    this.move(keyboard)
-  })
+  // camera.on('update', function (interval) {
+  //   if (camera.yoked) {
+  //     camera.transform.translation = player.position()
+  //     camera.transform.rotation = player.angle()
+  //   }
+  //   this.move(keyboard)
+  // })
 
   ring.on('update', function (interval) {
     this.update(player, world)
   })
 
+  var camera = require('lookat-camera')()
+  
+  camera.position = [0, -50, 200]
+  camera.target = [0, 0, 0]
+  camera.up = [0, 0, 1]
+
   game.on('draw', function (context) {
-    mask.set(context)
+    //test.draw(context, camera)
+    //mask.set(context)
     world.draw(context, camera)
     player.draw(context, camera)
-    mask.unset(context)
-    ring.draw(context)
+    //mask.unset(context)
+    //ring.draw(context)
   })
 
   game.on('update', function (interval) {

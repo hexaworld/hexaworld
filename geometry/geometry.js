@@ -2,8 +2,14 @@ var _ = require('lodash')
 var inside = require('point-in-polygon')
 var transform = require('transformist')
 var sat = require('sat')
+var triangulate = require('delaunay-triangulate')
+var glgeometry = require('gl-geometry')
+var glslify = require('glslify')
+var mat4 = require('gl-mat4')
+var Shader = require('gl-shader')
 
 function Geometry (data) {
+  var self = this
   if (!data.props) throw new Error('Must provide properties')
   if (!data.points) throw new Error('Must provide points')
   this.props = data.props
@@ -145,6 +151,47 @@ Geometry.prototype.drawBezier = function (context, points, scale) {
   }
 }
 
+Geometry.prototype.drawSurface = function (context, camera) {
+  var self = this
+
+  if (!this.proj) this.proj = mat4.create()
+  if (!this.view) this.view = mat4.create()
+
+  if (!this.shader) {
+    this.shader = Shader(context,
+      glslify('../shaders/flat.vert'),
+      glslify('../shaders/flat.frag')
+    )
+  }
+
+  if (!this.geometry | this.props.dynamic) {
+    this.geometry = glgeometry(context)
+    var complex = {
+      positions: this.points.map(function (p) {return [p[0], p[1], 0]}),
+      cells: triangulate(self.points).map(function (p) {return p.sort()})
+    }
+    this.geometry.attr('position', complex.positions)
+    this.geometry.faces(complex.cells)
+  }
+
+  //camera.tick()
+
+  camera.view(self.view)
+
+  var fieldOfView = Math.PI / 7
+  var near = 0.01
+  var far  = 1000
+  mat4.perspective(self.proj, fieldOfView, 1, near, far)
+
+  context.enable(context.DEPTH_TEST)
+
+  self.geometry.bind(self.shader)
+  self.geometry.draw(context.TRIANGLES)
+  self.shader.uniforms.proj = self.proj
+  self.shader.uniforms.view = self.view
+  self.geometry.unbind()
+}
+
 Geometry.prototype.drawChildren = function (context, camera) {
   if (this.children) {
     this.children.forEach(function (child) {
@@ -156,16 +203,20 @@ Geometry.prototype.drawChildren = function (context, camera) {
 Geometry.prototype.drawSelf = function (context, camera) {
   var points = this.points
   var scale = 1
-  if (camera) {
-    points = camera.transform.invert(points)
-    points = points.map(function (xy) {
-      return [xy[0] + camera.game.width / 2, xy[1] + camera.game.height / 2]
-    })
-    scale = camera.transform.scale
+  if (this.props.surface) {
+    this.drawSurface(context, camera)
+  } else if (this.props.fill || this.props.stroke) {
+    if (camera) {
+      points = camera.transform.invert(points)
+      points = points.map(function (xy) {
+        return [xy[0] + camera.game.width / 2, xy[1] + camera.game.height / 2]
+      })
+      scale = camera.transform.scale
+    }
+    if (this.props.type === 'polygon') this.drawPolygon(context, points, scale)
+    if (this.props.type === 'bezier') this.drawBezier(context, points, scale)
+    if (this.props.type === 'line') this.drawLines(context, points, scale)
   }
-  if (this.props.type === 'polygon') this.drawPolygon(context, points, scale)
-  if (this.props.type === 'bezier') this.drawBezier(context, points, scale)
-  if (this.props.type === 'line') this.drawLines(context, points, scale)
 }
 
 Geometry.prototype.draw = function (context, camera, opts) {

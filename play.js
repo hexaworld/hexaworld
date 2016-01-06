@@ -19,7 +19,7 @@ module.exports = function (id, level, opts) {
     })
     var config = _.cloneDeep(level.config)
     config.stages = maps.length
-    config.energy = 2400
+    config.energy = 12000
     return {maps: maps, config: config}
   }
 

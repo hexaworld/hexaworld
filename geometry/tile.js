@@ -20,10 +20,16 @@ module.exports = function (opts) {
   ]
 
   var wedges = _.range(6).map(function (i) {
-    return wedge({rotation: i * 60})
+    return wedge({
+      rotation: i * 60,
+      surface: opts.surface || false
+    })
   })
   var blocks = _.range(6).map(function (i) {
-    if (!_.includes(opts.paths, i)) return block({rotation: i * 60})
+    if (!_.includes(opts.paths, i)) return block({
+      rotation: i * 60,
+      surface: opts.surface || false
+    })
   })
   _.remove(blocks, _.isUndefined)
   var ends = _.range(6).map(function (i) {
@@ -58,7 +64,7 @@ module.exports = function (opts) {
   })
   _.remove(paths, _.isUndefined)
 
-  var children = center.concat(wedges).concat(blocks).concat(ends).concat(paths)
+  var children = center.concat(wedges).concat(blocks)
 
   return new Geometry({
     props: {

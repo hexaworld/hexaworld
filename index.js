@@ -30,9 +30,9 @@ var base = function (start) {
 }
 
 var maps = [
-  base({translation: [0, -2], rotation: 180}),
-  base({translation: [1, -1], rotation: 0}),
-  base({translation: [0, -1], rotation: 0})
+  base({translation: [0, 0], rotation: 180}),
+  base({translation: [0, 0], rotation: 0}),
+  base({translation: [0, 0], rotation: 0})
 ]
 
 var level = {
