@@ -10,10 +10,13 @@ module.exports = function (opts) {
       fill: opts.fill,
       stroke: opts.stroke,
       thickness: opts.thickness,
+      color: opts.color,
       target: opts.target || false,
       cue: opts.cue || false,
       trigger: opts.trigger || false,
-      surface: opts.surface || false
+      surface: opts.surface || false,
+      height: opts.height || 0,
+      lit: opts.lit || false
     },
 
     points: _.range(7).map(function (i) {

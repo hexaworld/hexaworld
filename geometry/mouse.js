@@ -9,7 +9,9 @@ module.exports = function (opts) {
       fill: opts.fill,
       type: 'polygon',
       surface: true,
-      dynamic: true
+      dynamic: true,
+      color: [250, 250, 250],
+      lit: false
     },
 
     points: [

@@ -39,7 +39,7 @@ module.exports = function (canvas, schema, opts) {
     speed: {translation: 1.25, rotation: 8.0},
     friction: 0.9,
     stroke: 'white',
-    fill: 'rgb(75,75,75)',
+    fill: [75, 75, 75],
     thickness: 0.5
   })
 

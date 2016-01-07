@@ -68,7 +68,8 @@ module.exports = function (opts) {
 
   return new Geometry({
     props: {
-      type: 'polygon'
+      type: 'polygon',
+      color: [55, 55, 55]
     },
 
     points: _.range(7).map(function (i) {

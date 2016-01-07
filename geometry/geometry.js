@@ -157,7 +157,10 @@ Geometry.prototype.drawBezier = function (context, points, scale) {
 Geometry.prototype.drawSurface = function (context, camera, light) {
   var self = this
 
-  if (!this.proj) this.proj = mat4.create()
+  if (!this.proj) {
+    this.proj = mat4.create()
+    mat4.perspective(self.proj, Math.PI / 4, 1, 0.01, 1000)
+  }
   if (!this.view) this.view = mat4.create()
   if (!this.eye) this.eye = new Float32Array(3)
 
@@ -171,7 +174,7 @@ Geometry.prototype.drawSurface = function (context, camera, light) {
   if (!this.geometry | this.props.dynamic) {
     this.geometry = glgeometry(context)
     var complex = {
-      positions: this.points.map(function (p) {return [p[0], p[1], -10]}),
+      positions: this.points.map(function (p) {return [p[0], p[1], self.props.height || 0]}),
       cells: triangulate(self.points).map(function (p) {return p.sort()})
     }
     this.geometry.attr('position', complex.positions)
@@ -179,23 +182,20 @@ Geometry.prototype.drawSurface = function (context, camera, light) {
     this.geometry.faces(complex.cells)
   }
 
-  //camera.tick()
+  var color = self.props.color ? self.props.color.map(function (c) {return c / 255.0}) : [0.5, 0.5, 0.5]
 
   camera.view(self.view)
-
-  var fieldOfView = Math.PI / 4
-  var near = 0.01
-  var far  = 1000
-  mat4.perspective(self.proj, fieldOfView, 1, near, far)
 
   context.enable(context.DEPTH_TEST)
 
   self.geometry.bind(self.shader)
-  self.geometry.draw(context.TRIANGLES)
   self.shader.uniforms.proj = self.proj
   self.shader.uniforms.view = self.view
   self.shader.uniforms.eye = eye(self.view, self.eye)
-  self.shader.uniforms.light = [light[0], light[1], 0]
+  self.shader.uniforms.light = [light[0], light[1], 5]
+  self.shader.uniforms.lit = self.props.lit ? 1.0 : 0.0
+  self.shader.uniforms.color = color
+  self.geometry.draw(context.TRIANGLES)
   self.geometry.unbind()
 }
 

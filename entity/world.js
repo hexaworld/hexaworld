@@ -3,6 +3,7 @@ var inherits = require('inherits')
 var tile = require('../geometry/tile.js')
 var circle = require('../geometry/circle.js')
 var hex = require('../geometry/hex.js')
+var Geometry = require('../geometry/geometry.js')
 var Entity = require('crtrdg-entity')
 
 module.exports = World
@@ -58,12 +59,21 @@ World.prototype.reload = function (schema) {
 
     return tileObj
   })
+
+  self.floor = hex({
+    surface: true,
+    height: -5,
+    color: [90, 90, 90],
+    scale: 400,
+    lit: false
+  })
 }
 
 World.prototype.draw = function (context, camera, light) {
   this.tiles.forEach(function (tile) {
     tile.draw(context, camera, light)
   })
+  this.floor.draw(context, camera, light)
 }
 
 World.prototype.locate = function (point) {
