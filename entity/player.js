@@ -134,8 +134,8 @@ Player.prototype.move = function (keys, world) {
   }
 }
 
-Player.prototype.draw = function (context, camera) {
-  this.geometry.draw(context, camera, {order: 'bottom'})
+Player.prototype.draw = function (context, camera, light) {
+  this.geometry.draw(context, camera, light)
 }
 
 Player.prototype.position = function () {

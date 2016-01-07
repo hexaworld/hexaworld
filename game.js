@@ -140,8 +140,8 @@ module.exports = function (canvas, schema, opts) {
   game.on('draw', function (context) {
     //test.draw(context, camera)
     //mask.set(context)
-    world.draw(context, camera)
-    player.draw(context, camera)
+    world.draw(context, camera, player.position())
+    player.draw(context, camera, player.position())
     //mask.unset(context)
     //ring.draw(context)
   })

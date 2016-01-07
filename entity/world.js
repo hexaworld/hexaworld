@@ -60,9 +60,9 @@ World.prototype.reload = function (schema) {
   })
 }
 
-World.prototype.draw = function (context, camera) {
+World.prototype.draw = function (context, camera, light) {
   this.tiles.forEach(function (tile) {
-    tile.draw(context, camera)
+    tile.draw(context, camera, light)
   })
 }
 

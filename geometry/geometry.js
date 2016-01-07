@@ -6,7 +6,10 @@ var triangulate = require('delaunay-triangulate')
 var glgeometry = require('gl-geometry')
 var glslify = require('glslify')
 var mat4 = require('gl-mat4')
+var eye = require('eye-vector')
+var normals = require('normals')
 var Shader = require('gl-shader')
+
 
 function Geometry (data) {
   var self = this
@@ -151,11 +154,12 @@ Geometry.prototype.drawBezier = function (context, points, scale) {
   }
 }
 
-Geometry.prototype.drawSurface = function (context, camera) {
+Geometry.prototype.drawSurface = function (context, camera, light) {
   var self = this
 
   if (!this.proj) this.proj = mat4.create()
   if (!this.view) this.view = mat4.create()
+  if (!this.eye) this.eye = new Float32Array(3)
 
   if (!this.shader) {
     this.shader = Shader(context,
@@ -167,10 +171,11 @@ Geometry.prototype.drawSurface = function (context, camera) {
   if (!this.geometry | this.props.dynamic) {
     this.geometry = glgeometry(context)
     var complex = {
-      positions: this.points.map(function (p) {return [p[0], p[1], 0]}),
+      positions: this.points.map(function (p) {return [p[0], p[1], -10]}),
       cells: triangulate(self.points).map(function (p) {return p.sort()})
     }
     this.geometry.attr('position', complex.positions)
+    this.geometry.attr('normal', normals.vertexNormals(complex.cells, complex.positions))
     this.geometry.faces(complex.cells)
   }
 
@@ -189,22 +194,24 @@ Geometry.prototype.drawSurface = function (context, camera) {
   self.geometry.draw(context.TRIANGLES)
   self.shader.uniforms.proj = self.proj
   self.shader.uniforms.view = self.view
+  self.shader.uniforms.eye = eye(self.view, self.eye)
+  self.shader.uniforms.light = [light[0], light[1], 0]
   self.geometry.unbind()
 }
 
-Geometry.prototype.drawChildren = function (context, camera) {
+Geometry.prototype.drawChildren = function (context, camera, light) {
   if (this.children) {
     this.children.forEach(function (child) {
-      child.draw(context, camera)
+      child.draw(context, camera, light)
     })
   }
 }
 
-Geometry.prototype.drawSelf = function (context, camera) {
+Geometry.prototype.drawSelf = function (context, camera, light) {
   var points = this.points
   var scale = 1
   if (this.props.surface) {
-    this.drawSurface(context, camera)
+    this.drawSurface(context, camera, light)
   } else if (this.props.fill || this.props.stroke) {
     if (camera) {
       points = camera.transform.invert(points)
@@ -219,17 +226,9 @@ Geometry.prototype.drawSelf = function (context, camera) {
   }
 }
 
-Geometry.prototype.draw = function (context, camera, opts) {
-  opts = opts || {order: 'top'}
-  if (opts.order === 'top') {
-    this.drawSelf(context, camera)
-    this.drawChildren(context, camera)
-  } else if (opts.order === 'bottom') {
-    this.drawChildren(context, camera)
-    this.drawSelf(context, camera)
-  } else {
-    throw Error('Order ' + opts.order + ' not recognized')
-  }
+Geometry.prototype.draw = function (context, camera, light) {
+  this.drawSelf(context, camera, light)
+  this.drawChildren(context, camera, light)
 }
 
 module.exports = Geometry

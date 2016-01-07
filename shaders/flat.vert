@@ -6,8 +6,11 @@ attribute vec3 normal;
 uniform mat4 proj;
 uniform mat4 view;
 
-varying vec3 anormal;
+varying vec3 vposition;
+varying vec3 vnormal;
 
 void main() {
-  gl_Position = proj * view * vec4(position, 1.0);
+	vposition = position;
+	vnormal = normalize(abs(normal));
+ 	gl_Position = proj * view * vec4(position, 1.0);
 }
