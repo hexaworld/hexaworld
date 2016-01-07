@@ -1,6 +1,6 @@
 var _ = require('lodash')
 var EventEmitter = require('eventemitter2').EventEmitter2
-var Game = require('crtrdg-gameloop')
+var Game = require('gameloop')
 var Keyboard = require('crtrdg-keyboard')
 var Touch = require('crtrdg-touch')
 var Player = require('./entity/player.js')
@@ -23,6 +23,7 @@ module.exports = function (canvas, schema, opts) {
 
   var game = new Game({
     canvas: canvas,
+    renderer: canvas.getContext('webgl'),
     width: height,
     height: height
   })
