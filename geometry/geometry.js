@@ -178,7 +178,7 @@ Geometry.prototype.drawSurface = function (context, camera) {
 
   camera.view(self.view)
 
-  var fieldOfView = Math.PI / 7
+  var fieldOfView = Math.PI / 4
   var near = 0.01
   var far  = 1000
   mat4.perspective(self.proj, fieldOfView, 1, near, far)

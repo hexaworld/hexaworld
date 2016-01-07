@@ -20,6 +20,13 @@ module.exports = function (opts) {
       scale: opts.scale,
       rotation: opts.rotation,
       translation: opts.translation
-    }
+    },
+
+    children: [
+      new Geometry({
+        points: [[0, -4], [0, 30]],
+        props: {}
+      })
+    ]
   })
 }

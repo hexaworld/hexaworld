@@ -117,18 +117,9 @@ module.exports = function (canvas, schema, opts) {
   player.on('update', function (interval) {
     var keys = _.extend(_.cloneDeep(keyboard.keysDown), touch.down)
     this.move(keys, world)
-
-    var xy = player.position()
-    var rad = player.angle() * Math.PI / 180
-    var scale = 100
-    var offset = [
-      scale * Math.sin(rad),
-      scale * Math.cos(rad)
-    ]
-
-    camera.target = [xy[0], xy[1], 0]
-    camera.position = [xy[0], xy[1] - 50, 200]
-    
+    var line = player.geometry.children[0].points
+    camera.target = [line[0][0], line[0][1], 5]
+    camera.position = [line[1][0], line[1][1], 30]
   })
 
   // camera.on('update', function (interval) {
@@ -144,9 +135,6 @@ module.exports = function (canvas, schema, opts) {
   })
 
   var camera = require('lookat-camera')()
-  
-  camera.position = [0, -50, 200]
-  camera.target = [0, 0, 0]
   camera.up = [0, 0, 1]
 
   game.on('draw', function (context) {
