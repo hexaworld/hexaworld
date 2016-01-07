@@ -33,8 +33,8 @@ module.exports = function (container) {
 
   var hex = document.createElementNS('http://www.w3.org/2000/svg', 'polygon')
   hex.setAttribute('points', points.join(' '))
-  hex.style.fill = 'rgb(55,55,55)'
-  hex.style.stroke = 'rgb(155,155,155)'
+  hex.style.fill = 'rgb(20,20,20)'
+  hex.style.stroke = 'rgb(20,20,20)'
   hex.style.strokeWidth = '5'
   hex.style.strokeLinejoin = 'round'
   hex.style.pointerEvents = 'none'
@@ -45,7 +45,7 @@ module.exports = function (container) {
   svg.appendChild(hex)
 
   var number = document.createElementNS('http://www.w3.org/2000/svg', 'text')
-  number.setAttribute('fill', 'rgb(155,155,155)')
+  number.setAttribute('fill', 'rgb(150,150,150)')
   number.setAttribute('font-size', width * 0.05)
   number.setAttribute('font-family', 'Hack')
   number.setAttribute('text-anchor', 'middle')

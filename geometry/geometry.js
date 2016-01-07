@@ -175,7 +175,7 @@ Geometry.prototype.drawSurface = function (context, camera, light) {
   if (!this.geometry | this.props.dynamic) {
     this.geometry = glgeometry(context)
     var complex = {
-      positions: this.points.map(function (p) {return [p[0], p[1], self.props.height || 0]}),
+      positions: this.points.map(function (p) {return [p[0], p[1], self.props.height || -5]}),
       cells: triangulate(self.points).map(function (p) {return p.sort()})
     }
     this.geometry.attr('position', complex.positions)
@@ -195,7 +195,7 @@ Geometry.prototype.drawSurface = function (context, camera, light) {
   self.shader.uniforms.proj = self.proj
   self.shader.uniforms.view = self.view
   self.shader.uniforms.eye = eye(self.view, self.eye)
-  self.shader.uniforms.light = [light[0], light[1], 10]
+  self.shader.uniforms.light = [light[0], light[1], 5]
   self.shader.uniforms.lit = self.props.lit ? 1.0 : 0.0
   self.shader.uniforms.color = color
   self.geometry.draw(context.TRIANGLES)

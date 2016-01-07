@@ -17,13 +17,13 @@ void main() {
 	vec3 lightdir = light - vposition;
 
 	float diff = orenn(normalize(lightdir), normalize(viewdiff), vnormal, 0.9, 0.9);
-	float spec = gauss(normalize(lightdir), normalize(viewdiff), vnormal, 0.99);
+	float spec = gauss(normalize(lightdir), normalize(viewdiff), vnormal, 1.0);
 
 	vec3 material = color;
 
 	vec3 result = (lit > 0.0) ? (vec3(material * diff + spec)) : material;
 	
-	//result = mix(color, vec3(0.23, 0.23, 0.23), fog(length(viewdiff), 0.005));
+	result = mix(result, vec3(0.1, 0.1, 0.1), fog(length(viewdiff), 0.005));
 
  	gl_FragColor = vec4(result, 1);
 }

@@ -46,7 +46,7 @@ module.exports = function (container) {
     style.width = (width * 0.45) / n - 12
     style.position = 'absolute'
     style.border = 'solid 3px rgb(150,150,150)'
-    style.outline = 'solid 6px rgb(45,45,45)'
+    style.outline = 'solid 6px rgb(25,25,25)'
     style.zIndex = '1000'
     label.appendChild(notch)
   })

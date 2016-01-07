@@ -12,11 +12,11 @@ module.exports = function (container, opts) {
     height = height * 0.9
   }
 
-  container.style.width = height * 0.75 + 'px'
+  container.style.width = ismobile ? window.innerWidth : height * 0.75 + 'px'
   container.style.height = height + 'px'
   container.style.position = 'relative'
   container.style.top = 0
-  container.style.background = 'rgb(55,55,55)'
+  container.style.background = 'rgb(25,25,25)'
 
   canvas.id = 'game'
   canvas.width = ismobile ? window.innerWidth : height * 0.75
@@ -24,7 +24,7 @@ module.exports = function (container, opts) {
   canvas.style.marginTop = 0
   canvas.style.position = 'relative'
   canvas.style.zIndex = 0
-  canvas.style.background = 'rgb(45,45,45)'
+  canvas.style.background = 'rgb(25,25,25)'
   container.appendChild(canvas)
 
   canvas.style.opacity = 0.0

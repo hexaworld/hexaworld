@@ -3,6 +3,7 @@ var inherits = require('inherits')
 var tile = require('../geometry/tile.js')
 var circle = require('../geometry/circle.js')
 var hex = require('../geometry/hex.js')
+var hexrgb = require('hex-rgb')
 var Geometry = require('../geometry/geometry.js')
 var Entity = require('crtrdg-entity')
 
@@ -28,16 +29,20 @@ World.prototype.reload = function (schema) {
       children.push(hex({
         // fill: t.cue.fill,
         scale: scale,
-        cue: true
+        cue: true,
+        surface: true,
+        color: hexrgb(t.cue.fill)
       }))
     }
     if (t.target) {
-      children.push(circle({
+      children.push(hex({
         // fill: t.target.fill,
         // stroke: t.target.fill,
-        thickness: 0.75,
         scale: 0.09,
-        target: true
+        target: true,
+        surface: true,
+        color: hexrgb(t.target.fill),
+        lit: true
       }))
     }
 
@@ -62,8 +67,8 @@ World.prototype.reload = function (schema) {
 
   self.floor = hex({
     surface: true,
-    height: -5,
-    color: [90, 90, 90],
+    height: -10,
+    color: [35, 35, 35],
     scale: 400,
     lit: false
   })

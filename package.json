@@ -30,6 +30,7 @@
     "glsl-fog": "0.0.1",
     "glsl-specular-gaussian": "^1.0.0",
     "glslify": "^5.0.2",
+    "hex-rgb": "^1.0.0",
     "inherits": "~2.0.0",
     "lodash": "^3.10.1",
     "lookat-camera": "^1.0.0",

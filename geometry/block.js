@@ -13,7 +13,7 @@ module.exports = function (opts) {
       obstacle: true,
       surface: opts.surface || false,
       color: [55, 55, 55],
-      lit: false
+      lit: true
     },
 
     points: [

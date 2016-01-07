@@ -11,7 +11,8 @@ module.exports = function (opts) {
       surface: true,
       dynamic: true,
       color: [250, 250, 250],
-      lit: false
+      lit: false,
+      height: -4.7
     },
 
     points: [
