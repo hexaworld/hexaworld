@@ -6,6 +6,8 @@ body {
   font-smoothing: antialiased;
   font-weight: 300;
   background: rgb(55,55,55);
+  margin: 0;
+  padding: 0;
 }
 
 h1#title {

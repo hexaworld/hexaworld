@@ -12,19 +12,18 @@ module.exports = function (container, opts) {
     height = height * 0.9
   }
 
-  container.style.width = height * 0.7 + 'px'
+  container.style.width = height * 0.75 + 'px'
   container.style.height = height + 'px'
-  container.style.top = (window.innerHeight - height) / 2
   container.style.position = 'relative'
-  container.style.top = (window.innerHeight - height) * 0.5
+  container.style.top = 0
   container.style.background = 'rgb(55,55,55)'
 
   canvas.id = 'game'
-  canvas.width = height * 0.7
-  canvas.height = height * 0.7
-  canvas.style.marginTop = ismobile ? height * 0.18 : height * 0.15
-  canvas.style.position = 'absolute'
-  canvas.style.zIndex = 2000
+  canvas.width = ismobile ? window.innerWidth : height * 0.75
+  canvas.height = window.innerHeight
+  canvas.style.marginTop = 0
+  canvas.style.position = 'relative'
+  canvas.style.zIndex = 0
   canvas.style.background = 'rgb(45,45,45)'
   container.appendChild(canvas)
 

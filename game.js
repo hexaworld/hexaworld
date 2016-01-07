@@ -113,7 +113,6 @@ module.exports = function (canvas, schema, opts) {
     }
   })
 
-
   player.on('update', function (interval) {
     var keys = _.extend(_.cloneDeep(keyboard.keysDown), touch.down)
     this.move(keys, world)

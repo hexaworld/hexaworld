@@ -159,7 +159,8 @@ Geometry.prototype.drawSurface = function (context, camera, light) {
 
   if (!this.proj) {
     this.proj = mat4.create()
-    mat4.perspective(self.proj, Math.PI / 4, 1, 0.01, 1000)
+    var aspect = context.drawingBufferWidth / context.drawingBufferHeight
+    mat4.perspective(self.proj, Math.PI / 4, aspect, 0.01, 1000)
   }
   if (!this.view) this.view = mat4.create()
   if (!this.eye) this.eye = new Float32Array(3)
@@ -182,7 +183,9 @@ Geometry.prototype.drawSurface = function (context, camera, light) {
     this.geometry.faces(complex.cells)
   }
 
-  var color = self.props.color ? self.props.color.map(function (c) {return c / 255.0}) : [0.5, 0.5, 0.5]
+  var color = self.props.color 
+    ? self.props.color.map(function (c) {return c / 255.0}) 
+    : [0.5, 0.5, 0.5]
 
   camera.view(self.view)
 
@@ -192,7 +195,7 @@ Geometry.prototype.drawSurface = function (context, camera, light) {
   self.shader.uniforms.proj = self.proj
   self.shader.uniforms.view = self.view
   self.shader.uniforms.eye = eye(self.view, self.eye)
-  self.shader.uniforms.light = [light[0], light[1], 5]
+  self.shader.uniforms.light = [light[0], light[1], 10]
   self.shader.uniforms.lit = self.props.lit ? 1.0 : 0.0
   self.shader.uniforms.color = color
   self.geometry.draw(context.TRIANGLES)
