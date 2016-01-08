@@ -16,7 +16,7 @@ module.exports = function (opts) {
     },
 
     points: [
-      [-0.6, 1.2], [0.6, 1.2], [0, -1.5]
+      [-0.6, 0.6], [0.6, 0.6], [0, -0.6]
     ],
 
     transform: {
