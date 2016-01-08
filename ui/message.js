@@ -11,6 +11,7 @@ module.exports = function (container) {
   style.height = width * 0.1
   style.textAlign = 'center'
   style.position = 'absolute'
+  style.pointerEvents = 'none'
   container.appendChild(label)
 
   var message = document.createElement('div')

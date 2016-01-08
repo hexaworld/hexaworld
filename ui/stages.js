@@ -17,6 +17,7 @@ module.exports = function (container) {
   var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
   svg.setAttribute('width', size * 1.2)
   svg.setAttribute('height', size)
+  svg.style.pointerEvents = 'none'
   if (ismobile) {
     svg.style.position = 'fixed'
     svg.style.bottom = 0

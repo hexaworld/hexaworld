@@ -13,6 +13,7 @@ module.exports = function (container) {
   style.top = width * 0.07
   style.height = width * 0.05
   style.display = 'inline-block'
+  style.pointerEvents = 'none'
   style.position = 'absolute'
   container.appendChild(label)
 
