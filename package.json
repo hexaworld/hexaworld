@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "test": "standard",
+    "bundle": "browserify index.js -o bundle.js",
     "start": "budo index.js:bundle.js --live"
   },
   "browserify": {
@@ -50,7 +51,7 @@
   },
   "devDependencies": {
     "budo": "~7.0.0",
-    "browserify": "~2.25.0",
+    "browserify": "~12.0.0",
     "standard": "^5.4.1"
   }
 }
