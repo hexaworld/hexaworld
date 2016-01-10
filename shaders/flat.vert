@@ -11,6 +11,6 @@ varying vec3 vnormal;
 
 void main() {
 	vposition = position;
-	vnormal = normalize(abs(normal));
+	vnormal = normalize(normal);
  	gl_Position = proj * view * vec4(position, 1.0);
 }

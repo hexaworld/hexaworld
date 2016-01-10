@@ -13,14 +13,15 @@ module.exports = function (opts) {
       obstacle: true,
       surface: opts.surface || false,
       color: [55, 55, 55],
-      lit: true
+      lit: true,
+      height: 4
     },
 
     points: [
-      [-1 / 2, Math.sqrt(3) / 2],
       [-1 / 2, Math.sqrt(3) / 2 / width],
-      [1 / 2, Math.sqrt(3) / 2 / width],
-      [1 / 2, Math.sqrt(3) / 2]
+      [-1 / 2, Math.sqrt(3) / 2],
+      [1 / 2, Math.sqrt(3) / 2],
+      [1 / 2, Math.sqrt(3) / 2 / width]
     ],
 
     transform: {

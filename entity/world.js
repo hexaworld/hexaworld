@@ -31,7 +31,8 @@ World.prototype.reload = function (schema) {
         scale: scale,
         cue: true,
         surface: true,
-        color: hexrgb(t.cue.fill)
+        color: hexrgb(t.cue.fill),
+        height: 1.1
       }))
     }
     if (t.target) {
@@ -42,7 +43,8 @@ World.prototype.reload = function (schema) {
         target: true,
         surface: true,
         color: hexrgb(t.target.fill),
-        lit: true
+        lit: true,
+        height: 1.1
       }))
     }
 
@@ -52,7 +54,7 @@ World.prototype.reload = function (schema) {
       paths: t.paths,
       children: children,
       thickness: self.opts.thickness,
-      surface: true
+      surface: true,
     })
 
     var x = t.translation[0]
@@ -67,7 +69,7 @@ World.prototype.reload = function (schema) {
 
   self.floor = hex({
     surface: true,
-    height: -10,
+    height: 1,
     color: [35, 35, 35],
     scale: 400,
     lit: false

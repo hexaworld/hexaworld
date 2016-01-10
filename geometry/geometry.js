@@ -9,6 +9,9 @@ var mat4 = require('gl-mat4')
 var eye = require('eye-vector')
 var normals = require('normals')
 var Shader = require('gl-shader')
+var unindex = require('unindex-mesh')
+var reindex = require('mesh-reindex')
+var extrude = require('extrude')
 
 
 function Geometry (data) {
@@ -174,10 +177,10 @@ Geometry.prototype.drawSurface = function (context, camera, light) {
 
   if (!this.geometry | this.props.dynamic) {
     this.geometry = glgeometry(context)
-    var complex = {
-      positions: this.points.map(function (p) {return [p[0], p[1], self.props.height || -5]}),
-      cells: triangulate(self.points).map(function (p) {return p.sort()})
-    }
+    var height = self.props.height || 5
+    var complex = extrude(self.points, {top: height, bottom: 0})
+    var flattened = unindex(complex.positions, complex.cells)
+    complex = reindex(flattened)
     this.geometry.attr('position', complex.positions)
     this.geometry.attr('normal', normals.vertexNormals(complex.cells, complex.positions))
     this.geometry.faces(complex.cells)
@@ -194,8 +197,8 @@ Geometry.prototype.drawSurface = function (context, camera, light) {
   self.geometry.bind(self.shader)
   self.shader.uniforms.proj = self.proj
   self.shader.uniforms.view = self.view
-  self.shader.uniforms.eye = eye(self.view, self.eye)
-  self.shader.uniforms.light = [light[0], light[1], 5]
+  self.shader.uniforms.eye = eye(self.view)
+  self.shader.uniforms.light = [light[0], light[1], 10]
   self.shader.uniforms.lit = self.props.lit ? 1.0 : 0.0
   self.shader.uniforms.color = color
   self.geometry.draw(context.TRIANGLES)
