@@ -157,26 +157,26 @@ Geometry.prototype.drawBezier = function (context, points, scale) {
   }
 }
 
-Geometry.prototype.drawSurface = function (context, camera, light) {
+Geometry.prototype.drawSurface = function (gl, camera, light) {
   var self = this
 
   if (!this.proj) {
     this.proj = mat4.create()
-    var aspect = context.drawingBufferWidth / context.drawingBufferHeight
+    var aspect = gl.drawingBufferWidth / gl.drawingBufferHeight
     mat4.perspective(self.proj, Math.PI / 4, aspect, 0.01, 1000)
   }
   if (!this.view) this.view = mat4.create()
   if (!this.eye) this.eye = new Float32Array(3)
 
   if (!this.shader) {
-    this.shader = Shader(context,
+    this.shader = Shader(gl,
       glslify('../shaders/flat.vert'),
       glslify('../shaders/flat.frag')
     )
   }
 
   if (!this.geometry | this.props.dynamic) {
-    this.geometry = glgeometry(context)
+    this.geometry = glgeometry(gl)
     var height = self.props.height || 5
     var complex = extrude(self.points, {top: height, bottom: 0})
     var flattened = unindex(complex.positions, complex.cells)
@@ -192,16 +192,23 @@ Geometry.prototype.drawSurface = function (context, camera, light) {
 
   camera.view(self.view)
 
-  context.enable(context.DEPTH_TEST)
-
+  gl.enable(gl.DEPTH_TEST)
+  
+  gl.enable(gl.STENCIL_TEST)
+  gl.stencilFunc(gl.ALWAYS, 1, 0xFF)
+  gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE)
+  gl.stencilMask(0xFF)
+    
   self.geometry.bind(self.shader)
+
   self.shader.uniforms.proj = self.proj
   self.shader.uniforms.view = self.view
   self.shader.uniforms.eye = eye(self.view)
-  self.shader.uniforms.light = [light[0], light[1], 10]
+  self.shader.uniforms.light = [light[0], light[1], 40]
   self.shader.uniforms.lit = self.props.lit ? 1.0 : 0.0
   self.shader.uniforms.color = color
-  self.geometry.draw(context.TRIANGLES)
+
+  self.geometry.draw(gl.TRIANGLES)
   self.geometry.unbind()
 }
 
