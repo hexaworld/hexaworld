@@ -15,7 +15,11 @@ module.exports = function (opts) {
   var center = [
     hex({
       scale: 0.25,
-      trigger: true
+      trigger: true,
+      surface: true,
+      height: 4,
+      lit: true,
+      color: [55, 55, 55]
     })
   ]
 
@@ -58,13 +62,13 @@ module.exports = function (opts) {
       return path({
         rotation: i * 60,
         thickness: thickness,
-        children: children
+        children: []
       })
     }
   })
   _.remove(paths, _.isUndefined)
 
-  var children = center.concat(wedges).concat(blocks)
+  var children = center.concat(wedges).concat(blocks).concat(paths)
 
   return new Geometry({
     props: {

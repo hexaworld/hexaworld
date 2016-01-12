@@ -12,14 +12,14 @@ module.exports = function (container, opts) {
     height = height * 0.9
   }
 
-  container.style.width = ismobile ? window.innerWidth : height * 0.75 + 'px'
+  container.style.width = ismobile ? window.innerWidth : window.innerWidth 
   container.style.height = height + 'px'
   container.style.position = 'relative'
   container.style.top = 0
   container.style.background = 'rgb(25,25,25)'
 
   canvas.id = 'game'
-  canvas.width = ismobile ? window.innerWidth : height * 0.75
+  canvas.width = ismobile ? window.innerWidth : window.innerWidth 
   canvas.height = window.innerHeight
   canvas.style.marginTop = 0
   canvas.style.position = 'relative'

@@ -12,9 +12,9 @@ module.exports = function (opts) {
       type: 'polygon',
       obstacle: true,
       surface: opts.surface || false,
-      color: [55, 55, 55],
-      lit: true,
-      height: 4
+      color: [10, 10, 10],
+      lit: false,
+      height: 1
     },
 
     points: [
