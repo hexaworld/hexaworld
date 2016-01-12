@@ -34,6 +34,8 @@ module.exports = function (id, level, opts) {
   var stages = require('./ui/stages.js')(container)
 
   stages.hide()
+  score.hide()
+  energy.hide()
 
   var state = new State(level.config)
 
@@ -135,8 +137,8 @@ module.exports = function (id, level, opts) {
     setTimeout(function () {
       message.hide()
       main.show()
-      score.show()
-      energy.show()
+      //score.show()
+      //energy.show()
       //stages.show()
     }, 1000)
     game.start()
