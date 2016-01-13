@@ -33,9 +33,7 @@ module.exports = function (id, level, opts) {
   var score = require('./ui/score.js')(container)
   var stages = require('./ui/stages.js')(container)
 
-  stages.hide()
   energy.hide()
-  score.hide()
 
   var state = new State(level.config)
 
