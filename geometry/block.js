@@ -6,15 +6,13 @@ module.exports = function (opts) {
 
   return new Geometry({
     props: {
-      fill: 'rgb(55,55,55)',
-      stroke: 'rgb(55,55,55)',
       thickness: 0,
       type: 'polygon',
       obstacle: true,
-      surface: opts.surface || false,
-      color: [55, 55, 55],
+      surface: false || false,
+      color: [10, 10, 100],
       lit: true,
-      height: 4
+      height: -1
     },
 
     points: [

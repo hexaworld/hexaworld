@@ -12,6 +12,7 @@ var Shader = require('gl-shader')
 var unindex = require('unindex-mesh')
 var reindex = require('mesh-reindex')
 var extrude = require('extrude')
+var polyline = require('extrude-polyline')
 
 
 function Geometry (data) {
@@ -169,21 +170,54 @@ Geometry.prototype.drawSurface = function (gl, camera, light) {
   if (!this.eye) this.eye = new Float32Array(3)
 
   if (!this.shader) {
-    this.shader = Shader(gl,
+    this.shader = {}
+
+    this.shader.fill = Shader(gl,
       glslify('../shaders/flat.vert'),
       glslify('../shaders/flat.frag')
+    )
+
+    this.shader.stroke = Shader(gl,
+      glslify('../shaders/edge.vert'),
+      glslify('../shaders/edge.frag')
     )
   }
 
   if (!this.geometry | this.props.dynamic) {
-    this.geometry = glgeometry(gl)
-    var height = self.props.height || 5
-    var complex = extrude(self.points, {top: height, bottom: 0})
-    var flattened = unindex(complex.positions, complex.cells)
-    complex = reindex(flattened)
-    this.geometry.attr('position', complex.positions)
-    this.geometry.attr('normal', normals.vertexNormals(complex.cells, complex.positions))
-    this.geometry.faces(complex.cells)
+    this.geometry = {}
+
+    if (this.props.fill) {
+      this.geometry.fill = glgeometry(gl)
+      var height = self.props.height || 0
+      var complex = extrude(self.points, {top: height, bottom: 0})
+      var flattened = unindex(complex.positions, complex.cells)
+      complex = reindex(flattened)
+      this.geometry.fill.attr('position', complex.positions)
+      this.geometry.fill.attr('normal', normals.vertexNormals(complex.cells, complex.positions))
+      this.geometry.fill.faces(complex.cells)
+    }
+    
+    if (this.props.stroke) {
+      this.geometry.stroke = glgeometry(gl)
+      var stroke = polyline({thickness: 1, cap: 'square', join: 'bleve1', miterLimit: 5})
+      var points = self.points.concat([self.points[0]])
+      complex = stroke.build(points)
+      var top = {
+        cells: complex.cells,
+        positions: complex.positions.map(function (p) {return [p[0], p[1], height + 0.1]})
+      }
+      var bottom = {
+        cells: complex.cells.map(function (p) {return p.map(function (c) {return c + top.cells.length + 2})}),
+        positions: complex.positions.map(function (p) {return [p[0], p[1], -0.1]})
+      }
+      complex = {
+        cells: top.cells.concat(bottom.cells),
+        positions: top.positions.concat(bottom.positions)
+      }
+      this.geometry.stroke.attr('position', complex.positions)
+      this.geometry.stroke.attr('normal', normals.vertexNormals(complex.cells, complex.positions))
+      this.geometry.stroke.faces(complex.cells)
+    }
   }
 
   var color = self.props.color 
@@ -194,22 +228,27 @@ Geometry.prototype.drawSurface = function (gl, camera, light) {
 
   gl.enable(gl.DEPTH_TEST)
   
-  gl.enable(gl.STENCIL_TEST)
-  gl.stencilFunc(gl.ALWAYS, 1, 0xFF)
-  gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE)
-  gl.stencilMask(0xFF)
-    
-  self.geometry.bind(self.shader)
+  if (this.geometry.fill) {
+    self.geometry.fill.bind(self.shader.fill)
+    self.shader.fill.uniforms.proj = self.proj
+    self.shader.fill.uniforms.view = self.view
+    self.shader.fill.uniforms.eye = eye(self.view)
+    self.shader.fill.uniforms.light = [light[0], light[1], 40]
+    self.shader.fill.uniforms.lit = self.props.lit ? 1.0 : 0.0
+    self.shader.fill.uniforms.color = color
+    self.geometry.fill.draw(gl.TRIANGLES)
+    self.geometry.fill.unbind()
+  }
+  
+  if (this.geometry.stroke) {
+    self.geometry.stroke.bind(self.shader.stroke)
+    self.shader.stroke.uniforms.proj = self.proj
+    self.shader.stroke.uniforms.view = self.view
+    self.shader.stroke.uniforms.eye = eye(self.view)
+    self.geometry.stroke.draw(gl.TRIANGLES)
+    self.geometry.stroke.unbind()
+  }
 
-  self.shader.uniforms.proj = self.proj
-  self.shader.uniforms.view = self.view
-  self.shader.uniforms.eye = eye(self.view)
-  self.shader.uniforms.light = [light[0], light[1], 40]
-  self.shader.uniforms.lit = self.props.lit ? 1.0 : 0.0
-  self.shader.uniforms.color = color
-
-  self.geometry.draw(gl.TRIANGLES)
-  self.geometry.unbind()
 }
 
 Geometry.prototype.drawChildren = function (context, camera, light) {

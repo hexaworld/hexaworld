@@ -3,25 +3,31 @@ var animate = require('animateplus')
 
 module.exports = function (container) {
   var width = container.clientWidth
+  var height = container.clientHeight
   var style
+
+  var ismobile = window.innerWidth < window.innerHeight
 
   var label = document.createElement('div')
   label.id = 'score'
+  var offset = container.offsetLeft
+  if (container.offsetParent) offset += container.offsetParent.offsetLeft
   style = label.style
-  style.left = width * 0.75
-  style.width = width * 0.2
-  style.top = width * 0.07
+  style.left = offset + width * 0.5 - width * 0.25 * 0.5
+  style.width = width * 0.25
+  style.top = ismobile ? height * 0.1 : height * 0.06
   style.height = width * 0.05
+  style.textAlign = 'center'
   style.display = 'inline-block'
   style.pointerEvents = 'none'
-  style.position = 'absolute'
+  style.position = 'fixed'
   container.appendChild(label)
 
   var number = document.createElement('span')
   style = number.style
   style.color = 'rgb(200,200,200)'
   style.fontFamily = 'Hack'
-  style.fontSize = width * 0.06 + 'px'
+  style.fontSize = height * 0.06 + 'px'
   style.lineHeight = width * 0.06 + 'px'
   style.display = 'inline-block'
   style.verticalAlign = 'middle'

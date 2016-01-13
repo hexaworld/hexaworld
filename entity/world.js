@@ -27,24 +27,25 @@ World.prototype.reload = function (schema) {
       if (t.cue.scale === 2) scale = 0.16
       if (t.cue.scale === 3) scale = 0.19
       children.push(hex({
-        // fill: t.cue.fill,
+        fill: t.cue.fill,
+        stroke: false,
         scale: scale,
         cue: true,
         surface: true,
         color: hexrgb(t.cue.fill),
-        height: 1.1
+        height: 4.2
       }))
     }
     if (t.target) {
       children.push(hex({
-        // fill: t.target.fill,
-        // stroke: t.target.fill,
+        fill: t.target.fill,
+        stroke: false,
         scale: 0.09,
         target: true,
         surface: true,
         color: hexrgb(t.target.fill),
         lit: true,
-        height: 1.1
+        height: 4.2
       }))
     }
 
@@ -54,7 +55,7 @@ World.prototype.reload = function (schema) {
       paths: t.paths,
       children: children,
       thickness: self.opts.thickness,
-      surface: true,
+      surface: true
     })
 
     var x = t.translation[0]
@@ -68,11 +69,11 @@ World.prototype.reload = function (schema) {
   })
 
   self.floor = hex({
-    surface: true,
-    height: 1,
-    color: [35, 35, 35],
+    surface: false,
+    height: -5,
+    color: [10, 10, 10],
     scale: 400,
-    lit: false
+    lit: true
   })
 }
 
@@ -80,7 +81,7 @@ World.prototype.draw = function (context, camera, light) {
   this.tiles.forEach(function (tile) {
     tile.draw(context, camera, light)
   })
-  this.floor.draw(context, camera, light)
+  //this.floor.draw(context, camera, light)
 }
 
 World.prototype.locate = function (point) {

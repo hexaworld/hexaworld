@@ -21,6 +21,7 @@
     "d3-color": "^0.2.7",
     "delaunay-triangulate": "^1.1.6",
     "eventemitter2": "^0.4.14",
+    "extrude-polyline": "^1.0.6",
     "eye-vector": "0.0.0",
     "face-normals": "0.0.0",
     "gameloop": "^1.1.3",

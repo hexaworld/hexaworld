@@ -19,7 +19,7 @@ module.exports = function (id, level, opts) {
     })
     var config = _.cloneDeep(level.config)
     config.stages = maps.length
-    config.energy = 4800
+    config.energy = 12000
     return {maps: maps, config: config}
   }
 
@@ -33,8 +33,6 @@ module.exports = function (id, level, opts) {
   var score = require('./ui/score.js')(container)
   var stages = require('./ui/stages.js')(container)
 
-  stages.hide()
-  score.hide()
   energy.hide()
 
   var state = new State(level.config)
@@ -137,9 +135,9 @@ module.exports = function (id, level, opts) {
     setTimeout(function () {
       message.hide()
       main.show()
-      //score.show()
+      score.show()
       //energy.show()
-      //stages.show()
+      stages.show()
     }, 1000)
     game.start()
   }

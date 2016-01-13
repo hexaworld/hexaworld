@@ -16,15 +16,16 @@ module.exports = function (container, opts) {
   container.style.height = height + 'px'
   container.style.position = 'relative'
   container.style.top = 0
-  container.style.background = 'rgb(25,25,25)'
+  container.style.background = 'rgb(10,10,10)'
 
   canvas.id = 'game'
+
   canvas.width = ismobile ? window.innerWidth : window.innerWidth
   canvas.height = window.innerHeight
   canvas.style.marginTop = 0
   canvas.style.position = 'relative'
   canvas.style.zIndex = 0
-  canvas.style.background = 'rgb(25,25,25)'
+  canvas.style.background = 'rgb(10,10,10)'
   container.appendChild(canvas)
 
   canvas.style.opacity = 0.0
