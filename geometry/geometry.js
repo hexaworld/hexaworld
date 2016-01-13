@@ -199,7 +199,7 @@ Geometry.prototype.drawSurface = function (gl, camera, light) {
     
     if (this.props.stroke) {
       this.geometry.stroke = glgeometry(gl)
-      var stroke = polyline({thickness: 1, cap: 'square', join: 'bleve1', miterLimit: 5})
+      var stroke = polyline({thickness: 1, cap: 'end', join: 'miter', miterLimit: 1})
       var points = self.points.concat([self.points[0]])
       complex = stroke.build(points)
       var top = {
@@ -245,6 +245,7 @@ Geometry.prototype.drawSurface = function (gl, camera, light) {
     self.shader.stroke.uniforms.proj = self.proj
     self.shader.stroke.uniforms.view = self.view
     self.shader.stroke.uniforms.eye = eye(self.view)
+    self.shader.stroke.uniforms.light = [light[0], light[1], 40]
     self.geometry.stroke.draw(gl.TRIANGLES)
     self.geometry.stroke.unbind()
   }
