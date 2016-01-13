@@ -19,6 +19,8 @@ module.exports = function (opts) {
       surface: true,
       height: 4,
       lit: true,
+      fill: 'rgb(55,55,55)',
+      stroke: 'rgb(55,55,55)',
       color: [55, 55, 55]
     })
   ]
@@ -73,7 +75,7 @@ module.exports = function (opts) {
   return new Geometry({
     props: {
       type: 'polygon',
-      color: [55, 55, 55]
+      color: [55, 55, 55],
     },
 
     points: _.range(7).map(function (i) {

@@ -137,9 +137,9 @@ module.exports = function (id, level, opts) {
     setTimeout(function () {
       message.hide()
       main.show()
-      //score.show()
+      score.show()
       //energy.show()
-      //stages.show()
+      stages.show()
     }, 1000)
     game.start()
   }
