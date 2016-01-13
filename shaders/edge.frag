@@ -19,7 +19,7 @@ void main() {
 	vec3 viewdiff = eye - vposition;
 	vec3 lightdir = light - vposition;
 
-	float att = calcLightAttenuation(length(lightdir), 200.0, 2.0);
+	float att = calcLightAttenuation(length(lightdir), 200.0, 0.5);
 
  	gl_FragColor = vec4(att * vec3(1.0, 1.0, 1.0), 1.0);
 }

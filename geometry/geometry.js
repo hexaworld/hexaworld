@@ -199,7 +199,7 @@ Geometry.prototype.drawSurface = function (gl, camera, light) {
     
     if (this.props.stroke) {
       this.geometry.stroke = glgeometry(gl)
-      var stroke = polyline({thickness: 1, cap: 'end', join: 'miter', miterLimit: 1})
+      var stroke = polyline({thickness: 0.75, cap: 'end', join: 'miter', miterLimit: 1})
       var points = self.points.concat([self.points[0]])
       complex = stroke.build(points)
       var top = {
