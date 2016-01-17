@@ -33,7 +33,7 @@ function Player (opts) {
       '<left>', '<right>', '<up>',
       '<swipeLeft>', '<swipeRight>', '<swipeUp>',
       '<tapDownLeft>', '<tapDownRight>', '<tapUpLeft>', '<tapUpRight>'],
-    heading: [-60, 60, 0, -60, 60, 0, -60, 60, 0, -60, 60, 0, 0],
+    heading: [60, -60, 0, 60, -60, 0, 60, -60, 0, 60, -60, 0, 0],
     shift: [0, 0, 8, 0, 0, 8, 0, 0, 8, 0, 0, 8, 8],
     speed: opts.speed
   })
