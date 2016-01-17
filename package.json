@@ -17,7 +17,7 @@
     "crtrdg-entity": "^1.0.0",
     "crtrdg-keyboard": "^1.0.0",
     "crtrdg-time": "0.0.0",
-    "crtrdg-touch": "^1.0.0",
+    "crtrdg-touch": "^1.0.1",
     "d3-color": "^0.2.7",
     "delaunay-triangulate": "^1.1.6",
     "dom-css": "^2.0.0",
