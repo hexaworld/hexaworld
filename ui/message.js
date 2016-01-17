@@ -6,6 +6,7 @@ module.exports = function (container) {
   var ismobile = width < height
 
   var label = document.createElement('div')
+  container.appendChild(label)
   css(label, {
     top: height * 0.35,
     margin: '0px auto',
@@ -16,17 +17,15 @@ module.exports = function (container) {
     pointerEvents: 'none'
   })
 
-  container.appendChild(label)
-
   var message = document.createElement('div')
+  label.appendChild(message)
   css(message, {
     color: 'rgb(150,150,150)',
     fontFamily: 'Hack',
     fontSize: Math.sqrt(width * 5),
     opacity: 0
   })
-  label.appendChild(message)
-
+  
   function show (text) {
     css(message, {opacity: 1})
     message.innerHTML = text

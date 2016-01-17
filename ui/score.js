@@ -13,7 +13,7 @@ module.exports = function (container) {
   css(label, {
     left: 0, right: 0,
     margin: '0px auto',
-    width: width * 0.25,
+    width: width * 0.35,
     top: ismobile ? height * 0.1 : height * 0.06,
     textAlign: 'center',
     pointerEvents: 'none',
@@ -26,7 +26,7 @@ module.exports = function (container) {
   css(number, {
     color: 'rgb(200,200,200)',
     fontFamily: 'Hack',
-    fontSize: height * 0.05,
+    fontSize: height * 0.065,
     display: 'inline-block',
     verticalAlign: 'middle',
   })

@@ -2,11 +2,18 @@ var css = require('dom-css')
 var _ = require('lodash')
 
 module.exports = function (container) {
-  var width = container.clientHeight
-  var height = container.clientWidth
+  var width = container.clientWidth
+  var height = container.clientHeight
 
   var ismobile = window.innerWidth < window.innerHeight
-  var size = ismobile ? width * 0.35 : width * 0.4
+  var size = ismobile ? height * 0.35 : height * 0.4
+
+  var colors = {
+    fill: 'rgb(10,10,10)',
+    stroke: 'rgb(150,150,150)',
+    text1: 'rgb(200,200,200)',
+    text2: 'rgb(150,150,150)'
+  }
 
   var points = _.range(7).map(function (i) {
     var dx = 0.6 * size * Math.cos(i * 2 * Math.PI / 6) + size / 2
@@ -28,12 +35,12 @@ module.exports = function (container) {
 
   var hex = document.createElementNS('http://www.w3.org/2000/svg', 'polygon')
   hex.setAttribute('points', points.join(' '))
-  t = 'translate(' + size * -0.3 + ',' + size * -0.62 + ')'
+  t = 'translate(' + size * -0.39 + ',' + size * -0.62 + ')'
   hex.setAttribute('transform', t)
   css(hex, {
-    fill: 'rgb(10,10,10)',
-    stroke: 'rgb(190,190,190)',
-    strokeWidth: '5',
+    fill: colors.fill,
+    stroke: colors.stroke,
+    strokeWidth: 4,
     strokeLinejoin: 'round',
     pointerEvents: 'none'
   })
@@ -43,11 +50,10 @@ module.exports = function (container) {
   number.innerHTML = ''
   css(number, {
     fontFamily: 'Hack',
-    fontSize: size * 0.08,
-    color: 'rgb(150,150,150)',
-    opacity: 1,
+    fontSize: ismobile ? width * 0.066 : size * 0.1,
+    color: colors.text,
     pointerEvents: 'none',
-    left: width * 0.02, 
+    left: ismobile ? width * 0.03 : width * 0.012, 
     top: size * 0.05,
     width: width * 0.3,
     position: 'absolute'
@@ -55,17 +61,18 @@ module.exports = function (container) {
   container.appendChild(number)
 
   function update (state) {
-    number.innerHTML = "<span style='font-size:" + size * 0.08 + "px'>found </span>" + (state.current) + "<span style='font-size:" + size * 0.1 + "px'>|</span>" + state.total
+    number.innerHTML = '+ ' + (state.current) + '/' + state.total
   }
 
   function hide () {
-    css(svg, {opactiy: 0})
-    css(numer, {opactiy: 0})
+    css(svg, {opacity: 0.0})
+    css(number, {opacity: 0.0})
   }
 
   function show () {
-    css(svg, {opactiy: 1})
-    css(number, {opactiy: 1})
+    console.log('showing')
+    css(svg, {opacity: 1.0})
+    css(number, {opacity: 1.0})
   }
 
   return {
