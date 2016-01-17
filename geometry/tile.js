@@ -45,26 +45,47 @@ module.exports = function (opts) {
   var paths = _.range(6).map(function (i) {
     if (_.includes(opts.paths, i)) {
       var children = []
-      if (Math.random() > 0) {
+      if (Math.random() >= 0) {
         children = [
           circle({
-            fill: 'white', stroke: 'white', thickness: opts.thickness,
-            translation: [0, 1.5], scale: 0.06, consumable: true
+            fill: 'white', 
+            thickness: opts.thickness,
+            translation: [0, 1.5], 
+            scale: 0.06, 
+            consumable: true,
+            surface: true,
+            height: 4.5,
+            color: [255,255,255],
+            lit: false
           }),
           circle({
-            fill: 'white', stroke: 'white', thickness: opts.thickness,
-            translation: [0, 2], scale: 0.06, consumable: true
+            fill: 'white', 
+            thickness: opts.thickness,
+            translation: [0, 2], 
+            scale: 0.06, 
+            consumable: true,
+            surface: true,
+            height: 4.5,
+            color: [255,255,255],
+            lit: false
           }),
           circle({
-            fill: 'white', stroke: 'white', thickness: opts.thickness,
-            translation: [0, 2.5], scale: 0.06, consumable: true
+            fill: 'white', 
+            thickness: opts.thickness,
+            translation: [0, 2.5], 
+            scale: 0.06, 
+            consumable: true,
+            surface: true,
+            height: 4.5,
+            color: [255,255,255],
+            lit: false
           })
         ]
       }
       return path({
         rotation: i * 60,
         thickness: thickness,
-        children: []
+        children: children
       })
     }
   })

@@ -1,34 +1,34 @@
+var css = require('dom-css')
 var animate = require('animateplus')
 
 module.exports = function (container, opts) {
   var canvas = document.createElement('canvas')
-  var height = container.clientHeight || opts.size
+  var height = container.clientHeight
+  var width = container.clientWidth
+  var ismobile = width < height
 
-  var ismobile = window.innerWidth < window.innerHeight
+  var size = ismobile ? 0.9 * width : 0.76 * height
 
-  if (height * 0.7 > window.innerWidth) {
-    height = window.innerWidth * (1 / 0.7) - 30
-  } else {
-    height = height * 0.9
-  }
-
-  container.style.width = ismobile ? window.innerWidth : window.innerWidth
-  container.style.height = height + 'px'
-  container.style.position = 'relative'
-  container.style.top = 0
-  container.style.background = 'rgb(10,10,10)'
+  css(container, {position: 'relative'})
 
   canvas.id = 'game'
+  canvas.width = size
+  canvas.height = size
 
-  canvas.width = ismobile ? window.innerWidth : window.innerWidth
-  canvas.height = window.innerHeight
-  canvas.style.marginTop = 0
-  canvas.style.position = 'relative'
-  canvas.style.zIndex = 0
-  canvas.style.background = 'rgb(10,10,10)'
+  css(canvas, {
+    display: 'block',
+    margin: '0px auto',
+    left: 0, right: 0,
+    marginTop: (height - size) * 0.55,
+    position: 'absolute',
+    zIndex: 0,
+    opacity: 0.0,
+    background: 'rgb(10,10,10)',
+    border: 'solid 1px white'
+  })
+  
   container.appendChild(canvas)
 
-  canvas.style.opacity = 0.0
 
   function hide () {
     animate({

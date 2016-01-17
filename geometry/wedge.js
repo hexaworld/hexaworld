@@ -10,7 +10,7 @@ module.exports = function (opts) {
       type: 'polygon',
       obstacle: true,
       surface: false || false,
-      color: [10, 10, 100],
+      color: [20, 20, 20],
       lit: true,
       height: -1
     },

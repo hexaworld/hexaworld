@@ -204,11 +204,11 @@ Geometry.prototype.drawSurface = function (gl, camera, light) {
       complex = stroke.build(points)
       var top = {
         cells: complex.cells,
-        positions: complex.positions.map(function (p) {return [p[0], p[1], height + 0.1]})
+        positions: complex.positions.map(function (p) {return [p[0], p[1], height + 0.2]})
       }
       var bottom = {
         cells: complex.cells.map(function (p) {return p.map(function (c) {return c + top.cells.length + 2})}),
-        positions: complex.positions.map(function (p) {return [p[0], p[1], -0.1]})
+        positions: complex.positions.map(function (p) {return [p[0], p[1], -0.2]})
       }
       complex = {
         cells: top.cells.concat(bottom.cells),

@@ -33,7 +33,7 @@ World.prototype.reload = function (schema) {
         cue: true,
         surface: true,
         color: hexrgb(t.cue.fill),
-        height: 4.2
+        height: 20
       }))
     }
     if (t.target) {
@@ -66,14 +66,6 @@ World.prototype.reload = function (schema) {
     self._tileCache[x] = rowCache
 
     return tileObj
-  })
-
-  self.floor = hex({
-    surface: false,
-    height: -5,
-    color: [10, 10, 10],
-    scale: 400,
-    lit: true
   })
 }
 

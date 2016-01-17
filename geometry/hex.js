@@ -16,7 +16,8 @@ module.exports = function (opts) {
       trigger: opts.trigger || false,
       surface: opts.surface || false,
       height: opts.height || 0,
-      lit: opts.lit || false
+      lit: opts.lit || false,
+      consumable: opts.consumable || false
     },
 
     points: _.range(7).map(function (i) {
@@ -27,7 +28,8 @@ module.exports = function (opts) {
 
     transform: {
       scale: opts.scale,
-      rotation: opts.rotation
+      rotation: opts.rotation,
+      translation: opts.translation
     },
 
     children: opts.children

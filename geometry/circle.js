@@ -10,10 +10,14 @@ module.exports = function (opts) {
       stroke: opts.stroke,
       thickness: opts.thickness,
       shadow: opts.shadow || {},
-      type: 'bezier',
+      type: 'polygon',
       cue: opts.cue || false,
       target: opts.target || false,
-      consumable: opts.consumable || false
+      consumable: opts.consumable || false,
+      surface: opts.surface || false,
+      height: opts.height,
+      color: opts.color,
+      lit: opts.lit
     },
 
     points: [

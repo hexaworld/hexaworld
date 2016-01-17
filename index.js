@@ -1,7 +1,3 @@
-var opts = {
-  size: 700
-}
-
 var config = {
   name: 'welcome',
   lives: 3,
@@ -20,7 +16,8 @@ var base = function (start) {
       {translation: [1, 0], paths: [1, 3]},
       {translation: [0, -1], paths: [1, 3, 5]},
       {translation: [0, -2], paths: [0, 5]},
-      {translation: [1, -2], paths: [0, 2], cue: {fill: '#CF5557', scale: 1}}
+      {translation: [1, -2], paths: [0, 2, 3], cue: {fill: '#CF5557', scale: 1}},
+      {translation: [1, -3], paths: [0, 1, 2, 3, 4, 5], cue: {fill: '#CF5557', scale: 1}},
     ],
     start: [{translation: start.translation, rotation: start.rotation}],
     target: [0, 1],
@@ -40,5 +37,5 @@ var level = {
   maps: maps
 }
 
-var play = require('./play.js')('container', level, opts)
+var play = require('./play.js')('container', level)
 play.start()

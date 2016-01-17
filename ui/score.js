@@ -1,37 +1,35 @@
+var css = require('dom-css')
 var sprintf = require('sprintf-js').sprintf
 var animate = require('animateplus')
 
 module.exports = function (container) {
   var width = container.clientWidth
   var height = container.clientHeight
-  var style
 
   var ismobile = window.innerWidth < window.innerHeight
 
   var label = document.createElement('div')
   label.id = 'score'
-  var offset = container.offsetLeft
-  if (container.offsetParent) offset += container.offsetParent.offsetLeft
-  style = label.style
-  style.left = offset + width * 0.5 - width * 0.25 * 0.5
-  style.width = width * 0.25
-  style.top = ismobile ? height * 0.1 : height * 0.06
-  style.height = width * 0.05
-  style.textAlign = 'center'
-  style.display = 'inline-block'
-  style.pointerEvents = 'none'
-  style.position = 'fixed'
+  css(label, {
+    left: 0, right: 0,
+    margin: '0px auto',
+    width: width * 0.25,
+    top: ismobile ? height * 0.1 : height * 0.06,
+    textAlign: 'center',
+    pointerEvents: 'none',
+    position: 'absolute',
+  })
   container.appendChild(label)
 
   var number = document.createElement('span')
-  style = number.style
-  style.color = 'rgb(200,200,200)'
-  style.fontFamily = 'Hack'
-  style.fontSize = height * 0.06 + 'px'
-  style.lineHeight = width * 0.06 + 'px'
-  style.display = 'inline-block'
-  style.verticalAlign = 'middle'
   number.innerHTML = sprintf('%05d', 0)
+  css(number, {
+    color: 'rgb(200,200,200)',
+    fontFamily: 'Hack',
+    fontSize: height * 0.05,
+    display: 'inline-block',
+    verticalAlign: 'middle',
+  })
   label.appendChild(number)
 
   function update (state, opts) {
@@ -54,11 +52,11 @@ module.exports = function (container) {
   }
 
   function hide () {
-    label.style.opacity = 0
+    css(label, {opacity: 0})
   }
 
   function show () {
-    label.style.opacity = 1
+    lcss(label, {opacity: 1})
   }
 
   return {

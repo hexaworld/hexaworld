@@ -1,34 +1,39 @@
+var css = require('dom-css')
+
 module.exports = function (container) {
   var width = container.clientWidth
   var height = container.clientHeight
-  var style
+  var ismobile = width < height
 
   var label = document.createElement('div')
-  style = label.style
-  style.left = 0
-  style.top = height * 0.4
-  style.width = width
-  style.height = width * 0.1
-  style.textAlign = 'center'
-  style.position = 'absolute'
-  style.pointerEvents = 'none'
+  css(label, {
+    top: height * 0.35,
+    margin: '0px auto',
+    left: 0, right: 0,
+    width: ismobile ? width : width * 0.7,
+    textAlign: 'center',
+    position: 'absolute',
+    pointerEvents: 'none'
+  })
+
   container.appendChild(label)
 
   var message = document.createElement('div')
-  style = message.style
-  style.color = 'rgb(150,150,150)'
-  style.fontFamily = 'Hack'
-  style.fontSize = width * 0.12 + 'px'
-  style.opacity = 0
+  css(message, {
+    color: 'rgb(150,150,150)',
+    fontFamily: 'Hack',
+    fontSize: Math.sqrt(width * 5),
+    opacity: 0
+  })
   label.appendChild(message)
 
   function show (text) {
-    style.opacity = 1
+    css(message, {opacity: 1})
     message.innerHTML = text
   }
 
   function hide () {
-    style.opacity = 0
+    css(message, {opacity: 0})
   }
 
   return {

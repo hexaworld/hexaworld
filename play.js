@@ -4,9 +4,7 @@ var EventEmitter = require('eventemitter2').EventEmitter2
 var State = require('./state.js')
 var formatEvent = require('./util/events.js').formatEvent
 
-module.exports = function (id, level, opts) {
-  opts = opts || {size: 700}
-
+module.exports = function (id, level) {
   function load (level) {
     var tmp
     var maps = []
@@ -19,7 +17,7 @@ module.exports = function (id, level, opts) {
     })
     var config = _.cloneDeep(level.config)
     config.stages = maps.length
-    config.energy = 12000
+    config.energy = 2400
     return {maps: maps, config: config}
   }
 
@@ -27,7 +25,7 @@ module.exports = function (id, level, opts) {
 
   var container = document.getElementById(id)
 
-  var main = require('./ui/main.js')(container, opts)
+  var main = require('./ui/main.js')(container)
   var message = require('./ui/message.js')(container)
   var energy = require('./ui/energy.js')(container)
   var score = require('./ui/score.js')(container)
@@ -67,7 +65,7 @@ module.exports = function (id, level, opts) {
 
   function endgame (text) {
     setTimeout(function () {
-      message.show(text + ' \n SCORE ' + sprintf('%05d', state.score.current))
+      message.show(text + '<br>\nSCORE ' + sprintf('%05d', state.score.current))
     }, 500)
   }
 
@@ -87,6 +85,9 @@ module.exports = function (id, level, opts) {
     energy.update(state.energy)
     game.flash()
 
+    state.stages.current += 1
+    stages.update(state.stages)
+
     setTimeout(function () {
       if (state.energy.current > 0) {
         var remaining = state.energy.current
@@ -102,22 +103,23 @@ module.exports = function (id, level, opts) {
         }, 150)
       }
 
-      if (state.stages.current === state.stages.total - 1) {
+      if (state.stages.current === state.stages.total) {
         events.emit(['level', 'completed'], formatEvent({ level: level.config.name }))
         setTimeout(function () {
           main.hide()
           endgame('COMPLETE!')
         }, 700)
       } else {
-        state.stages.current += 1
+        
         setTimeout(function () {
           main.hide()
           setTimeout(function () {
             game.reload(level.maps[state.stages.current])
-            stages.update(state.stages)
-            state.energy.current += 900
-            energy.update(state.energy)
-            main.show()
+            setTimeout(function () {
+              state.energy.current += 900
+              energy.update(state.energy)
+              main.show()
+            }, 400)
           }, 400)
         }, 700)
       }
@@ -157,6 +159,7 @@ module.exports = function (id, level, opts) {
       main.canvas.style.opacity = 0
       game.reload(level.maps[state.stages.current])
       start()
+      console.log('level loaded')
     },
 
     start: start,
