@@ -25,8 +25,7 @@ module.exports = function (container, opts) {
     position: 'absolute',
     zIndex: 0,
     opacity: 0.0,
-    background: 'rgb(10,10,10)',
-    border: 'solid 1px white'
+    background: 'rgb(10,10,10)'
   })
   
   container.appendChild(canvas)

@@ -6,11 +6,11 @@ module.exports = function (container) {
   var height = container.clientHeight
 
   var ismobile = window.innerWidth < window.innerHeight
-  var size = ismobile ? height * 0.35 : height * 0.4
+  var size = ismobile ? width * 0.57 : height * 0.4
 
   var colors = {
     fill: 'rgb(10,10,10)',
-    stroke: 'rgb(150,150,150)',
+    stroke: 'none',
     text1: 'rgb(200,200,200)',
     text2: 'rgb(150,150,150)'
   }
