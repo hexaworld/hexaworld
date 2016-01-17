@@ -159,7 +159,6 @@ module.exports = function (id, level) {
       main.canvas.style.opacity = 0
       game.reload(level.maps[state.stages.current])
       start()
-      console.log('level loaded')
     },
 
     start: start,

@@ -10,7 +10,7 @@ module.exports = function (container) {
     top: height * 0.35,
     margin: '0px auto',
     left: 0, right: 0,
-    width: ismobile ? width : width * 0.7,
+    width: ismobile ? width : width * 0.6,
     textAlign: 'center',
     position: 'absolute',
     pointerEvents: 'none'
