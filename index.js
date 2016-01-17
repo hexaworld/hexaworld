@@ -1,3 +1,6 @@
+var fastclick = require('fastclick').FastClick
+fastclick.attach(document.body)
+
 var config = {
   name: 'welcome',
   lives: 3,
