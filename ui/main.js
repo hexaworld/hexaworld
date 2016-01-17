@@ -19,7 +19,7 @@ module.exports = function (container, opts) {
     display: 'block',
     margin: '0px auto',
     left: 0, right: 0,
-    marginTop: (height - size) * 0.55,
+    marginTop: (height - size) * 0.6,
     position: 'absolute',
     zIndex: 0,
     opacity: 0.0,
