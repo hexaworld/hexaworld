@@ -23,15 +23,15 @@ void main() {
 	vec3 viewdiff = eye - vposition;
 	vec3 lightdir = light - vposition;
 
-	float diff = orenn(normalize(lightdir), normalize(viewdiff), vnormal, 0.9, 0.9);
-	float spec = gauss(normalize(lightdir), normalize(viewdiff), vnormal, 1.0);
+	// float diff = orenn(normalize(lightdir), normalize(viewdiff), vnormal, 0.9, 0.9);
+	// float spec = gauss(normalize(lightdir), normalize(viewdiff), vnormal, 1.0);
 
 	float att = calcLightAttenuation(length(lightdir), 150.0, 1.0);
-	vec3 lcol = vec3(0.6, 0.6, 0.6);
+	vec3 lcol = vec3(1.0, 1.0, 1.0);
 
 	vec3 material = color;
 
-	vec3 result = (lit > 0.0) ? (att * lcol * vec3(material * diff + spec)) : material;
+	vec3 result = (lit > 0.0) ? (att * lcol * material) : material;
 
 	// result = (vposition.x > 0.0) ? (vec3(0.0, 0.0, 0.0)) : result;
 	
