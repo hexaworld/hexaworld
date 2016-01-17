@@ -35,20 +35,22 @@ module.exports = function (container) {
   function update (state, opts) {
     opts = opts || {duration: 50, magnitude: 0.1}
     number.innerHTML = sprintf('%05d', state.current)
-    animate({
-      el: number,
-      scale: [1, 1 + opts.magnitude],
-      duration: 50,
-      easing: 'easeInQuad',
-      complete: function () {
-        animate({
-          el: number,
-          scale: [1 + opts.magnitude, 1],
-          duration: opts.duration,
-          easing: 'easeInQuad'
-        })
-      }
-    })
+    if (opts.magnitude > 0) {
+      animate({
+        el: number,
+        scale: [1, 1 + opts.magnitude],
+        duration: 50,
+        easing: 'easeInQuad',
+        complete: function () {
+          animate({
+            el: number,
+            scale: [1 + opts.magnitude, 1],
+            duration: opts.duration,
+            easing: 'easeInQuad'
+          })
+        }
+      })
+    }
   }
 
   function hide () {

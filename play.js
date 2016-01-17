@@ -43,7 +43,7 @@ module.exports = function (id, level) {
     state.energy.current += 50
     state.score.current += 10
     energy.update(state.energy)
-    score.update(state.score)
+    score.update(state.score, {magnitude: 0})
   })
 
   game.events.on(['player', 'exit'], function (event) {
