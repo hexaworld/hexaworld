@@ -7,13 +7,15 @@ module.exports = function (container, opts) {
   var width = container.clientWidth
   var ismobile = width < height
 
-  var size = ismobile ? 0.9 * width : 0.76 * height
+  var size = ismobile ? 0.9 * width : 0.65 * height
+  var ratio = window.devicePixelRatio || 1
 
   css(container, {position: 'relative'})
 
   canvas.id = 'game'
-  canvas.width = size
-  canvas.height = size
+  canvas.width = size * ratio
+  canvas.height = size * 1.153 * ratio
+  css(canvas, {width: size, height: size * 1.153})
 
   css(canvas, {
     display: 'block',
