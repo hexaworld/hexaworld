@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "test": "standard",
-    "bundle": "browserify index.js -o bundle.js",
+    "build": "browserify index.js -o bundle.js",
     "start": "budo index.js:bundle.js --live"
   },
   "browserify": {
