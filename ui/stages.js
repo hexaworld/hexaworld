@@ -65,7 +65,7 @@ module.exports = function (container) {
 
   function show () {
     css(svg, {opactiy: 1})
-    css(numer, {opactiy: 1})
+    css(number, {opactiy: 1})
   }
 
   return {

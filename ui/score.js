@@ -56,7 +56,7 @@ module.exports = function (container) {
   }
 
   function show () {
-    lcss(label, {opacity: 1})
+    css(label, {opacity: 1})
   }
 
   return {
