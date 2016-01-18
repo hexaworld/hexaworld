@@ -51,17 +51,49 @@ World.prototype.reload = function (schema) {
       }))
     }
 
+    var x = t.translation[0]
+    var y = t.translation[1]
+
+    function neighbors (r, q) {
+      return [
+        (x === r & y + 1 === q),
+        (x - 1 === r & y + 1 === q),
+        (x - 1 === r & y === q),
+        (x === r & y - 1 === q),
+        (x + 1 === r & y - 1 === q),
+        (x + 1 === r & y === q)
+      ]
+    }
+
+    var hide = []
+    _.forEach(schema, function (n) {
+      var r = n.translation[0]
+      var q = n.translation[1]
+
+      var paths = [3, 4, 5, 0, 1, 2]
+
+      _.range(6).forEach( function (p) {
+        if (neighbors(r, q)[p] & !_.includes(t.paths, p) & !_.includes(n.paths, paths[p])) hide.push(p)
+      })
+    })
+
+    _.range(6).forEach( function (i) {
+      if (!_.find(schema, function (t) {
+        var r = t.translation[0]
+        var q = t.translation[1]
+        return neighbors(r, q)[i]
+      })) hide.push(i)
+    })
+
     var tileObj = tile({
       scale: 50,
       translation: t.translation,
       paths: t.paths,
       children: children,
       thickness: self.opts.thickness,
-      surface: true
+      surface: true,
+      hide: hide
     })
-
-    var x = t.translation[0]
-    var y = t.translation[1]
 
     var rowCache = self._tileCache[x] || {}
     rowCache[y] = tileObj
@@ -75,7 +107,6 @@ World.prototype.draw = function (context, camera, light) {
   this.tiles.forEach(function (tile) {
     tile.draw(context, camera, light)
   })
-  //this.floor.draw(context, camera, light)
 }
 
 World.prototype.locate = function (point) {

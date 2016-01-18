@@ -125,7 +125,7 @@ module.exports = function (opts) {
   _.remove(bottomEdges, _.isUndefined)
 
   var topEdges = _.range(6).map(function (i) {
-    if (!_.includes(opts.paths, i)) {
+    if (!_.includes(opts.paths, i) & !_.includes(opts.hide, i)) {
       return endTop({
         rotation: i * 60,
         thickness: thickness
