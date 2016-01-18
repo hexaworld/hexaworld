@@ -4,10 +4,10 @@ var wedge = require('./wedge.js')
 var block = require('./block.js')
 var end = require('./end.js')
 var path = require('./path.js')
-var pathLeft = require('./path-left.js')
-var pathRight = require('./path-right.js')
-var endBottom = require('./end-bottom.js')
-var endTop = require('./end-top.js')
+var edgeLeft = require('./edge-left.js')
+var edgeRight = require('./edge-right.js')
+var edgeBottom = require('./edge-bottom.js')
+var edgeTop = require('./edge-top.js')
 var circle = require('./circle.js')
 var Geometry = require('./geometry.js')
 
@@ -24,7 +24,7 @@ module.exports = function (opts) {
       height: 4,
       lit: true,
       fill: 'rgb(55,55,55)',
-      color: [55, 55, 55]
+      color: [90, 90, 90]
     })
   ]
 
@@ -57,7 +57,7 @@ module.exports = function (opts) {
           surface: true,
           height: 4.3,
           bottom: 4.1,
-          color: [250,250,250],
+          color: [255,255,255],
           lit: true
         }),
         circle({
@@ -69,7 +69,7 @@ module.exports = function (opts) {
           surface: true,
           height: 4.3,
           bottom: 4.1,
-          color: [250,250,250],
+          color: [255,255,255],
           lit: true
         }),
         circle({
@@ -81,7 +81,7 @@ module.exports = function (opts) {
           surface: true,
           height: 4.3,
           bottom: 4.1,
-          color: [250,250,250],
+          color: [255,255,255],
           lit: true
         })
       ]
@@ -94,47 +94,47 @@ module.exports = function (opts) {
   })
   _.remove(paths, _.isUndefined)
 
-  var leftEdges = _.range(6).map(function (i) {
+  var left = _.range(6).map(function (i) {
     if (_.includes(opts.paths, i)) {
-      return pathLeft({
+      return edgeLeft({
         rotation: i * 60,
         thickness: thickness
       })
     }
   })
-  _.remove(leftEdges, _.isUndefined)
+  _.remove(left, _.isUndefined)
 
-  var rightEdges = _.range(6).map(function (i) {
+  var right = _.range(6).map(function (i) {
     if (_.includes(opts.paths, i)) {
-      return pathRight({
+      return edgeRight({
         rotation: i * 60,
         thickness: thickness
       })
     }
   })
-  _.remove(rightEdges, _.isUndefined)
+  _.remove(right, _.isUndefined)
 
-  var bottomEdges = _.range(6).map(function (i) {
+  var bottom = _.range(6).map(function (i) {
     if (!_.includes(opts.paths, i)) {
-      return endBottom({
+      return edgeBottom({
         rotation: i * 60,
         thickness: thickness
       })
     }
   })
-  _.remove(bottomEdges, _.isUndefined)
+  _.remove(bottom, _.isUndefined)
 
-  var topEdges = _.range(6).map(function (i) {
+  var top = _.range(6).map(function (i) {
     if (!_.includes(opts.paths, i) & !_.includes(opts.hide, i)) {
-      return endTop({
+      return edgeTop({
         rotation: i * 60,
         thickness: thickness
       })
     }
   })
-  _.remove(topEdges, _.isUndefined)
+  _.remove(top, _.isUndefined)
   
-  var children = center.concat(wedges).concat(blocks).concat(paths).concat(leftEdges).concat(rightEdges).concat(bottomEdges).concat(topEdges)
+  var children = center.concat(wedges).concat(blocks).concat(paths).concat(left).concat(right).concat(bottom).concat(top)
 
   return new Geometry({
     props: {

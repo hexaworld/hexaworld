@@ -6,11 +6,11 @@ module.exports = function (opts) {
 
   return new Geometry({
     props: {
-      stroke: 'white',
+      stroke: 'rgb(255,255,255)',
       thickness: opts.thickness || 0.25,
       type: 'polygon',
-      surface: true,
       color: [55, 55, 55],
+      surface: true,
       height: 4.2,
       bottom: -0.2,
       lit: true
@@ -18,7 +18,7 @@ module.exports = function (opts) {
 
     points: [
       [-1 / 2, Math.sqrt(3) / 2], 
-      [1 / 2, Math.sqrt(3) / 2]
+      [-1 / 2, Math.sqrt(3) / 2 / width]
     ],
 
     transform: {

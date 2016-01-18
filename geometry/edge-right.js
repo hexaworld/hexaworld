@@ -6,7 +6,7 @@ module.exports = function (opts) {
 
   return new Geometry({
     props: {
-      stroke: 'rgb(252,252,252)',
+      stroke: 'rgb(255,255,255)',
       thickness: opts.thickness || 0.25,
       type: 'polygon',
       color: [55, 55, 55],
