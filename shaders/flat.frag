@@ -5,6 +5,10 @@ varying vec3 vnormal;
 
 uniform vec3 eye;
 uniform vec3 light;
+uniform vec3 light2;
+uniform vec3 light3;
+uniform vec3 light4;
+uniform vec3 light5;
 uniform vec3 color;
 uniform float lit;
 
@@ -23,19 +27,39 @@ void main() {
 	vec3 viewdiff = eye - vposition;
 	vec3 lightdir = light - vposition;
 
-	// float diff = orenn(normalize(lightdir), normalize(viewdiff), vnormal, 0.9, 0.9);
-	// float spec = gauss(normalize(lightdir), normalize(viewdiff), vnormal, 1.0);
+	vec3 lightdir2 = light2 - vposition;
+	vec3 lightdir3 = light3 - vposition;
+	vec3 lightdir4 = light4 - vposition;
+	vec3 lightdir5 = light5 - vposition;
 
-	float att = calcLightAttenuation(length(lightdir), 150.0, 1.0);
+	float diff2 = orenn(normalize(lightdir2), normalize(viewdiff), vnormal, 0.9, 0.9);
+	float diff3 = orenn(normalize(lightdir3), normalize(viewdiff), vnormal, 0.9, 0.9);
+	float diff4 = orenn(normalize(lightdir4), normalize(viewdiff), vnormal, 0.9, 0.9);
+	float diff5 = orenn(normalize(lightdir5), normalize(viewdiff), vnormal, 0.9, 0.9);
+
+	float att2 = calcLightAttenuation(length(lightdir2), 30.0, 1.1);
+	float att3 = calcLightAttenuation(length(lightdir3), 30.0, 1.1);
+	float att4 = calcLightAttenuation(length(lightdir4), 30.0, 1.1);
+	float att5 = calcLightAttenuation(length(lightdir5), 30.0, 1.1);
+
 	vec3 lcol = vec3(1.0, 1.0, 1.0);
+	vec3 lcol2 = vec3(0.87, 0.52, 0.22);
+	vec3 lcol3 = vec3(0.0, 0.76, 0.93);
+	vec3 lcol4 = vec3(0.81, 0.33, 0.34);
+	vec3 lcol5 = vec3(0.51, 0.79, 0.29);
 
 	vec3 material = color;
 
-	vec3 result = (lit > 0.0) ? (att * lcol * material) : material;
+	vec3 result = (lit > 0.0) ? (lcol * material) : material;
 
 	// result = (vposition.x > 0.0) ? (vec3(0.0, 0.0, 0.0)) : result;
 	
-	// result = mix(result, vec3(0.1, 0.1, 0.1), fog(length(viewdiff), 0.005));
+	result = (lit > 0.0) ? mix(result, vec3(0.08, 0.08, 0.08), fog(length(viewdiff), 0.01)) : result;
+
+	result = (lit > 0.0) ? (result + 8.0 * att2 * diff2 * lcol2 * material) :  result;
+	result = (lit > 0.0) ? (result + 8.0 * att3 * diff3 * lcol3 * material) :  result;
+	result = (lit > 0.0) ? (result + 8.0 * att4 * diff4 * lcol4 * material) :  result;
+	result = (lit > 0.0) ? (result + 8.0 * att5 * diff5 * lcol5 * material) :  result;
 
  	gl_FragColor = vec4(result, 1);
 }

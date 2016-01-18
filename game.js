@@ -119,6 +119,7 @@ module.exports = function (canvas, schema, opts) {
     var line = player.geometry.children[0].points
     camera.target = [line[0][0], line[0][1], 5]
     camera.position = [line[1][0], line[1][1], 30]
+    //console.log(player.position())
   })
 
   // camera.on('update', function (interval) {

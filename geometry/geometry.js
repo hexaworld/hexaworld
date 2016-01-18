@@ -221,14 +221,18 @@ Geometry.prototype.drawSurface = function (gl, camera, light) {
   camera.view(self.view)
 
   gl.enable(gl.DEPTH_TEST)
-  gl.lineWidth(4)
+  gl.lineWidth(5)
   
   if (this.geometry.fill) {
     self.geometry.fill.bind(self.shader.fill)
     self.shader.fill.uniforms.proj = self.proj
     self.shader.fill.uniforms.view = self.view
     self.shader.fill.uniforms.eye = eye(self.view)
-    self.shader.fill.uniforms.light = [light[0], light[1], 40]
+    self.shader.fill.uniforms.light = [light[0], light[1], 20]
+    self.shader.fill.uniforms.light2 = [0, 0, 15]
+    self.shader.fill.uniforms.light3 = [-73, -43, 15]
+    self.shader.fill.uniforms.light4 = [75, -129.9, 15]
+    self.shader.fill.uniforms.light5 = [-75, 43, 15]
     self.shader.fill.uniforms.lit = self.props.lit ? 1.0 : 0.0
     self.shader.fill.uniforms.color = color
     self.geometry.fill.draw(gl.TRIANGLES)
@@ -240,7 +244,13 @@ Geometry.prototype.drawSurface = function (gl, camera, light) {
     self.shader.stroke.uniforms.proj = self.proj
     self.shader.stroke.uniforms.view = self.view
     self.shader.stroke.uniforms.eye = eye(self.view)
-    self.shader.stroke.uniforms.light = [light[0], light[1], 40]
+    self.shader.stroke.uniforms.light = [light[0], light[1], 20]
+    self.shader.stroke.uniforms.light2 = [0, 0, 15]
+    self.shader.stroke.uniforms.light3 = [-75, -43, 15]
+    self.shader.stroke.uniforms.light4 = [75, -129.9, 15]
+    self.shader.stroke.uniforms.light5 = [-75, 43, 15]
+    self.shader.stroke.uniforms.lit = self.props.lit ? 1.0 : 0.0
+    self.shader.stroke.uniforms.color = [255, 255, 255]
     self.geometry.stroke.draw(gl.LINES)
     self.geometry.stroke.unbind()
   }

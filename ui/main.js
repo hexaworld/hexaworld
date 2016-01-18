@@ -10,8 +10,6 @@ module.exports = function (container, opts) {
   var size = ismobile ? width : 0.65 * height
   var ratio = 1.5 * window.devicePixelRatio || 1
 
-  console.log(window.devicePixelRatio)
-
   css(container, {position: 'relative'})
 
   canvas.id = 'game'
@@ -27,7 +25,7 @@ module.exports = function (container, opts) {
     position: 'absolute',
     zIndex: 0,
     opacity: 0.0,
-    background: 'rgb(10,10,10)'
+    background: 'rgb(20,20,20)'
   })
   
   container.appendChild(canvas)

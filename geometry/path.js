@@ -9,7 +9,7 @@ module.exports = function (opts) {
       fill: 'rgb(55,55,55)',
       thickness: opts.thickness || 0.25,
       type: 'polygon',
-      color: [55, 55, 55],
+      color: [90, 90, 90],
       surface: true,
       height: 4,
       lit: true
