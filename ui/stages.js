@@ -6,7 +6,7 @@ module.exports = function (container) {
   var height = container.clientHeight
 
   var ismobile = window.innerWidth < window.innerHeight
-  var size = ismobile ? width * 0.57 : height * 0.33
+  var size = ismobile ? width * 0.57 : height * 0.37
 
   var colors = {
     fill: 'rgb(40,40,40)',
