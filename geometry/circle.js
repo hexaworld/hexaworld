@@ -17,7 +17,8 @@ module.exports = function (opts) {
       surface: opts.surface || false,
       height: opts.height,
       color: opts.color,
-      lit: opts.lit
+      lit: opts.lit,
+      bottom: opts.bottom
     },
 
     points: [

@@ -16,6 +16,7 @@ module.exports = function (opts) {
       trigger: opts.trigger || false,
       surface: opts.surface || false,
       height: opts.height || 0,
+      bottom: opts.bottom,
       lit: opts.lit || false,
       consumable: opts.consumable || false
     },

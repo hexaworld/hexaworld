@@ -7,8 +7,10 @@ module.exports = function (container, opts) {
   var width = container.clientWidth
   var ismobile = width < height
 
-  var size = ismobile ? 0.9 * width : 0.65 * height
-  var ratio = window.devicePixelRatio || 1
+  var size = ismobile ? width : 0.65 * height
+  var ratio = 1.5 * window.devicePixelRatio || 1
+
+  console.log(window.devicePixelRatio)
 
   css(container, {position: 'relative'})
 

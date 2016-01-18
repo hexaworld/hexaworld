@@ -23,7 +23,7 @@ module.exports = function (canvas, schema, opts) {
 
   var game = new Game({
     canvas: canvas,
-    renderer: canvas.getContext('webgl', {stencil: true}),
+    renderer: canvas.getContext('webgl'),
     width: height,
     height: height
   })

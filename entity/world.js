@@ -33,7 +33,8 @@ World.prototype.reload = function (schema) {
         cue: true,
         surface: true,
         color: hexrgb(t.cue.fill),
-        height: 4.5
+        height: 4.2,
+        bottom: 4
       }))
     }
     if (t.target) {
@@ -45,7 +46,8 @@ World.prototype.reload = function (schema) {
         surface: true,
         color: hexrgb(t.target.fill),
         lit: true,
-        height: 4.2
+        height: 4.2,
+        bottom: 4
       }))
     }
 

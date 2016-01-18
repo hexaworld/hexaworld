@@ -6,20 +6,19 @@ module.exports = function (opts) {
 
   return new Geometry({
     props: {
-      fill: 'rgb(55,55,55)',
+      stroke: 'white',
       thickness: opts.thickness || 0.25,
       type: 'polygon',
-      color: [55, 55, 55],
       surface: true,
-      height: 4,
+      color: [55, 55, 55],
+      height: 4.2,
+      bottom: -0.2,
       lit: true
     },
 
     points: [
-      [-1 / 2, Math.sqrt(3) / 2], 
-      [1 / 2, Math.sqrt(3) / 2], 
-      [1 / 2, Math.sqrt(3) / 2 / width],
-      [-1 / 2, Math.sqrt(3) / 2 / width]
+      [-1 / 2, Math.sqrt(3) / 2 / width], 
+      [1 / 2, Math.sqrt(3) / 2 / width]
     ],
 
     transform: {

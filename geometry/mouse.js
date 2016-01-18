@@ -12,7 +12,8 @@ module.exports = function (opts) {
       dynamic: true,
       color: [250, 250, 250],
       lit: false,
-      height: 5
+      height: 5.2,
+      bottom: 4.3
     },
 
     points: [

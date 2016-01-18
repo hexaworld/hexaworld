@@ -6,10 +6,10 @@ module.exports = function (container) {
   var height = container.clientHeight
 
   var ismobile = window.innerWidth < window.innerHeight
-  var size = ismobile ? width * 0.57 : height * 0.4
+  var size = ismobile ? width * 0.57 : height * 0.33
 
   var colors = {
-    fill: 'rgb(10,10,10)',
+    fill: 'rgb(40,40,40)',
     stroke: 'none',
     text1: 'rgb(200,200,200)',
     text2: 'rgb(150,150,150)'
@@ -51,7 +51,7 @@ module.exports = function (container) {
   css(number, {
     fontFamily: 'Hack',
     fontSize: ismobile ? width * 0.066 : size * 0.1,
-    color: colors.text,
+    color: colors.text1,
     pointerEvents: 'none',
     left: ismobile ? width * 0.03 : width * 0.012, 
     top: size * 0.05,

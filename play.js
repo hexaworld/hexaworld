@@ -132,6 +132,7 @@ module.exports = function (id, level) {
     }
     energy.update(state.energy)
     stages.update(state.stages)
+    score.update(state.score)
     message.show('FIND THE CIRCLE!')
     events.emit(['map', 'started'], formatEvent({ map: state.stages.current }))
     setTimeout(function () {
@@ -140,7 +141,7 @@ module.exports = function (id, level) {
       score.show()
       //energy.show()
       stages.show()
-    }, 1500)
+    }, 3000)
     game.start()
   }
 
@@ -159,6 +160,7 @@ module.exports = function (id, level) {
       main.canvas.style.opacity = 0
       game.reload(level.maps[state.stages.current])
       start()
+      console.log(state.score)
     },
 
     start: start,

@@ -13,7 +13,7 @@ var base = function (start) {
     tiles: [
       {translation: [0, 0], paths: [0, 2, 4], cue: {fill: '#DE863A', scale: 1}},
       {translation: [-1, 0], paths: [0, 4, 5], cue: {fill: '#00C3EE', scale: 1}},
-      {translation: [0, 1], paths: [2, 3, 4], target: {fill: 'white'}},
+      {translation: [0, 1], paths: [2, 3, 4], target: {fill: '#FFFFFF'}},
       {translation: [-1, 1], paths: [4, 5], cue: {fill: '#82C94A', scale: 1}},
       {translation: [1, -1], paths: [2, 3]},
       {translation: [1, 0], paths: [1, 3]},
