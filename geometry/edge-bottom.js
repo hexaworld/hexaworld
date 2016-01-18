@@ -11,8 +11,8 @@ module.exports = function (opts) {
       type: 'polygon',
       surface: true,
       color: [55, 55, 55],
-      height: 4.2,
-      bottom: -0.2,
+      height: 4.1,
+      bottom: -0.1,
       lit: true
     },
 

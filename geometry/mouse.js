@@ -28,7 +28,7 @@ module.exports = function (opts) {
 
     children: [
       new Geometry({
-        points: [[0, -4], [0, 30]],
+        points: [[0, -9], [0, 26]],
         props: {}
       })
     ]

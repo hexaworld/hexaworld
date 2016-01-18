@@ -24,7 +24,7 @@ module.exports = function (opts) {
       height: 4,
       lit: true,
       fill: 'rgb(55,55,55)',
-      color: [90, 90, 90]
+      color: [80, 80, 80]
     })
   ]
 

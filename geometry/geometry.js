@@ -208,7 +208,7 @@ Geometry.prototype.drawSurface = function (gl, camera, light) {
         positions: self.points.map(function (p) {return [p[0], p[1], bottom]})
       }
       complex = {
-        positions: top.positions.concat(bottom.positions)
+        positions: top.positions
       }
       this.geometry.stroke.attr('position', complex.positions)
     }
@@ -221,14 +221,14 @@ Geometry.prototype.drawSurface = function (gl, camera, light) {
   camera.view(self.view)
 
   gl.enable(gl.DEPTH_TEST)
-  gl.lineWidth(5)
-  
+  gl.lineWidth(3 * (window.devicePixelRatio || 1))
+   
   if (this.geometry.fill) {
     self.geometry.fill.bind(self.shader.fill)
     self.shader.fill.uniforms.proj = self.proj
     self.shader.fill.uniforms.view = self.view
     self.shader.fill.uniforms.eye = eye(self.view)
-    self.shader.fill.uniforms.light = [light[0], light[1], 20]
+    self.shader.fill.uniforms.light1 = [light[0], light[1], 15]
     self.shader.fill.uniforms.light2 = [0, 0, 15]
     self.shader.fill.uniforms.light3 = [-73, -43, 15]
     self.shader.fill.uniforms.light4 = [75, -129.9, 15]
