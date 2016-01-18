@@ -183,13 +183,15 @@ Geometry.prototype.drawSurface = function (gl, camera, light) {
     )
   }
 
-  if (!this.geometry | this.props.dynamic) {
+  if (!this.geometry || this.props.dynamic) {
     this.geometry = {}
+
+    var height = self.props.height || 0
+    var bottom = self.props.bottom || 0
 
     if (this.props.fill) {
       this.geometry.fill = glgeometry(gl)
-      var height = self.props.height || 0
-      var complex = extrude(self.points, {top: height, bottom: 0})
+      var complex = extrude(self.points, {top: height, bottom: bottom})
       var flattened = unindex(complex.positions, complex.cells)
       complex = reindex(flattened)
       this.geometry.fill.attr('position', complex.positions)
@@ -199,24 +201,16 @@ Geometry.prototype.drawSurface = function (gl, camera, light) {
     
     if (this.props.stroke) {
       this.geometry.stroke = glgeometry(gl)
-      var stroke = polyline({thickness: 0.75, cap: 'end', join: 'miter', miterLimit: 1})
-      var points = self.points.concat([self.points[0]])
-      complex = stroke.build(points)
       var top = {
-        cells: complex.cells,
-        positions: complex.positions.map(function (p) {return [p[0], p[1], height + 0.2]})
+        positions: self.points.map(function (p) {return [p[0], p[1], height]})
       }
       var bottom = {
-        cells: complex.cells.map(function (p) {return p.map(function (c) {return c + top.cells.length + 2})}),
-        positions: complex.positions.map(function (p) {return [p[0], p[1], -0.2]})
+        positions: self.points.map(function (p) {return [p[0], p[1], bottom]})
       }
       complex = {
-        cells: top.cells.concat(bottom.cells),
         positions: top.positions.concat(bottom.positions)
       }
       this.geometry.stroke.attr('position', complex.positions)
-      this.geometry.stroke.attr('normal', normals.vertexNormals(complex.cells, complex.positions))
-      this.geometry.stroke.faces(complex.cells)
     }
   }
 
@@ -227,6 +221,7 @@ Geometry.prototype.drawSurface = function (gl, camera, light) {
   camera.view(self.view)
 
   gl.enable(gl.DEPTH_TEST)
+  gl.lineWidth(4)
   
   if (this.geometry.fill) {
     self.geometry.fill.bind(self.shader.fill)
@@ -246,7 +241,7 @@ Geometry.prototype.drawSurface = function (gl, camera, light) {
     self.shader.stroke.uniforms.view = self.view
     self.shader.stroke.uniforms.eye = eye(self.view)
     self.shader.stroke.uniforms.light = [light[0], light[1], 40]
-    self.geometry.stroke.draw(gl.TRIANGLES)
+    self.geometry.stroke.draw(gl.LINES)
     self.geometry.stroke.unbind()
   }
 
