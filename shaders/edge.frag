@@ -40,7 +40,7 @@ void main() {
 
 	vec3 result = vec3(1.0, 1.0, 1.0);
 
-	result = (lit > 0.0) ? mix(result, vec3(0.0588, 0.0588, 0.0588), fog(length(viewdiff), 0.01)) : result;
+	result = (lit > 0.0) ? mix(result, vec3(0.0392, 0.0392, 0.0392), fog(length(viewdiff), 0.01)) : result;
 
 	// result = (lit > 0.0) ? (result + 0.006 * att2 * lcol2 * material) :  result;
 	// result = (lit > 0.0) ? (result + 0.006 * att3 * lcol3 * material) :  result;

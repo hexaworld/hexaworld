@@ -22,11 +22,13 @@ module.exports = function (container, opts) {
     display: 'block',
     margin: '0px auto',
     left: 0, right: 0,
-    marginTop: (height - size) * 0.5,
+    marginTop: ismobile 
+      ? (height - size) * 0.6 
+      : (height - size) * 0.5,
     position: 'absolute',
     zIndex: 0,
     opacity: 0.0,
-    background: 'rgb(15,15,15)'
+    background: 'rgb(10,10,10)'
   })
   
   container.appendChild(canvas)
@@ -52,7 +54,9 @@ module.exports = function (container, opts) {
     position: 'absolute',
     left: 0, right: 0,
     margin: '0px auto',
-    marginTop: (height - size) * 0.5 - 0.05 * size * (2 / Math.sqrt(3)),
+    marginTop: ismobile 
+      ? (height - size) * 0.6 - 0.05 * size * (2 / Math.sqrt(3)) 
+      : (height - size) * 0.5 - 0.05 * size * (2 / Math.sqrt(3)),
     display: 'block'
   })
   container.appendChild(svg)
@@ -80,9 +84,9 @@ module.exports = function (container, opts) {
   var edge = document.createElementNS('http://www.w3.org/2000/svg', 'polygon')
   edge.setAttribute('points', points1.join(' '))
   css(edge, {
-    strokeWidth: 4,
+    strokeWidth: 7,
     fill: 'none',
-    stroke: 'rgb(100,100,100)'
+    stroke: 'rgb(45,45,45)'
   })
   svg.appendChild(edge)
 

@@ -9,7 +9,7 @@ module.exports = function (container) {
   var size = ismobile ? width * 0.57 : height * 0.37
 
   var colors = {
-    fill: 'rgb(40,40,40)',
+    fill: 'rgb(45,45,45)',
     stroke: 'none',
     text1: 'rgb(200,200,200)',
     text2: 'rgb(150,150,150)'

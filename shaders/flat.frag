@@ -56,7 +56,7 @@ void main() {
 
 	// result = (vposition.x > 0.0) ? (vec3(0.0, 0.0, 0.0)) : result;
 	
-	result = (lit > 0.0) ? mix(result, vec3(0.0588, 0.0588, 0.0588), fog(length(viewdiff), 0.01)) : result;
+	result = (lit > 0.0) ? mix(result, vec3(0.0392, 0.0392, 0.0392), fog(length(viewdiff), 0.01)) : result;
 
 	result = (lit > 0.0) ? (result + 1.0 * att1 * diff1 * lcol1 * material) :  result;
 	result = (lit > 0.0) ? (result + 8.0 * att2 * diff2 * lcol2 * material) :  result;
