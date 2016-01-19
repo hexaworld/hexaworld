@@ -29,7 +29,7 @@ World.prototype.reload = function (schema) {
       children.push(hex({
         fill: t.cue.fill,
         stroke: false,
-        scale: scale,
+        scale: scale * 0.75,
         cue: true,
         surface: true,
         color: hexrgb(t.cue.fill),
@@ -39,12 +39,12 @@ World.prototype.reload = function (schema) {
     }
     if (t.target) {
       children.push(hex({
-        fill: t.target.fill,
+        fill: 'rgb(190,190,190)',
         stroke: false,
         scale: 0.09,
         target: true,
         surface: true,
-        color: hexrgb(t.target.fill),
+        color: [180,180,180],
         lit: true,
         height: 4.2,
         bottom: 4

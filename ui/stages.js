@@ -29,7 +29,8 @@ module.exports = function (container) {
   css(svg, {
     pointerEvents: 'none',
     position: 'absolute',
-    top: 0, left: 0
+    top: 0, left: 0,
+    opacity: 0
   })
   container.appendChild(svg)
 
@@ -56,7 +57,8 @@ module.exports = function (container) {
     left: ismobile ? width * 0.03 : width * 0.012, 
     top: size * 0.05,
     width: width * 0.3,
-    position: 'absolute'
+    position: 'absolute',
+    opacity: 0.0
   })
   container.appendChild(number)
 
@@ -70,7 +72,6 @@ module.exports = function (container) {
   }
 
   function show () {
-    console.log('showing')
     css(svg, {opacity: 1.0})
     css(number, {opacity: 1.0})
   }

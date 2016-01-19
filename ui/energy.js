@@ -1,92 +1,131 @@
+var css = require('dom-css')
 var _ = require('lodash')
 
 module.exports = function (container) {
+  var height = container.clientHeight
   var width = container.clientWidth
-  var style
+  var ismobile = width < height
+
+  var size = ismobile ? height * 0.17 : width * 0.15
+
+  var hexheight = 1.1 * size * (2 / Math.sqrt(3))
+  var hexwidth = 1.1 * size
+
+  var wrapper = document.createElement('div')
+  wrapper.id = 'energy'
+  css(wrapper, {
+    position: 'absolute',
+    left: ismobile ? width * 0.65 : width * 0.75,
+    top: ismobile ? height * 0.085 : height * 0.1,
+    width: hexwidth,
+    height: hexheight,
+    textAlign: 'center',
+    opacity: 0
+  })
+  container.appendChild(wrapper)
+
+  function hex (size, offset) {
+    return _.range(7).map(function (i) {
+      var dx = (size / Math.sqrt(3)) * Math.cos(i * 2 * Math.PI / 6 + Math.PI / 6) + 1.1 * offset / 2
+      var dy = (size / Math.sqrt(3)) * Math.sin(i * 2 * Math.PI / 6 + Math.PI / 6) + 1.1 * offset / Math.sqrt(3)
+      return [dx, dy]
+    })
+  }
+
+  function used (fraction) {
+    var rad = Math.PI * 2 * fraction
+    var base = [[hexwidth/2, 0], [hexwidth, 0]]
+    if (fraction > 0) base = base.concat([0, 0])
+    if (fraction > 1/3) base = base.concat([0, hexheight])
+    if (fraction > 2/3) base = base.concat([hexwidth, hexheight])
+    if (fraction > 0.9) base = base.concat([hexwidth, 0])
+    var target = [-hexwidth * Math.sin(rad) + hexwidth * 0.5, hexheight - (hexheight * Math.cos(rad) + hexheight * 0.5)]
+    var end = [hexwidth/2, hexheight/2]
+    return base.concat([target]).concat([end])
+  }
+
+  var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+  svg.setAttribute('width', hexwidth)
+  svg.setAttribute('height', hexheight)
+  css(svg, {
+    pointerEvents: 'none',
+    position: 'absolute',
+    left: 0, right: 0,
+    margin: '0px auto',
+    display: 'block'
+  })
+  wrapper.appendChild(svg)
+
+  var background = document.createElementNS('http://www.w3.org/2000/svg', 'polygon')
+  background.setAttribute('points', hex(size, size).join(' '))
+  css(background, {
+    fill: 'rgb(45,45,45)',
+    stroke: 'none',
+    zIndex: 2000
+  })
+  //svg.appendChild(background)
+
+  var mask = document.createElementNS('http://www.w3.org/2000/svg', 'mask')
+  mask.id = 'energy-mask'
+  svg.appendChild(mask)
+
+  var box = document.createElementNS('http://www.w3.org/2000/svg', 'polygon')
+  box.setAttribute('points', [[0, 0], [0, hexwidth], [hexwidth, hexheight], [hexwidth, 0]].join(' '))
+  box.setAttribute('fill', 'white')
+  mask.appendChild(box)
+
+  var triangle = document.createElementNS('http://www.w3.org/2000/svg', 'polygon')
+  triangle.setAttribute('points', used(0.8).join(' '))
+  triangle.setAttribute('fill', 'black')
+  mask.appendChild(triangle)
+
+  var front = document.createElementNS('http://www.w3.org/2000/svg', 'polygon')
+  front.setAttribute('points', hex(size * 0.75, size).join(' '))
+  front.setAttribute('mask', 'url(#energy-mask)')
+  css(front, {
+    fill: 'rgb(45,45,45)',
+    stroke: 'none',
+    zIndex: 2000
+  })
+  svg.appendChild(front)
+
+  var middle = document.createElementNS('http://www.w3.org/2000/svg', 'polygon')
+  middle.setAttribute('points', hex(size * 0.52, size).join(' '))
+  css(middle, {
+    fill: 'rgb(10,10,10)',
+    stroke: 'none',
+    zIndex: 2000
+  })
+  svg.appendChild(middle)
 
   var label = document.createElement('div')
-  label.id = 'energy'
-  style = label.style
-  style.left = width * 0.06
-  style.width = width * 0.45
-  style.top = width * 0.07
-  style.height = width * 0.05
-  style.position = 'absolute'
-  container.appendChild(label)
-
-  var bar = document.createElement('div')
-  style = bar.style
-  style.left = 0
-  style.width = width * 0.45 - 2
-  style.height = '120%'
-  style.top = 0
-  style.background = 'rgb(55,55,55)'
-  style.position = 'absolute'
-  label.appendChild(bar)
-
-  var fill = document.createElement('div')
-  style = fill.style
-  style.left = 0
-  style.width = width * 0.45 - 2
-  style.height = '120%'
-  style.top = 0
-  style.background = 'rgb(150,150,150)'
-  style.transition = 'width 0.2s'
-  style.position = 'absolute'
-  label.appendChild(fill)
-
-  var n = 8
-
-  _.range(n).forEach(function (i) {
-    var notch = document.createElement('div')
-    style = notch.style
-    style.left = i * ((width * 0.45) / n)
-    style.top = 0
-    style.height = label.offsetHeight
-    style.width = (width * 0.45) / n - 12
-    style.position = 'absolute'
-    style.border = 'solid 3px rgb(150,150,150)'
-    style.outline = 'solid 6px rgb(25,25,25)'
-    style.zIndex = '1000'
-    label.appendChild(notch)
+  label.innerHTML = '8'
+  css(label, {
+    position: 'relative',
+    color: 'rgb(220,220,220)',
+    fontSize: ismobile ? width * 0.066 : height * 0.065,
+    fontFamily: 'Hack',
+    top: size * (2 / Math.sqrt(3)) * 1.1 * 0.5 - (ismobile ? width * 0.066 : height * 0.065) * 0.6
   })
-
-  function ghost () {
-    var count = 0
-    var blinker = setInterval(function () {
-      setTimeout(function () {
-        bar.style.background = 'rgb(50,50,50)'
-      }, 100)
-      bar.style.background = 'rgb(150,150,150)'
-      count++
-      if (count === 4) clearInterval(blinker)
-    }, 200)
-  }
-
-  function blink () {
-    fill.style.background = 'rgb(240,240,240)'
-    setTimeout(function () {
-      fill.style.background = 'rgb(150,150,150)'
-    }, 50)
-  }
+  wrapper.appendChild(label)
 
   function update (state) {
-    fill.style.width = Math.max(width * 0.45 * Math.max(state.current, 0) / state.total - 2, 0)
+    var remaining = Math.max(state.current, 0) / state.total
+    triangle.setAttribute('points', used(1 - remaining).join(' '))
+    label.innerHTML = parseInt(Math.max(state.current, 0) / 300)
   }
 
   function hide () {
-    label.style.opacity = 0
+    wrapper.style.opacity = 0
   }
 
   function show () {
-    label.style.opacity = 1
+    wrapper.style.opacity = 1
   }
 
   return {
     update: update,
     hide: hide,
-    show: show,
-    blink: blink,
-    ghost: ghost
+    show: show
   }
 }

@@ -6,7 +6,6 @@ var Touch = require('crtrdg-touch')
 var Player = require('./entity/player.js')
 var Camera = require('./entity/camera.js')
 var World = require('./entity/world.js')
-var Ring = require('./entity/ring.js')
 var Mask = require('./util/mask.js')
 var formatEvent = require('./util/events.js').formatEvent
 
@@ -41,21 +40,6 @@ module.exports = function (canvas, schema, opts) {
     stroke: 'white',
     fill: [75, 75, 75],
     thickness: 0.5
-  })
-
-  // var camera = new Camera({
-  //   scale: 130 * 1 / height * 0.7,
-  //   speed: {translation: 0.1, rotation: 0.1, scale: 0.002},
-  //   friction: 0.9,
-  //   yoked: true
-  // })
-
-  var ring = new Ring({
-    size: 0.88 * game.width / 2,
-    translation: [game.width / 2, game.width / 2],
-    extent: 0.1 * game.width / 2,
-    count: 8,
-    offset: 3
   })
 
   var mask = new Mask({
@@ -101,7 +85,6 @@ module.exports = function (canvas, schema, opts) {
   player.addTo(game)
   //camera.addTo(game)
   world.addTo(game)
-  ring.addTo(game)
 
   keyboard.on('keydown', function (keyCode) {
     if (keyCode === '<space>') {
@@ -119,7 +102,6 @@ module.exports = function (canvas, schema, opts) {
     var line = player.geometry.children[0].points
     camera.target = [line[0][0], line[0][1], 5]
     camera.position = [line[1][0], line[1][1], 30]
-    //console.log(player.position())
   })
 
   // camera.on('update', function (interval) {
@@ -129,10 +111,6 @@ module.exports = function (canvas, schema, opts) {
   //   }
   //   this.move(keyboard)
   // })
-
-  ring.on('update', function (interval) {
-    this.update(player, world)
-  })
 
   var camera = require('lookat-camera')()
   camera.up = [0, 0, 1]
@@ -163,7 +141,6 @@ module.exports = function (canvas, schema, opts) {
   function reload (schema) {
     world.reload(schema.tiles)
     player.moveto(schema.start[0])
-    ring.stopFlashing()
   }
 
   reload(schema)
@@ -193,10 +170,6 @@ module.exports = function (canvas, schema, opts) {
 
     moveto: function (transform) {
       player.moveto(transform)
-    },
-
-    flash: function () {
-      ring.startFlashing(schema.flash)
     },
 
     events: events

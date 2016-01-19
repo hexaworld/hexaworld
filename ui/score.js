@@ -14,10 +14,11 @@ module.exports = function (container) {
     left: 0, right: 0,
     margin: '0px auto',
     width: width * 0.35,
-    top: ismobile ? height * 0.1 : height * 0.06,
+    top: ismobile ? height * 0.06 : height * 0.06,
     textAlign: 'center',
     pointerEvents: 'none',
     position: 'absolute',
+    opacity: 0
   })
   container.appendChild(label)
 
@@ -26,14 +27,14 @@ module.exports = function (container) {
   css(number, {
     color: 'rgb(200,200,200)',
     fontFamily: 'Hack',
-    fontSize: height * 0.065,
+    fontSize: ismobile ? width * 0.08 : height * 0.065,
     display: 'inline-block',
     verticalAlign: 'middle',
   })
   label.appendChild(number)
 
   function update (state, opts) {
-    opts = opts || {duration: 50, magnitude: 0.1}
+    opts = opts || {duration: 50, magnitude: 0}
     number.innerHTML = sprintf('%05d', state.current)
     if (opts.magnitude > 0) {
       animate({
