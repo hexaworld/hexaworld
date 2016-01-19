@@ -55,7 +55,7 @@ module.exports = function (container) {
     textAlign: 'right',
     position: 'absolute',
     pointerEvents: 'none',
-    lineHeight: ismobile ? width * 0.12 * 0.7 + 'px' : height * 0.2 * 0.7 + 'px'
+    lineHeight: ismobile ? width * 0.12 * 0.7 + 'px' : height * 0.22 * 0.7 + 'px'
   })
 
   var message = document.createElement('div')
@@ -64,7 +64,7 @@ module.exports = function (container) {
     color: 'rgb(200,200,200)',
     fontFamily: 'Hack',
     fontWeight: '800',
-    fontSize: ismobile ? width * 0.08 : height * 0.04
+    fontSize: ismobile ? width * 0.08 : height * 0.05
   })
 
   svg.onclick = function () {

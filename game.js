@@ -8,6 +8,7 @@ var Camera = require('./entity/camera.js')
 var World = require('./entity/world.js')
 var Mask = require('./util/mask.js')
 var formatEvent = require('./util/events.js').formatEvent
+var hexrgb = require('hex-rgb')
 
 module.exports = function (canvas, schema, opts) {
   opts = opts || {size: 700}
@@ -115,13 +116,16 @@ module.exports = function (canvas, schema, opts) {
   var camera = require('lookat-camera')()
   camera.up = [0, 0, 1]
 
+  var lights, cues
+
   game.on('draw', function (context) {
-    //test.draw(context, camera)
-    //mask.set(context)
-    world.draw(context, camera, player.position())
-    player.draw(context, camera, player.position())
-    //mask.unset(context)
-    //ring.draw(context)
+    cues = world.cues().map(function (cue) {return {
+      color: hexrgb(cue.color).map(function (c) {return c / 255}),
+      position: cue.translation
+    }})
+    lights = [{color: [1,1,1], position: player.position()}].concat(cues)
+    world.draw(context, camera, lights)
+    player.draw(context, camera, lights)
   })
 
   game.on('update', function (interval) {

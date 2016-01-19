@@ -17,7 +17,7 @@ module.exports = function (id, level) {
     })
     var config = _.cloneDeep(level.config)
     config.stages = maps.length
-    config.energy = 2400
+    config.energy = parseInt(config.moves) * 300
     return {maps: maps, config: config}
   }
 
@@ -39,7 +39,7 @@ module.exports = function (id, level) {
 
   game.events.on(['player', 'collect'], function (event) {
     state.score.current += 10
-    score.update(state.score, {magnitude: 0.15})
+    score.update(state.score, {magnitude: 0})
   })
 
   game.events.on(['player', 'exit'], function (event) {
@@ -118,16 +118,9 @@ module.exports = function (id, level) {
 
     setTimeout(function () {
       if (state.energy.current > 0) {
-        var remaining = state.energy.current
-        var counter = setInterval(function () {
-          if (remaining <= 0) {
-            clearInterval(counter)
-          } else {
-            state.score.current += Math.min(300, remaining) * 3
-            remaining -= Math.min(300, remaining)
-            score.update(state.score, {magnitude: 0.25, duration: 250})
-          }
-        }, 150)
+        state.score.current += state.energy.current * 3
+        score.update(state.score, {magnitude: 0.5, duration: 250})
+        energy.update(state.energy, {magnitude: 0.5, duration: 250})
       }
 
       if (state.stages.current === state.stages.total) {
@@ -148,7 +141,7 @@ module.exports = function (id, level) {
               state.energy.current += 600
               energy.update(state.energy)
               main.show()
-            }, 400)
+            }, 600)
           }, 400)
         }, 700)
       }

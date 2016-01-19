@@ -44,7 +44,7 @@ World.prototype.reload = function (schema) {
         scale: 0.09,
         target: true,
         surface: true,
-        color: [180,180,180],
+        color: [150,150,150],
         lit: true,
         height: 4.2,
         bottom: 4
@@ -103,9 +103,9 @@ World.prototype.reload = function (schema) {
   })
 }
 
-World.prototype.draw = function (context, camera, light) {
+World.prototype.draw = function (context, camera, lights) {
   this.tiles.forEach(function (tile) {
-    tile.draw(context, camera, light)
+    tile.draw(context, camera, lights)
   })
 }
 

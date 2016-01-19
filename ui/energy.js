@@ -1,4 +1,5 @@
 var css = require('dom-css')
+var animate = require('animateplus')
 var _ = require('lodash')
 
 module.exports = function (container) {
@@ -109,10 +110,27 @@ module.exports = function (container) {
   })
   wrapper.appendChild(label)
 
-  function update (state) {
+  function update (state, opts) {
+    opts = opts || {duration: 50, magnitude: 0}
     var remaining = Math.max(state.current, 0) / state.total
     triangle.setAttribute('points', used(1 - remaining).join(' '))
     label.innerHTML = parseInt(Math.max(state.current, 0) / 300)
+    if (opts.magnitude > 0) {
+      animate({
+        el: label,
+        scale: [1, 1 + opts.magnitude],
+        duration: 50,
+        easing: 'easeInQuad',
+        complete: function () {
+          animate({
+            el: label,
+            scale: [1 + opts.magnitude, 1],
+            duration: opts.duration,
+            easing: 'easeInQuad'
+          })
+        }
+      })
+    }
   }
 
   function hide () {
