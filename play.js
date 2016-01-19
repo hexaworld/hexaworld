@@ -69,7 +69,7 @@ module.exports = function (id, level) {
   function endgame (text) {
     setTimeout(function () {
       message.show(text + '<br><br>\nSCORE ' + sprintf('%05d', state.score.current))
-      action.show('TAP TO RESTART')
+      action.show('TAP TO RETRY')
       action.events.on('click', function () {
         events.emit(['level', 'restart'], formatEvent({ level: level.config.name }))
 
