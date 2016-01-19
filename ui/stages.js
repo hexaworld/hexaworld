@@ -63,7 +63,7 @@ module.exports = function (container) {
   container.appendChild(number)
 
   function update (state) {
-    number.innerHTML = '+ ' + (state.current) + '/' + state.total
+    number.innerHTML = 'S ' + (state.current) + '/' + state.total
   }
 
   function hide () {
