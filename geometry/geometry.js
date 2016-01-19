@@ -158,7 +158,7 @@ Geometry.prototype.drawBezier = function (context, points, scale) {
   }
 }
 
-Geometry.prototype.drawSurface = function (gl, camera, light) {
+Geometry.prototype.drawSurface = function (gl, camera, lights) {
   var self = this
 
   if (!this.proj) {
@@ -222,17 +222,19 @@ Geometry.prototype.drawSurface = function (gl, camera, light) {
 
   gl.enable(gl.DEPTH_TEST)
   gl.lineWidth(3 * (window.devicePixelRatio || 1))
-   
+
   if (this.geometry.fill) {
     self.geometry.fill.bind(self.shader.fill)
     self.shader.fill.uniforms.proj = self.proj
     self.shader.fill.uniforms.view = self.view
     self.shader.fill.uniforms.eye = eye(self.view)
-    self.shader.fill.uniforms.light1 = [light[0], light[1], 15]
-    self.shader.fill.uniforms.light2 = [0, 0, 15]
-    self.shader.fill.uniforms.light3 = [-73, -43, 15]
-    self.shader.fill.uniforms.light4 = [75, -129.9, 15]
-    self.shader.fill.uniforms.light5 = [-75, 43, 15]
+
+    lights.forEach(function (light, i) {
+      self.shader.fill.uniforms['lcol' + (i + 1)] = light.color
+      self.shader.fill.uniforms['lpos' + (i + 1)] = [light.position[0], light.position[1], 15]
+    })
+    self.shader.fill.uniforms.ncol = lights.length
+
     self.shader.fill.uniforms.lit = self.props.lit ? 1.0 : 0.0
     self.shader.fill.uniforms.color = color
     self.geometry.fill.draw(gl.TRIANGLES)
@@ -244,11 +246,6 @@ Geometry.prototype.drawSurface = function (gl, camera, light) {
     self.shader.stroke.uniforms.proj = self.proj
     self.shader.stroke.uniforms.view = self.view
     self.shader.stroke.uniforms.eye = eye(self.view)
-    self.shader.stroke.uniforms.light = [light[0], light[1], 20]
-    self.shader.stroke.uniforms.light2 = [0, 0, 15]
-    self.shader.stroke.uniforms.light3 = [-75, -43, 15]
-    self.shader.stroke.uniforms.light4 = [75, -129.9, 15]
-    self.shader.stroke.uniforms.light5 = [-75, 43, 15]
     self.shader.stroke.uniforms.lit = self.props.lit ? 1.0 : 0.0
     self.shader.stroke.uniforms.color = [255, 255, 255]
     self.geometry.stroke.draw(gl.LINES)
@@ -257,19 +254,19 @@ Geometry.prototype.drawSurface = function (gl, camera, light) {
 
 }
 
-Geometry.prototype.drawChildren = function (context, camera, light) {
+Geometry.prototype.drawChildren = function (context, camera, lights) {
   if (this.children) {
     this.children.forEach(function (child) {
-      child.draw(context, camera, light)
+      child.draw(context, camera, lights)
     })
   }
 }
 
-Geometry.prototype.drawSelf = function (context, camera, light) {
+Geometry.prototype.drawSelf = function (context, camera, lights) {
   var points = this.points
   var scale = 1
   if (this.props.surface) {
-    this.drawSurface(context, camera, light)
+    this.drawSurface(context, camera, lights)
   } else if (this.props.fill || this.props.stroke) {
     if (camera) {
       points = camera.transform.invert(points)
@@ -284,9 +281,9 @@ Geometry.prototype.drawSelf = function (context, camera, light) {
   }
 }
 
-Geometry.prototype.draw = function (context, camera, light) {
-  this.drawSelf(context, camera, light)
-  this.drawChildren(context, camera, light)
+Geometry.prototype.draw = function (context, camera, lights) {
+  this.drawSelf(context, camera, lights)
+  this.drawChildren(context, camera, lights)
 }
 
 module.exports = Geometry
